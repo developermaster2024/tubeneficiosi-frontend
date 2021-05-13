@@ -24,6 +24,9 @@ import fiveAsec from './assets/images/5asec.png';
 import shield from './assets/images/shield.png';
 import callCenterAgent from './assets/images/call-center-agent.png';
 import rent from './assets/images/rent.png';
+import smartphone from './assets/images/smartphone.png';
+import appBg from './assets/images/app-bg.jpg';
+import downloadAndroidApp from './assets/images/download-android-app.svg';
 import SectionHeading from './components/SectionHeading';
 import ProductAdCard from './components/ProductAdCard';
 import ProductCard from './components/ProductCard';
@@ -52,7 +55,14 @@ const App = () => {
           {categories.map((category, index) => <a
             key={index}
             href="/#"
-            className="flex items-center justify-center relative w-full py-8 bg-blue-500 text-white font-semibold text-2xl rounded-md overflow-hidden shadow"
+            className="
+              flex items-center justify-center
+              relative w-full py-8
+              bg-blue-500 text-white font-semibold text-2xl
+              rounded-md overflow-hidden shadow
+              transform
+              hover:-translate-y-1 hover:shadow-2xl
+            "
             style={{
               backgroundImage: `url(${category.img})`,
               backgroundSize: 'cover',
@@ -300,6 +310,38 @@ const App = () => {
 
             <p className="text-xl leading-none text-gray-600 tracking-tight mt-8">{promo.subtitle}</p>
           </div>)}
+        </div>
+      </div>
+      
+      <div className="relative py-32 mt-20 bg-main bg-gradient-to-r from-main to-main-light text-white">
+        <div className="container">
+          <div className="absolute inset-y-0 right-0">
+            <img
+              src={appBg}
+              alt="App"
+              className="h-full"
+            />
+          </div>
+          <div className="flex">
+            <div className="w-1/2 flex flex-col items-center space-y-6">
+              <img
+                src={smartphone}
+                alt="Smartphone"
+                className="w-32 h-32"
+              />
+
+              <h4 className="text-5xl font-bold">Descárgate  la app</h4>
+
+              <p>Pide lo que sea y síguelo en tiempo real con la app Glovo.</p>
+
+              <a href="/#">
+                <img
+                  src={downloadAndroidApp}
+                  alt="Descargar app para android"
+                />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
