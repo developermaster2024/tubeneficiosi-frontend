@@ -27,6 +27,10 @@ import rent from './assets/images/rent.png';
 import smartphone from './assets/images/smartphone.png';
 import appBg from './assets/images/app-bg.jpg';
 import downloadAndroidApp from './assets/images/download-android-app.svg';
+import partner from './assets/images/partner.jpg';
+import clients from './assets/images/clients.jpg';
+import waveUp from './assets/images/wave-up.png';
+import waveDown from './assets/images/wave-down.png';
 import SectionHeading from './components/SectionHeading';
 import ProductAdCard from './components/ProductAdCard';
 import ProductCard from './components/ProductCard';
@@ -104,6 +108,60 @@ const App = () => {
             imgAlt="Aires acondicionados"
           />
         </div>
+      </div>
+
+      <div
+        className="my-80 bg-white relative"
+      >
+        <img
+          src={waveUp}
+          alt="Wave up"
+          className="w-full absolute transform -translate-y-full"
+        />
+      
+        {/* HAGAMOSLO JUNTOS */}
+        <div className="container">
+          
+          <h3 className="text-5xl text-center font-semibold">Hagámoslo juntos</h3>
+          
+          <div className="flex space-x-4 mt-20">
+            {[
+              {imgSrc: partner, imgAlt: 'Socio', title: 'Hazte Partner', content: '¡Crece con BeneficioSi! ¡Nuestra tecnología y base de usuarios puede ayudarte a aumentar las ventas y descubrir nuevas oportunidades!'},
+              {imgSrc: clients, imgAlt: 'Clientes', title: 'Registrate como cliente', content: 'Pedí online rápido y fácil a reconocidas marcas y +10.000 restaurantes'},
+            ].map((item, i) => <div
+              key={i}
+              className="w-1/2 flex flex-col items-center"
+            >
+              <div className="flex flex-col items-center space-y-6 mb-6">
+                <img
+                  src={item.imgSrc}
+                  alt={item.imgAlt}
+                  className="h-60 w-60 rounded-full shadow"
+                />
+                <h4 className="text-3xl font-semibold">{item.title}</h4>
+                <p className="max-w-[350px] text-center text-base">
+                  {item.content}
+                </p>
+              </div>
+              
+              <button className="
+                inline-flex items-center justify-center
+                mt-auto px-6 py-4 space-x-2
+                leading-4
+                border border-white rounded-lg shadow
+                bg-main text-white text-xl font-semibold
+              ">
+                Únete
+              </button>
+            </div>)}
+          </div>
+        </div>
+
+        <img
+          src={waveDown}
+          alt="Wave down"
+          className="w-full absolute bottom-0 transform translate-y-full"
+        />
       </div>
       
       <div className="container mt-20">
@@ -313,6 +371,7 @@ const App = () => {
         </div>
       </div>
       
+      {/* MOBILE APP SECTION */}
       <div className="relative py-32 mt-20 bg-main bg-gradient-to-r from-main to-main-light text-white">
         <div className="container">
           <div className="absolute inset-y-0 right-0">
@@ -345,6 +404,7 @@ const App = () => {
         </div>
       </div>
 
+      {/* WHAT WE OFFER */}
       <div className="container my-20">
           <div className="flex justify-evenly">
             {[
@@ -368,6 +428,7 @@ const App = () => {
           </div>
       </div>
 
+      {/* FOOTER */}
       <footer className="h-14 bg-gray-800 text-white">
         <div className="container h-full">
           <div className="flex justify-between items-center h-full">
