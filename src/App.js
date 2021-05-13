@@ -332,7 +332,7 @@ const App = () => {
 
               <h4 className="text-5xl font-bold">Descárgate  la app</h4>
 
-              <p>Pide lo que sea y síguelo en tiempo real con la app Glovo.</p>
+              <p>Pide lo que sea y síguelo en tiempo real con la app BeneficioSi.</p>
 
               <a href="/#">
                 <img
