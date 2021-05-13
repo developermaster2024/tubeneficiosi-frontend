@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'swiper/swiper-bundle.css';
+import SwiperCore, { Navigation, Pagination } from 'swiper';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+SwiperCore.use([Navigation, Pagination]);
 
 ReactDOM.render(
   <React.StrictMode>
