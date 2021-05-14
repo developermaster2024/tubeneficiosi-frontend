@@ -64,7 +64,7 @@ const App = () => {
               relative w-full py-8
               bg-blue-500 text-white font-semibold text-2xl
               rounded-md overflow-hidden shadow
-              transform
+              transform transition duration-300
               hover:-translate-y-1 hover:shadow-2xl
             "
             style={{
