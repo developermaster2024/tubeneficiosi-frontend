@@ -41,7 +41,7 @@ const Navbar = () => {
       </div>
     </div>
 
-    <div className="bg-green-100 py-2">
+    <div className="bg-main text-white py-2">
       <div className="container relative">
         <div className="flex items-center absolute -mt-2 space-x-2 text-xs">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
