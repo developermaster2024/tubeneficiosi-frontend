@@ -13,20 +13,20 @@ const Stores = () => {
     <div className="bg-white shadow-sm">
       <Container className="py-5">
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-semibold">Tiendas</h2>
+          <h2 className="text-3xl font-semibold">Afiliados</h2>
 
           <div className="flex space-x-4">
             <a href="/#" className="inline-flex items-center space-x-1">
               <GridIcon className="w-4 h-4" />
-              <span>Grid view</span>
+              <span>Vista de grilla</span>
             </a>
             <a href="/#" className="inline-flex items-center space-x-1 opacity-50">
               <ListIcon className="w-4 h-4" />
-              <span>List view</span>
+              <span>Vista de lista</span>
             </a>
             <a href="/#" className="inline-flex items-center space-x-1">
               <span className="px-1.5 py-0.5 text-xs bg-yellow-100 text-red-500 font-semibold rounded-lg">110</span>
-              <span>Tiendas</span>
+              <span>Afiliados</span>
             </a>
           </div>
         </div>
@@ -36,7 +36,7 @@ const Stores = () => {
     <Container withMargin className="mb-20">
       <div className="flex space-x-6">
         {/* FILTROS */}
-        <div className="w-60 h-screen space-y-5">
+        <div className="w-60 space-y-5">
           {/* Categories */}
           <div>
             <h4 className="text-xl font-semibold mb-2">Categories</h4>
@@ -85,8 +85,8 @@ const Stores = () => {
             >
               <StoreCard
                 imgSrc={burgerKing}
-                name="Tienda A"
-                description="Space for a small store description"
+                name="Afiliado A"
+                description="Space for a small affiliate description"
                 rating={4}
               />
             </div>)}

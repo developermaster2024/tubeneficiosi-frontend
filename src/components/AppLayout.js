@@ -10,7 +10,7 @@ const AppLayout = ({children}) => {
     {children}
 
     {/* FOOTER */}
-    <footer className="h-14 bg-gray-800 text-white">
+    <footer className="h-14 bg-gray-800 text-white mt-auto">
       <div className="container h-full">
         <div className="flex justify-between items-center h-full">
             <nav className="space-x-6">

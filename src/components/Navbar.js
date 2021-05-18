@@ -28,7 +28,7 @@ const Navbar = () => {
 
           <div className="flex items-center">
             <nav className="space-x-5 mr-5">
-              <a href="/#">Comprar</a>
+              <Link to="/products">Comprar</Link>
               <a href="/#">Vender</a>
               <a href="/#">Ayuda</a>
             </nav>
@@ -60,7 +60,7 @@ const Navbar = () => {
           <nav className="flex items-center space-x-7">
             <a href="/#">Ofertas del dia</a>
             <a href="/#">Servicio al cliente</a>
-            <Link to="/stores">Tiendas</Link>
+            <Link to="/affiliates">Afiliados</Link>
           </nav>
         </div>
       </div>

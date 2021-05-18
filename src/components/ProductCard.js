@@ -1,3 +1,5 @@
+import Button from "./Button"
+
 const ProductCard = ({
   name,
   description,
@@ -37,11 +39,7 @@ const ProductCard = ({
         <p className="font-semibold">{price} USD</p>
         <span className="text-xs text-gray-600">40.59</span>
       </div>
-      <button
-        className="inline-flex items-center justify-center px-3 py-2 space-x-2 leading-4 border border-white rounded bg-main text-white"
-      >
-        <span>Comprar ahora</span>
-      </button>
+      <Button color="main">Comprar ahora</Button>
     </div>
   </div>
 };
