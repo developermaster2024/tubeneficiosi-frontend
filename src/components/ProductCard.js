@@ -8,7 +8,7 @@ const ProductCard = ({
   imgSrc,
   imgAlt,
 }) => {
-  return <div className="p-4 max-w-[250px] space-y-4 w-full rounded-md bg-white shadow hover:shadow-lg">
+  return <div className="p-4 max-w-[250px] space-y-4 w-full rounded-md bg-white shadow hover:shadow-lg transition">
     <img
       src={imgSrc}
       alt={imgAlt}

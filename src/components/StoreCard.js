@@ -3,7 +3,7 @@ import StarIcon from "./StarIcon";
 const StoreCard = ({imgSrc, imgAlt, name, description, rating}) => {
   const finalImgAlt = imgAlt ?? name;
   
-  return <div className="p-4 bg-white max-w-[240px] shadow rounded">
+  return <div className="p-4 bg-white max-w-[240px] shadow rounded hover:shadow-lg transition">
     <img
       src={imgSrc}
       alt={finalImgAlt}
