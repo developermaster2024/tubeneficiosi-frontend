@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.jpg';
 
 const Navbar = () => {
@@ -5,11 +6,13 @@ const Navbar = () => {
     <div className="h-14 bg-gray-800 text-white">
       <div className="container h-full">
         <div className="flex items-center h-full">
-          <img
-            src={logo}
-            alt="BeneficioSi"
-            className="inline-block h-9 rounded-lg"
-          />
+          <Link to="/">
+            <img
+              src={logo}
+              alt="BeneficioSi"
+              className="inline-block h-9 rounded-lg"
+            />
+          </Link>
 
           <div className="flex items-center px-10 space-x-2 flex-grow">
             <select
@@ -57,7 +60,7 @@ const Navbar = () => {
           <nav className="flex items-center space-x-7">
             <a href="/#">Ofertas del dia</a>
             <a href="/#">Servicio al cliente</a>
-            <a href="/#">Tiendas</a>
+            <Link to="/stores">Tiendas</Link>
           </nav>
         </div>
       </div>

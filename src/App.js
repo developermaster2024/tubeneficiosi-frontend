@@ -4,11 +4,11 @@ import Routes from './Routes';
 
 const App = () => {
   return (
-    <AppLayout>
-      <Router>
-        <Routes />
-      </Router>
-    </AppLayout>
+    <Router>
+      <AppLayout>
+          <Routes />
+      </AppLayout>
+    </Router>
   );
 };
 
