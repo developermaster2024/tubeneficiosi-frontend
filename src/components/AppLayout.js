@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import WhatsappIcon from "./WhatsappIcon";
 
 const AppLayout = ({children}) => {
-  return <div className="min-h-screen bg-gray-50 text-sm open-sans">
+  return <div className="min-h-screen bg-gray-50 text-sm text-gray-900 open-sans">
     <Navbar />
 
     {children}

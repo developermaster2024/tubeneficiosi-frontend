@@ -13,7 +13,7 @@ const getColorClass = (color) => {
   }
 };
 
-const Button = ({children, className, href, color, onClick, endAdorment}) => {
+const Button = ({children, className, href, color, onClick, startAdorment, endAdorment}) => {
   const Tag = href ? 'a' : 'button';
 
   return <Tag
@@ -25,6 +25,7 @@ const Button = ({children, className, href, color, onClick, endAdorment}) => {
     ])}
     onClick={onClick}
   >
+    {startAdorment && <span>{startAdorment}</span>}
     <span>{children}</span>
     {endAdorment && <span>{endAdorment}</span>}
   </Tag>

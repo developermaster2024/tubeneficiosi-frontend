@@ -1,4 +1,4 @@
-const ChevronRightIcon = ({className, stroke = 'currentColor', fill = 'currentColor'}) => <svg
+const ChevronRightIcon = ({className, stroke = 'currentColor', fill = 'none'}) => <svg
   className={className}
   stroke={stroke}
   fill={fill}
