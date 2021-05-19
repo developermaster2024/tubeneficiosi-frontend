@@ -20,7 +20,7 @@ module.exports = {
         main: {
           light: '#f55f5f',
           DEFAULT: '#F04141',
-          dark: '#ed1f1f',
+          dark: '#d91616',
         },
         gray: colors.trueGray,
         orange: colors.orange,

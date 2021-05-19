@@ -1,9 +1,13 @@
+import { Link } from "react-router-dom";
 import StarIcon from "./StarIcon";
 
 const StoreCard = ({imgSrc, imgAlt, name, description, rating}) => {
   const finalImgAlt = imgAlt ?? name;
   
-  return <div className="p-4 bg-white max-w-[240px] shadow rounded hover:shadow-lg transition">
+  return <Link
+    to={`/stores/nombre-de-tienda`}
+    className="p-4 bg-white max-w-[240px] shadow rounded hover:shadow-lg transition"
+  >
     <img
       src={imgSrc}
       alt={finalImgAlt}
@@ -20,7 +24,7 @@ const StoreCard = ({imgSrc, imgAlt, name, description, rating}) => {
         />)}
       </div>
     </div>
-  </div>;
+  </Link>;
 };
 
 export default StoreCard;

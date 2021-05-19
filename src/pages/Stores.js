@@ -13,7 +13,7 @@ const Stores = () => {
     <div className="bg-white shadow-sm">
       <Container className="py-5">
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-semibold">Afiliados</h2>
+          <h2 className="text-3xl font-semibold">Comercios</h2>
 
           <div className="flex space-x-4">
             <a href="/#" className="inline-flex items-center space-x-1">
@@ -26,7 +26,7 @@ const Stores = () => {
             </a>
             <a href="/#" className="inline-flex items-center space-x-1">
               <span className="px-1.5 py-0.5 text-xs bg-yellow-100 text-red-500 font-semibold rounded-lg">110</span>
-              <span>Afiliados</span>
+              <span>Comercios</span>
             </a>
           </div>
         </div>
