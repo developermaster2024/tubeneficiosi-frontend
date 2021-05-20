@@ -1,4 +1,4 @@
-const StarIcon = ({className, stroke = 'currentColor', fill = 'currentColor'}) => {
+const StarIcon = ({className, stroke = 'currentColor', fill = 'none'}) => {
   return <svg
     className={className}
     stroke={stroke}

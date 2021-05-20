@@ -2,7 +2,6 @@ import Button from "../components/Button";
 import ChevronRightIcon from "../components/ChevronRightIcon";
 import Container from "../components/Container";
 import Pagination from "../components/Pagination";
-import ProductCard from "../components/ProductCard";
 import StarIcon from "../components/StarIcon";
 import burger from '../assets/images/hamburguesa.jpg';
 import Checkbox from "../components/Checkbox";
@@ -10,8 +9,21 @@ import TextField from "../components/TextField";
 import GridIcon from "../components/GridIcon";
 import ListIcon from "../components/ListIcon";
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
+import { useState } from "react";
+import clsx from "clsx";
+import ProductsCollection from "../components/ProductsCollection";
+
+const products = Array.from(Array(12).keys()).map(_ => ({
+  name: 'Product name',
+  description: 'Space for a small product description',
+  mainImgSrc: burger,
+  mainImgAlt: 'Hamburguesa',
+  price: '36.00',
+}));
 
 const Products = () => {
+  const [isInGridView, setIsInGridView] = useState(true);
+  
   return <>
     <div className="bg-white shadow-sm">
       <Container className="py-5">
@@ -19,18 +31,24 @@ const Products = () => {
           <h2 className="text-3xl font-semibold">Comprar</h2>
 
           <div className="flex space-x-4">
-            <a href="/#" className="inline-flex items-center space-x-1">
+            <span
+              className={clsx(['inline-flex items-center space-x-1 cursor-pointer', !isInGridView && 'opacity-75'])}
+              onClick={() => setIsInGridView(true)}
+            >
               <GridIcon className="w-4 h-4" />
               <span>Vista de grilla</span>
-            </a>
-            <a href="/#" className="inline-flex items-center space-x-1 opacity-50">
+            </span>
+            <span
+              className={clsx(['inline-flex items-center space-x-1 cursor-pointer', isInGridView && 'opacity-75'])}
+              onClick={() => setIsInGridView(false)}
+            >
               <ListIcon className="w-4 h-4" />
               <span>Vista de lista</span>
-            </a>
-            <a href="/#" className="inline-flex items-center space-x-1">
+            </span>
+            <span className="inline-flex items-center space-x-1 cursor-pointer">
               <span className="px-1.5 py-0.5 text-xs bg-yellow-100 text-red-500 font-semibold rounded-lg">110</span>
               <span>Productos</span>
-            </a>
+            </span>
           </div>
         </div>
       </Container>
@@ -122,25 +140,11 @@ const Products = () => {
             Beneficios
           </Button>
         </div>}
-      >     
-        {/* Tiendas */}
-        <div className="flex-grow">
-          <div className="grid grid-cols-3 gap-8">
-            {Array.from(Array(12).keys()).map(n => <div
-              key={n}
-              className="flex justify-center"
-            >
-              <ProductCard
-                key={n}
-                name="Product name"
-                description="Space for a small product description"
-                imgSrc={burger}
-                imgAlt="Hamburguesas"
-                price="12.00"
-              />
-            </div>)}
-          </div>
-        </div>
+      >
+        <ProductsCollection
+          products={products}
+          isInGridView={isInGridView}
+        />
       </LeftSidebarLayout>
 
       <div className="flex justify-center items-center mt-10">

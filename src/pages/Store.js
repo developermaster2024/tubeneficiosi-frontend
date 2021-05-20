@@ -13,8 +13,21 @@ import Pagination from "../components/Pagination";
 import burger from '../assets/images/hamburguesa.jpg';
 import burgerKing from '../assets/images/burger-king.png';
 import Badge from "../components/Badge";
+import { useState } from "react";
+import clsx from "clsx";
+import ProductsCollection from "../components/ProductsCollection";
 
-const Store = () => { 
+const products = Array.from(Array(12).keys()).map(_ => ({
+  name: 'Product name',
+  description: 'Space for a small product description',
+  mainImgSrc: burger,
+  mainImgAlt: 'Hamburguesa',
+  price: '36.00',
+}));
+
+const Store = () => {
+  const [isInGridView, setIsInGridView] = useState(true);
+
   return <>
     <div className="bg-white">
       <Container>
@@ -38,14 +51,20 @@ const Store = () => {
           />
 
           <div className="flex space-x-4">
-            <a href="/#" className="inline-flex items-center space-x-1">
+            <span
+              className={clsx(['inline-flex items-center space-x-1 cursor-pointer', !isInGridView && 'opacity-75'])}
+              onClick={() => setIsInGridView(true)}
+            >
               <GridIcon className="w-4 h-4" />
               <span>Vista de grilla</span>
-            </a>
-            <a href="/#" className="inline-flex items-center space-x-1 opacity-50">
+            </span>
+            <span
+              className={clsx(['inline-flex items-center space-x-1 cursor-pointer', isInGridView && 'opacity-75'])}
+              onClick={() => setIsInGridView(false)}
+            >
               <ListIcon className="w-4 h-4" />
               <span>Vista de lista</span>
-            </a>
+            </span>
             <a href="/#" className="inline-flex items-center space-x-1">
               <Badge>110</Badge>
               <span>Productos</span>
@@ -177,21 +196,10 @@ const Store = () => {
             </a>)}
           </div>
 
-          <div className="grid grid-cols-3 gap-8">
-            {Array.from(Array(12).keys()).map(n => <div
-              key={n}
-              className="flex justify-center"
-            >
-              <ProductCard
-                key={n}
-                name="Product name"
-                description="Space for a small product description"
-                imgSrc={burger}
-                imgAlt="Hamburguesas"
-                price="12.00"
-              />
-            </div>)}
-          </div>
+          <ProductsCollection
+            products={products}
+            isInGridView={isInGridView}
+          />
         </div>
       </div>
 
