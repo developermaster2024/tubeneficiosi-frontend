@@ -153,7 +153,13 @@ const Store = () => {
             </ul>
           </div>
 
-          <Button color="white" endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}>Beneficios</Button>
+          <Button
+            color="white"
+            endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}
+            to="/benefits"
+          >
+            Beneficios
+          </Button>
         </div>
 
         {/* Tiendas */}

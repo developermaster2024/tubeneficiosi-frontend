@@ -4,6 +4,7 @@ import Store from "./pages/Store";
 import Products from "./pages/Products";
 import Stores from "./pages/Stores";
 import Product from "./pages/Product";
+import Benefits from "./pages/Benefits";
 
 const Routes = () => {
   return <Switch>
@@ -12,6 +13,7 @@ const Routes = () => {
     <Route path="/stores/:slug" exact component={Store} />
     <Route path="/products" exact component={Products} />
     <Route path="/products/:slug" exact component={Product} />
+    <Route path="/benefits" exact component={Benefits} />
   </Switch>;
 };
 

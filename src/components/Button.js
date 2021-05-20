@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 
 const getColorClass = (color) => {
   switch(color) {
@@ -13,11 +14,17 @@ const getColorClass = (color) => {
   }
 };
 
-const Button = ({children, className, href, color, onClick, startAdorment, endAdorment}) => {
-  const Tag = href ? 'a' : 'button';
+const Button = ({children, className, href, to, color, onClick, startAdorment, endAdorment}) => {
+  const Tag = to 
+    ? Link
+    : href
+      ? 'a'
+      : 'button'
+    ;
 
   return <Tag
     href={href}
+    to={to}
     className={clsx([
       'inline-flex items-center justify-center px-4 py-2 space-x-2 leading-4 border border-white rounded text-white font-semibold shadow',
       getColorClass(color),

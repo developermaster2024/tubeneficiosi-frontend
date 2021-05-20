@@ -9,6 +9,7 @@ import Checkbox from "../components/Checkbox";
 import TextField from "../components/TextField";
 import GridIcon from "../components/GridIcon";
 import ListIcon from "../components/ListIcon";
+import LeftSidebarLayout from "../components/LeftSidebarLayout";
 
 const Products = () => {
   return <>
@@ -36,9 +37,8 @@ const Products = () => {
     </div>
   
     <Container withMargin className="mb-20">
-      <div className="flex space-x-6">
-        {/* FILTROS */}
-        <div className="w-60 space-y-6">
+      <LeftSidebarLayout
+        leftSide={<div className="space-y-6">
           {/* Categories */}
           <div>
             <h4 className="text-xl font-semibold mb-2">Categories</h4>
@@ -114,9 +114,15 @@ const Products = () => {
             </ul>
           </div>
 
-          <Button color="white" endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}>Beneficios</Button>
-        </div>
-
+          <Button
+            color="white"
+            endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}
+            to="/benefits"
+          >
+            Beneficios
+          </Button>
+        </div>}
+      >     
         {/* Tiendas */}
         <div className="flex-grow">
           <div className="grid grid-cols-3 gap-8">
@@ -135,7 +141,7 @@ const Products = () => {
             </div>)}
           </div>
         </div>
-      </div>
+      </LeftSidebarLayout>
 
       <div className="flex justify-center items-center mt-10">
         <Pagination />
