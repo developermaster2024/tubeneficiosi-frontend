@@ -13,7 +13,7 @@ const StoreHorizontalCard = ({imgSrc, imgAlt, name, description, rating}) => {
       className="w-56 h-56 rounded-l-md"
     />
 
-    <div className="flex-grow p-4">
+    <div className="flex-grow p-4 flex flex-col">
       <h4 className="text-2xl font-semibold">{name}</h4>
       <div className="flex space-x-1 mt-2">
         {[1, 2, 3, 4, 5].map(n => <StarIcon
@@ -23,8 +23,8 @@ const StoreHorizontalCard = ({imgSrc, imgAlt, name, description, rating}) => {
       </div>
       <p className="mt-4">{description}</p>
 
-      <div className="text-right">
-        <Button to="/stores/nombre-de-tienda" color="main">Ir a la tienda</Button>
+      <div className="text-right mt-auto">
+        <Button color="main">Ir a la tienda</Button>
       </div>
     </div>
   </Link>;

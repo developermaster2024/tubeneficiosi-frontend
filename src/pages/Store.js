@@ -8,7 +8,6 @@ import StarIcon from "../components/StarIcon";
 import TextField from "../components/TextField";
 import Button from "../components/Button";
 import ChevronRightIcon from "../components/ChevronRightIcon";
-import ProductCard from "../components/ProductCard";
 import Pagination from "../components/Pagination";
 import burger from '../assets/images/hamburguesa.jpg';
 import burgerKing from '../assets/images/burger-king.png';
