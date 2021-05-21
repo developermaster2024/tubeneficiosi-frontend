@@ -28,9 +28,8 @@ const Benefits = () => {
           'Supermercados',
           'Boliches',
           'Espectaculos',
-        ].map(categoria => <a
+        ].map(categoria => <div
           key={categoria}
-          href="/#"
           className="
             flex items-center justify-center
             w-1/5 py-3
@@ -39,10 +38,11 @@ const Benefits = () => {
             text-lg font-semibold
             rounded-md
             transition
+            cursor-pointer
           "
         >
           {categoria}
-        </a>)}
+        </div>)}
       </Container>
     </div>
 
