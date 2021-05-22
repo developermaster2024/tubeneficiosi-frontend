@@ -13,7 +13,9 @@ import { useState } from "react";
 import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
 import { categories } from "../util/categories";
+import { discounts } from "../util/discounts";
 import CategoryCheckbox from "../components/CategoryCheckbox";
+import DiscountsSlider from "../components/DiscountsSlider";
 
 const products = Array.from(Array(12).keys()).map(_ => ({
   name: 'Product name',
@@ -22,7 +24,6 @@ const products = Array.from(Array(12).keys()).map(_ => ({
   mainImgAlt: 'Hamburguesa',
   price: '36.00',
 }));
-
 
 const Products = () => {
   const [isInGridView, setIsInGridView] = useState(true);
@@ -144,6 +145,10 @@ const Products = () => {
           </Button>
         </div>}
       >
+        <div className="mb-10">
+          <DiscountsSlider discounts={discounts} />
+        </div>
+        
         <ProductsCollection
           products={products}
           isInGridView={isInGridView}

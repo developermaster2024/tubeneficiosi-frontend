@@ -15,6 +15,9 @@ import Badge from "../components/Badge";
 import { useState } from "react";
 import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
+import DiscountsSlider from "../components/DiscountsSlider";
+import { discounts } from "../util/discounts";
+import LeftSidebarLayout from "../components/LeftSidebarLayout";
 
 const products = Array.from(Array(12).keys()).map(_ => ({
   name: 'Product name',
@@ -74,9 +77,8 @@ const Store = () => {
     </div>
   
     <Container withMargin className="mb-20">
-      <div className="flex space-x-6">
-        {/* FILTROS */}
-        <div className="w-60 space-y-6">
+      <LeftSidebarLayout
+        leftSide={<div className="w-60 space-y-6">
           {/* Categories */}
           <div>
             <h4 className="text-xl font-semibold mb-2">Categories</h4>
@@ -178,29 +180,17 @@ const Store = () => {
           >
             Beneficios
           </Button>
+        </div>}
+      >
+        <div className="mb-10">
+          <DiscountsSlider discounts={discounts} />
         </div>
 
-        {/* Tiendas */}
-        <div className="flex-grow">
-          <div className="flex items-center mb-10 space-x-6">
-            {[
-              {name: 'Descuento de navidad', percentage: 60},
-              {name: 'Dia de las madres', percentage: 45},
-            ].map((discount, i) => <a
-              key={i}
-              href="/#"
-              className="px-3 py-2 text-2xl font-semibold bg-blue-800 text-yellow-400 rounded shadow"
-            >
-              {discount.name} ({discount.percentage}%)
-            </a>)}
-          </div>
-
-          <ProductsCollection
-            products={products}
-            isInGridView={isInGridView}
-          />
-        </div>
-      </div>
+        <ProductsCollection
+          products={products}
+          isInGridView={isInGridView}
+        />
+      </LeftSidebarLayout>
 
       <div className="flex justify-center items-center mt-10">
         <Pagination />
