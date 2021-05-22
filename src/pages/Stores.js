@@ -15,6 +15,8 @@ import LocationMarker from "../components/LocationMarker";
 import StoresInMap from "./StoresInMap";
 import CategoryCheckbox from "../components/CategoryCheckbox";
 import { categories } from "../util/categories";
+import DiscountsSlider from "../components/DiscountsSlider";
+import { discounts } from "../util/discounts";
 
 const latLngs = [
   {lat: -34.605349, lng: -58.478619},
@@ -126,6 +128,10 @@ const Stores = () => {
           </Button>
         </div>}
       >
+        <div className="mb-10">
+          <DiscountsSlider discounts={discounts} />
+        </div>
+        
         {viewType === 'map' && <StoresInMap stores={stores} />}   
         {viewType !== 'map' && <StoresCollection stores={stores} isInGridView={viewType === 'grid'} />}
       </LeftSidebarLayout>
