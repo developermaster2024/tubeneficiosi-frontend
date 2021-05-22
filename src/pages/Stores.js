@@ -13,6 +13,8 @@ import StoresCollection from "../components/StoresCollection";
 import { Link } from "react-router-dom";
 import LocationMarker from "../components/LocationMarker";
 import StoresInMap from "./StoresInMap";
+import CategoryCheckbox from "../components/CategoryCheckbox";
+import { categories } from "../util/categories";
 
 const latLngs = [
   {lat: -34.605349, lng: -58.478619},
@@ -83,12 +85,12 @@ const Stores = () => {
           <div>
             <h4 className="text-xl font-semibold mb-2">Categories</h4>
 
-            <ul className="text-gray-800 space-y-2">
-              <li><a href="/#">Gastronomía</a></li>
-              <li><a href="/#">Supermercados</a></li>
-              <li><a href="/#">Farmacías</a></li>
-              <li><a href="/#">Boliches</a></li>
-              <li><a href="/#">Espectaculos</a></li>
+            <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
+              {categories.map((category, i) => <CategoryCheckbox
+                key={i}
+                label={category.name}
+                children={category.children}
+              />)}
             </ul>
           </div>
 

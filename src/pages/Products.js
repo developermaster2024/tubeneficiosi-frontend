@@ -12,6 +12,8 @@ import LeftSidebarLayout from "../components/LeftSidebarLayout";
 import { useState } from "react";
 import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
+import { categories } from "../util/categories";
+import CategoryCheckbox from "../components/CategoryCheckbox";
 
 const products = Array.from(Array(12).keys()).map(_ => ({
   name: 'Product name',
@@ -20,6 +22,7 @@ const products = Array.from(Array(12).keys()).map(_ => ({
   mainImgAlt: 'Hamburguesa',
   price: '36.00',
 }));
+
 
 const Products = () => {
   const [isInGridView, setIsInGridView] = useState(true);
@@ -61,12 +64,12 @@ const Products = () => {
           <div>
             <h4 className="text-xl font-semibold mb-2">Categories</h4>
 
-            <ul className="text-gray-800 space-y-2">
-              <li><a href="/#">Gastronomía</a></li>
-              <li><a href="/#">Supermercados</a></li>
-              <li><a href="/#">Farmacías</a></li>
-              <li><a href="/#">Boliches</a></li>
-              <li><a href="/#">Espectaculos</a></li>
+            <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
+              {categories.map((category, i) => <CategoryCheckbox
+                key={i}
+                label={category.name}
+                children={category.children}
+              />)}
             </ul>
           </div>
 
