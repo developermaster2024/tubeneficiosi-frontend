@@ -3,6 +3,7 @@ import { useState } from "react";
 import Button from "./Button";
 import HeartIcon from "./HeartIcon";
 import LocationMarker from "./LocationMarker";
+import PhoneIcon from "./PhoneIcon";
 import ShareIcon from "./ShareIcon";
 import StarIcon from "./StarIcon";
 
@@ -73,6 +74,11 @@ const MapContainer = ({google, height = 500, stores}) => {
         <div className="flex items-center space-x-2">
           <LocationMarker className="w-5 h-5 text-blue-500" />
           <span className="text-xs">Av. Rivadavia 5730, 1406 CABA</span>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <PhoneIcon className="w-5 h-5 text-blue-500" />
+          <span className="text-xs">+54 11 68647086</span>
         </div>
 
         <Button
