@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { Link } from "react-router-dom";
 
 const getColorClass = (color) => {
-  switch(color) {
+  switch (color) {
     case 'main':
       return 'bg-main hover:bg-main-dark';
     case 'blue':
@@ -14,8 +14,8 @@ const getColorClass = (color) => {
   }
 };
 
-const Button = ({children, className, href, to, color, onClick, startAdorment, endAdorment}) => {
-  const Tag = to 
+const Button = ({ children, className, href, to, color, onClick, startAdorment, endAdorment }) => {
+  const Tag = to
     ? Link
     : href
       ? 'a'
@@ -26,7 +26,7 @@ const Button = ({children, className, href, to, color, onClick, startAdorment, e
     href={href}
     to={to}
     className={clsx([
-      'inline-flex items-center justify-center px-4 py-2 space-x-2 leading-4 border border-white rounded text-white font-semibold shadow',
+      'inline-flex items-center justify-center px-4 py-2 space-x-2 leading-4 border rounded-full text-white font-semibold shadow',
       getColorClass(color),
       className,
     ])}
