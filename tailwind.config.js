@@ -23,6 +23,7 @@ module.exports = {
           dark: '#d91616',
         },
         gray: colors.trueGray,
+        'blue-gray': colors.gray,
         orange: colors.orange,
       }
     },

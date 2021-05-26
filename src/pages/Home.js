@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import events from '../assets/images/espectaculos.jpg';
 import events2 from '../assets/images/espectaculos2.jpg';
 import gastronomy from '../assets/images/gastronomia.jpg';
@@ -34,13 +35,14 @@ import HomeSlider from "../components/HomeSlider";
 import ProductAdCard from "../components/ProductAdCard";
 import ProductCard from "../components/ProductCard";
 import SectionHeading from "../components/SectionHeading";
+import banner2 from '../assets/images/banner2.jpg';
 
 const categories = [
-  {name: 'Espectaculos', img: events},
-  {name: 'Gastronomía', img: gastronomy},
-  {name: 'Supermercados', img: supermarkets},
-  {name: 'Boliches', img: bars},
-  {name: 'Farmacias', img: pharmacy},
+  { name: 'Espectaculos', img: events },
+  { name: 'Gastronomía', img: gastronomy },
+  { name: 'Supermercados', img: supermarkets },
+  { name: 'Boliches', img: bars },
+  { name: 'Farmacias', img: pharmacy },
 ];
 
 const Home = () => {
@@ -115,13 +117,13 @@ const Home = () => {
 
       {/* HAGAMOSLO JUNTOS */}
       <div className="container">
-        
+
         <h3 className="text-5xl text-center font-semibold">Hagámoslo juntos</h3>
-        
+
         <div className="flex space-x-4 mt-20">
           {[
-            {imgSrc: partner, imgAlt: 'Socio', title: 'Hazte Partner', content: '¡Crece con BeneficioSi! ¡Nuestra tecnología y base de usuarios puede ayudarte a aumentar las ventas y descubrir nuevas oportunidades!'},
-            {imgSrc: clients, imgAlt: 'Clientes', title: 'Registrate como cliente', content: 'Pedí online rápido y fácil a reconocidas marcas y +10.000 restaurantes'},
+            { imgSrc: partner, imgAlt: 'Socio', title: 'Hazte Partner', content: '¡Crece con BeneficioSi! ¡Nuestra tecnología y base de usuarios puede ayudarte a aumentar las ventas y descubrir nuevas oportunidades!' },
+            { imgSrc: clients, imgAlt: 'Clientes', title: 'Registrate como cliente', content: 'Pedí online rápido y fácil a reconocidas marcas y +10.000 restaurantes' },
           ].map((item, i) => <div
             key={i}
             className="w-1/2 flex flex-col items-center"
@@ -137,7 +139,7 @@ const Home = () => {
                 {item.content}
               </p>
             </div>
-            
+
             <button className="
               inline-flex items-center justify-center
               mt-auto px-6 py-4 space-x-2
@@ -237,6 +239,12 @@ const Home = () => {
       </div>
     </div>
 
+    <Link to={`/products/slug-del-producto`}>
+      <div className="min-h-[50vh] my-8" style={{ backgroundImage: `url(${banner2})`, backgroundSize: '100% 100%' }}>
+
+      </div>
+    </Link>
+
     {/* Boliches */}
     <div className="container mt-20">
       <div className="flex space-x-4">
@@ -295,10 +303,10 @@ const Home = () => {
     <div className="container mt-20">
       <div className="flex justify-between space-x-4">
         {[
-          {name: 'Ecology', bannerSrc: ecologyBanner, logoSrc: ecology},
-          {name: 'Dell', bannerSrc: dellBanner, logoSrc: dell},
-          {name: 'Wix', bannerSrc: wixBanner, logoSrc: wix},
-          {name: 'Ama de Casa', bannerSrc: amaDeCasaBanner, logoSrc: amaDeCasa},
+          { name: 'Ecology', bannerSrc: ecologyBanner, logoSrc: ecology },
+          { name: 'Dell', bannerSrc: dellBanner, logoSrc: dell },
+          { name: 'Wix', bannerSrc: wixBanner, logoSrc: wix },
+          { name: 'Ama de Casa', bannerSrc: amaDeCasaBanner, logoSrc: amaDeCasa },
         ].map(tienda => <div
           key={tienda.name}
           className="relative bg-white max-w-xs w-full rounded-md overflow-hidden shadow"
@@ -314,7 +322,7 @@ const Home = () => {
             alt={tienda.name}
             className="absolute left-1/2 top-[40px] h-20 w-20 transform -translate-x-1/2 rounded shadow-md"
           />
-          
+
           <div className="p-4 pt-16 space-y-7">
             <h4 className="text-2xl text-center">{tienda.name}</h4>
 
@@ -343,9 +351,9 @@ const Home = () => {
     <div className="container mt-20">
       <div className="flex justify-center space-x-4">
         {[
-          {imgSrc: tresCepas, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves'},
-          {imgSrc: fiveAsec, imgAlt: '3 cepas', promo: 'Hasta 40%', title: 'De ahorro', subtitle: 'Todos los dias'},
-          {imgSrc: fiveAsec, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro', subtitle: 'Todos los jueves'},
+          { imgSrc: tresCepas, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
+          { imgSrc: fiveAsec, imgAlt: '3 cepas', promo: 'Hasta 40%', title: 'De ahorro', subtitle: 'Todos los dias' },
+          { imgSrc: fiveAsec, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro', subtitle: 'Todos los jueves' },
         ].map((promo, i) => <div
           className="flex flex-col justify-center items-center p-8 max-w-[300px] bg-white rounded-md shadow"
           key={i}
@@ -400,26 +408,26 @@ const Home = () => {
 
     {/* WHAT WE OFFER */}
     <div className="container my-20">
-        <div className="flex justify-evenly">
-          {[
-            {imgSrc: shield, title: 'Publicaciones verificadas', content: 'Nuestras publicaciones requieren una validación por datos y controlamos lo publicado'},
-            {imgSrc: rent, title: 'Compra protegida', content: 'Podés señar el auto que quieras y si la compra no se hace efectiva se te devuelve el importe al 100%'},
-            {imgSrc: callCenterAgent, title: 'Soporte', content: 'Acompañamos el proceso asegurandonos de que todo salga correctamente'},
-          ].map(item => <div
-            className="flex flex-col items-center space-y-4 w-full max-w-xs"
-            key={item.title}
-          >
-            <img
-              src={item.imgSrc}
-              alt={item.title}
-              className="h-20 w-20"
-            />
+      <div className="flex justify-evenly">
+        {[
+          { imgSrc: shield, title: 'Publicaciones verificadas', content: 'Nuestras publicaciones requieren una validación por datos y controlamos lo publicado' },
+          { imgSrc: rent, title: 'Compra protegida', content: 'Podés señar el auto que quieras y si la compra no se hace efectiva se te devuelve el importe al 100%' },
+          { imgSrc: callCenterAgent, title: 'Soporte', content: 'Acompañamos el proceso asegurandonos de que todo salga correctamente' },
+        ].map(item => <div
+          className="flex flex-col items-center space-y-4 w-full max-w-xs"
+          key={item.title}
+        >
+          <img
+            src={item.imgSrc}
+            alt={item.title}
+            className="h-20 w-20"
+          />
 
-            <h4 className="text-xl font-semibold">{item.title}</h4>
-            
-            <p className="text-center">{item.content}</p>
-          </div>)}
-        </div>
+          <h4 className="text-xl font-semibold">{item.title}</h4>
+
+          <p className="text-center">{item.content}</p>
+        </div>)}
+      </div>
     </div>
   </>;
 };

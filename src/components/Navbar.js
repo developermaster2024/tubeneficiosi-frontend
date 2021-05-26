@@ -29,7 +29,6 @@ const Navbar = () => {
           <div className="flex items-center">
             <nav className="space-x-5 mr-5">
               <Link to="/products">Comprar</Link>
-              <a href="/#">Vender</a>
               <a href="/#">Ayuda</a>
             </nav>
 
