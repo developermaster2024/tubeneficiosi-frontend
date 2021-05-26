@@ -10,10 +10,19 @@ import { IoCheckmarkCircleSharp } from "react-icons/io5";
 //Imagenes
 import BeneficioSiLogo from '../assets/images/logo.jpg';
 
+//
+import { Link, useHistory } from 'react-router-dom';
+
 const SelectUserToLogin = (props) => {
 
   const { show, setShow } = props;
   const [userType, setUserType] = useState(null);
+  const history = useHistory();
+
+  const handleContinue = () => {
+    history.push('/login');
+    closeModal();
+  }
 
   useEffect(() => {
 
@@ -83,7 +92,8 @@ const SelectUserToLogin = (props) => {
         </p>
 
         <div className="text-center mt-8">
-          <button className={clsx('px-24 py-4 rounded-full transition duration-500', {
+
+          <button onClick={handleContinue} disabled={!userType} className={clsx('px-24 py-4 rounded-full transition duration-500', {
             'bg-gray-100 text-gray-500': !userType,
             'bg-main text-white': userType,
           })}>
@@ -91,7 +101,7 @@ const SelectUserToLogin = (props) => {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   )
 
 }
