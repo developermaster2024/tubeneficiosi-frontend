@@ -36,6 +36,10 @@ import ProductAdCard from "../components/ProductAdCard";
 import ProductCard from "../components/ProductCard";
 import SectionHeading from "../components/SectionHeading";
 import banner2 from '../assets/images/banner2.jpg';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import StoreDiscountCard from '../components/StoreDiscountCard';
+import BankDiscountCard from '../components/BankDiscountCard';
+import { storeDiscounts, bankDiscounts } from '../util/discounts'
 
 const categories = [
   { name: 'Espectaculos', img: events },
@@ -343,33 +347,86 @@ const Home = () => {
       </div>
     </div>
 
+    {/*Descuentos*/}
+
+    <div className="container mt-20">
+      <SectionHeading>Descuentos</SectionHeading>
+    </div>
+
+    <div className="my-20 px-24">
+      <Swiper
+        navigation
+        style={{ padding: '0 100px' }}
+        onSlideChange={() => console.log('slide change')}
+        slidesPerView={3}
+        spaceBetween={50}
+        onSwiper={(swiper) => console.log(swiper)}
+      >
+        {
+          storeDiscounts.map((storeDiscount, i) =>
+            <SwiperSlide>
+              <StoreDiscountCard storeDiscount={storeDiscount}></StoreDiscountCard>
+            </SwiperSlide>
+          )
+        }
+      </Swiper>
+    </div>
+
+    {/* BENEFICIOS POR BANCO */}
+
     <div className="container mt-20">
       <SectionHeading>Beneficios por banco</SectionHeading>
     </div>
 
-    {/* BENEFICIOS POR BANCO */}
-    <div className="container mt-20">
-      <div className="flex justify-center space-x-4">
-        {[
-          { imgSrc: tresCepas, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
-          { imgSrc: fiveAsec, imgAlt: '3 cepas', promo: 'Hasta 40%', title: 'De ahorro', subtitle: 'Todos los dias' },
-          { imgSrc: fiveAsec, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro', subtitle: 'Todos los jueves' },
-        ].map((promo, i) => <div
-          className="flex flex-col justify-center items-center p-8 max-w-[300px] bg-white rounded-md shadow"
-          key={i}
-        >
-          <img
-            src={promo.imgSrc}
-            alt={promo.imgAlt}
-            className="h-20"
-          />
+    <div className="my-20 px-24">
+      <Swiper
+        navigation
+        style={{ padding: '0 100px' }}
+        onSlideChange={() => console.log('slide change')}
+        slidesPerView={2}
+        spaceBetween={50}
+        onSwiper={(swiper) => console.log(swiper)}
+      >
+        {
+          bankDiscounts.map((banckDiscount, i) =>
+            <SwiperSlide>
+              <BankDiscountCard bankDiscount={banckDiscount} ></BankDiscountCard>
+            </SwiperSlide>
+          )
+        }
+      </Swiper>
+    </div>
 
-          <p className="text-orange-500 text-4xl font-semibold my-3">{promo.promo}</p>
 
-          <p className="text-xl leading-none text-gray-600 tracking-tight uppercase">{promo.title}</p>
+    <div className="container mt-12">
+      <p className="text-center font-bold text-gray-500 text-2xl">Mas Productos</p>
+    </div>
 
-          <p className="text-xl leading-none text-gray-600 tracking-tight mt-8">{promo.subtitle}</p>
-        </div>)}
+    {/* PRODUCT ADS */}
+    <div className="container mt-12">
+      <div className="flex space-x-4">
+        <ProductAdCard
+          title={<>
+            <p>lo último</p>
+            <p>en celurares</p>
+          </>}
+          subtitle="black friday"
+          btnText="Ver más"
+          href="/#"
+          imgSrc={motorola}
+          imgAlt="Celulares"
+        />
+        <ProductAdCard
+          title={<>
+            <p>Refrescá tus</p>
+            <p>espacios</p>
+          </>}
+          subtitle="black friday"
+          btnText="Ver más"
+          href="/#"
+          imgSrc={aires}
+          imgAlt="Aires acondicionados"
+        />
       </div>
     </div>
 
