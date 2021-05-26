@@ -1,7 +1,12 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.jpg';
+import SelectUserToLogin from './SelectUserToLogin'
 
 const Navbar = () => {
+
+  const [show, setShow] = useState(false);
+
   return <>
     <div className="h-14 bg-gray-800 text-white">
       <div className="container h-full">
@@ -32,7 +37,7 @@ const Navbar = () => {
               <a href="/#">Ayuda</a>
             </nav>
 
-            <button className="inline-flex items-center justify-center px-3 py-2 space-x-2 leading-4 border border-white rounded">
+            <button onClick={() => { setShow(true) }} className="inline-flex items-center justify-center px-3 py-2 space-x-2 leading-4 border border-white rounded">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -64,6 +69,7 @@ const Navbar = () => {
         </div>
       </div>
     </div>
+    <SelectUserToLogin show={show} setShow={setShow}></SelectUserToLogin>
   </>;
 };
 

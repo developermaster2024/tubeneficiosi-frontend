@@ -6,6 +6,8 @@ import SwiperCore, { Navigation, Pagination } from 'swiper';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import 'animate.css/animate.min.css';
+
 SwiperCore.use([Navigation, Pagination]);
 
 ReactDOM.render(
