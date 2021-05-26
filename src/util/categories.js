@@ -3,7 +3,11 @@ export const createCategory = (name, children) => ({ name, children });
 export const categories = [
   createCategory('Gastronomía', [
     createCategory('Comodidades', [
-      createCategory('Wi-fi Gratis'),
+      createCategory('Wi-fi Gratis', [
+        createCategory('De 10MB'),
+        createCategory('De 20MB'),
+        createCategory('De 50MB'),
+      ]),
       createCategory('Acepta tarjetas de crédito'),
       createCategory('Incluye estacionamiento'),
       createCategory('Juegos para niños'),

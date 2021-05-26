@@ -17,7 +17,9 @@ import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
 import DiscountsSlider from "../components/DiscountsSlider";
 import { discounts } from "../util/discounts";
+import { cards } from '../util/cards';
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
+import CategoryCheckbox from "../components/CategoryCheckbox";
 
 const products = Array.from(Array(12).keys()).map(_ => ({
   name: 'Product name',
@@ -32,9 +34,9 @@ const Store = () => {
 
   return <>
     <div className="bg-white">
-      <Container>
-        <MainCategoriesBar />
-      </Container>
+
+      <MainCategoriesBar />
+
     </div>
 
     <img
@@ -75,7 +77,7 @@ const Store = () => {
         </div>
       </Container>
     </div>
-  
+
     <Container withMargin className="mb-20">
       <LeftSidebarLayout
         leftSide={<div className="w-60 space-y-6">
@@ -121,10 +123,10 @@ const Store = () => {
                 className="flex items-center space-x-2"
               >
                 <Checkbox label={<div className="flex space-x-1">
-                    {[1, 2, 3, 4, 5].map(n => <StarIcon
-                      key={n}
-                      className="w-4 h-4 text-yellow-400"
-                    />)}
+                  {[1, 2, 3, 4, 5].map(n => <StarIcon
+                    key={n}
+                    className="w-4 h-4 text-yellow-400"
+                  />)}
                 </div>} />
               </li>)}
             </ul>
@@ -139,7 +141,7 @@ const Store = () => {
               <li><Checkbox label="10$ a 100$" /></li>
               <li><Checkbox label="100$ a 500$" /></li>
               <li><Checkbox label="500$ a 1000$" /></li>
-              <li><Checkbox label="Más de 1000$" /></li>                
+              <li><Checkbox label="Más de 1000$" /></li>
             </ul>
 
             <div className="flex space-x-2">
@@ -170,6 +172,21 @@ const Store = () => {
               <li><Checkbox label="Televisores" /></li>
               <li><Checkbox label="Empanadas" /></li>
               <li><Checkbox label="Alguna otra" /></li>
+            </ul>
+          </div>
+
+          {/*Cards*/}
+          <div>
+            <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
+
+            <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
+              {cards.map((card, i) =>
+                <CategoryCheckbox
+                  key={i}
+                  label={card.name}
+                  children={card.children}
+                />
+              )}
             </ul>
           </div>
 

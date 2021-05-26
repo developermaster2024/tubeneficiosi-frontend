@@ -17,18 +17,19 @@ import CategoryCheckbox from "../components/CategoryCheckbox";
 import { categories } from "../util/categories";
 import DiscountsSlider from "../components/DiscountsSlider";
 import { discounts } from "../util/discounts";
+import { cards } from "../util/cards";
 
 const latLngs = [
-  {lat: -34.605349, lng: -58.478619},
-  {lat: -34.615521, lng: -58.408581},
-  {lat: -34.571149, lng: -58.430211},
-  {lat: -34.654504, lng: -58.486859},
-  {lat: -34.569453, lng: -58.499905},
-  {lat: -34.651057, lng: -58.521639},
-  {lat: -34.638347, lng: -58.433749},
-  {lat: -34.622245, lng: -58.516489},
-  {lat: -34.649928, lng: -58.404566},
-  {lat: -34.584943, lng: -58.435809},
+  { lat: -34.605349, lng: -58.478619 },
+  { lat: -34.615521, lng: -58.408581 },
+  { lat: -34.571149, lng: -58.430211 },
+  { lat: -34.654504, lng: -58.486859 },
+  { lat: -34.569453, lng: -58.499905 },
+  { lat: -34.651057, lng: -58.521639 },
+  { lat: -34.638347, lng: -58.433749 },
+  { lat: -34.622245, lng: -58.516489 },
+  { lat: -34.649928, lng: -58.404566 },
+  { lat: -34.584943, lng: -58.435809 },
 ];
 
 const stores = Array.from(Array(12).keys()).map(n => ({
@@ -43,7 +44,7 @@ const stores = Array.from(Array(12).keys()).map(n => ({
 
 const Stores = () => {
   const [viewType, setViewType] = useState('grid');
-  
+
   return <>
     <div className="bg-white shadow-sm">
       <Container className="py-5">
@@ -119,6 +120,21 @@ const Stores = () => {
             </ul>
           </div>
 
+          {/*Cards*/}
+          <div>
+            <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
+
+            <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
+              {cards.map((card, i) =>
+                <CategoryCheckbox
+                  key={i}
+                  label={card.name}
+                  children={card.children}
+                />
+              )}
+            </ul>
+          </div>
+
           <Button
             color="white"
             endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}
@@ -131,8 +147,8 @@ const Stores = () => {
         <div className="mb-10">
           <DiscountsSlider discounts={discounts} />
         </div>
-        
-        {viewType === 'map' && <StoresInMap stores={stores} />}   
+
+        {viewType === 'map' && <StoresInMap stores={stores} />}
         {viewType !== 'map' && <StoresCollection stores={stores} isInGridView={viewType === 'grid'} />}
       </LeftSidebarLayout>
 

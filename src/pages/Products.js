@@ -141,9 +141,13 @@ const Products = () => {
             <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
 
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
-              {cards.map((card, i) => <a href="#" style={{ display: 'block', color: '#F04141' }}>
-                {card.name}
-              </a>)}
+              {cards.map((card, i) =>
+                <CategoryCheckbox
+                  key={i}
+                  label={card.name}
+                  children={card.children}
+                />
+              )}
             </ul>
           </div>
 
