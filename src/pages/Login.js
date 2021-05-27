@@ -1,10 +1,11 @@
 //Imagenes
 import BeneficioSiLogo from '../assets/images/logo.jpg';
 import DeliveryMotion from '../assets/images/delivery-motion.gif';
-
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const Login = () => {
+
+  const history = useHistory();
 
   return (
     <div className="py-24">
@@ -46,7 +47,7 @@ const Login = () => {
             </div>
 
             <div className="text-center">
-              <button className="bg-main px-4 py-2 rounded text-white">
+              <button onClick={() => { history.push('/my-account/dashboard') }} className="bg-main px-4 py-2 rounded text-white">
                 Iniciar sesion
               </button>
             </div>
