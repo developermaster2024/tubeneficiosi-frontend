@@ -5,6 +5,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { IoCartOutline } from "react-icons/io5";
 import { IoLogOutOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 
 const MyAccountLayout = ({ children }) => {
@@ -14,28 +15,42 @@ const MyAccountLayout = ({ children }) => {
       <div className="flex">
         <div className="w-[5vw] bg-white h-[100vh] text-gray-500 text-[2vw]">
           <div>
-            <IoHomeSharp className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoHomeSharp>
+            <Link to={'/my-account/dashboard'}>
+              <IoHomeSharp className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoHomeSharp>
+            </Link>
           </div>
           <div>
-            <IoPersonCircleSharp className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoPersonCircleSharp>
+            <Link to={'/my-account/info'}>
+              <IoPersonCircleSharp className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoPersonCircleSharp>
+            </Link>
           </div>
           <div>
-            <IoLocationSharp className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoLocationSharp>
+            <Link to={'/my-account/address'}>
+              <IoLocationSharp className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoLocationSharp>
+            </Link>
           </div>
           <div>
-            <IoDocumentTextOutline className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoDocumentTextOutline>
+            <Link to={'/my-account/orders'}>
+              <IoDocumentTextOutline className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoDocumentTextOutline>
+            </Link>
           </div>
           <div>
-            <IoChatboxEllipsesOutline className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoChatboxEllipsesOutline>
+            <Link to={'/my-account/conversations'}>
+              <IoChatboxEllipsesOutline className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoChatboxEllipsesOutline>
+            </Link>
           </div>
           <div>
-            <IoCartOutline className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoCartOutline>
+            <Link to={'/my-account/carts'}>
+              <IoCartOutline className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoCartOutline>
+            </Link>
           </div>
           <div>
-            <IoLogOutOutline className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoLogOutOutline>
+            <Link>
+              <IoLogOutOutline className="mx-auto my-6 cursor-pointer hover:text-main transition duration-500"></IoLogOutOutline>
+            </Link>
           </div>
         </div>
-        <div className="w-1/12">
+        <div className="w-full min-w-0">
           {children}
         </div>
       </div>
