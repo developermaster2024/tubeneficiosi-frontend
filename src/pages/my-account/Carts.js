@@ -1,5 +1,6 @@
 import { IoCart } from "react-icons/io5";
-
+import MyAccountCartsTable from "../../components/MyAccountCartsTable";
+import { UserCarts } from '../../util/user-carts';
 const MyAccountCarts = () => {
   return (
     <div className="px-8">
@@ -7,6 +8,8 @@ const MyAccountCarts = () => {
         <IoCart className="text-4xl"></IoCart>
         <span className="ml-4">Mis Carritos</span>
       </h1>
+
+      <MyAccountCartsTable className carts={UserCarts}></MyAccountCartsTable>
     </div>
   )
 }
