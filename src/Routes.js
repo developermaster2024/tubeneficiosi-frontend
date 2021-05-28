@@ -5,6 +5,9 @@ import Products from "./pages/Products";
 import Stores from "./pages/Stores";
 import Product from "./pages/Product";
 import Benefits from "./pages/Benefits";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import MyAccountRoutes from './MyAccountRoutes';
 
 const Routes = () => {
   return <Switch>
@@ -14,6 +17,12 @@ const Routes = () => {
     <Route path="/products" exact component={Products} />
     <Route path="/products/:slug" exact component={Product} />
     <Route path="/benefits" exact component={Benefits} />
+
+    <Route path="/login" exact component={Login} />
+    <Route path="/register" exact component={Register} />
+
+
+    <Route path="/my-account" component={MyAccountRoutes} />
   </Switch>;
 };
 
