@@ -16,8 +16,14 @@ import StoresInMap from "./StoresInMap";
 import CategoryCheckbox from "../components/CategoryCheckbox";
 import { categories } from "../util/categories";
 import DiscountsSlider from "../components/DiscountsSlider";
-import { discounts } from "../util/discounts";
+import { discounts, storeDiscounts } from "../util/discounts";
 import { cards } from "../util/cards";
+import adsBanner from '../assets/images/banner.jpg';
+import adsBanner2 from '../assets/images/banner2.jpg';
+import storesBanner from '../assets/images/storesbanner.webp';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+import StoreDiscountCard from "../components/StoreDiscountCard";
 
 const latLngs = [
   { lat: -34.605349, lng: -58.478619 },
@@ -45,11 +51,13 @@ const stores = Array.from(Array(12).keys()).map(n => ({
 const Stores = () => {
   const [viewType, setViewType] = useState('grid');
 
+  const [activePage, setActivePage] = useState(1);
+
   return <>
     <div className="bg-white shadow-sm">
       <Container className="py-5">
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-semibold">Comercios</h2>
+          <h2 className="text-3xl font-semibold">Tiendas</h2>
 
           <div className="flex space-x-4">
             <span
@@ -81,6 +89,11 @@ const Stores = () => {
         </div>
       </Container>
     </div>
+
+    <Link to={'/stores/burguerking'}>
+      <div className="h-[35vh] w-full" style={{ backgroundImage: `url(${storesBanner})`, backgroundSize: '100% 100%' }}>
+      </div>
+    </Link>
 
     <Container withMargin className="mb-20">
       <LeftSidebarLayout
@@ -142,18 +155,46 @@ const Stores = () => {
           >
             Beneficios
           </Button>
+
+          <Link to={'/stores/burguerking'}>
+            <img className="w-full h-[120px] my-6 rounded" src={adsBanner} />
+          </Link>
+
+          <Link to={'/stores/burguerking'}>
+            <img className="w-full h-[120px] rounded my-6" src={adsBanner2} />
+          </Link>
         </div>}
       >
         <div className="mb-10">
-          <DiscountsSlider discounts={discounts} />
+          {/*Descuentos*/}
+          <h1 className="text-gray-600 font-semibold text-4xl mb-4">Descuentos</h1>
+          <Swiper
+            navigation
+            style={{ padding: '0 100px' }}
+            onSlideChange={() => console.log('slide change')}
+            autoplay={true}
+            slidesPerView={2}
+            spaceBetween={50}
+            onSwiper={(swiper) => console.log(swiper)}
+          >
+            {
+              storeDiscounts.map((storeDiscount, i) =>
+                <SwiperSlide>
+                  <StoreDiscountCard storeDiscount={storeDiscount}></StoreDiscountCard>
+                </SwiperSlide>
+              )
+            }
+          </Swiper>
         </div>
 
         {viewType === 'map' && <StoresInMap stores={stores} />}
         {viewType !== 'map' && <StoresCollection stores={stores} isInGridView={viewType === 'grid'} />}
+
+
       </LeftSidebarLayout>
 
-      <div className="flex justify-center items-center mt-10">
-        <Pagination />
+      <div className="flex w-full justify-center items-center mt-10">
+        <Pagination pages={10} activePage={activePage} onChange={setActivePage}></Pagination>
       </div>
     </Container>
   </>;
