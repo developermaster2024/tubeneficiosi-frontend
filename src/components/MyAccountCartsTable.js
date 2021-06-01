@@ -70,7 +70,9 @@ const MyAccountCartsTable = (props) => {
                     {cart.currency.code} {cart.products.reduce((total, product) => total + product.price, 0)}
                   </div>
                   <div className="w-3/12 flex justify-center items-center text-gray-400">
-                    <IoStorefrontSharp className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300"></IoStorefrontSharp>
+                    <Link to={`/stores/${cart.store.slug}`}>
+                      <IoStorefrontSharp className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300"></IoStorefrontSharp>
+                    </Link>
                     {
                       showDetails === i ?
                         <IoChevronUp onClick={() => { showDetailsCart(i) }} className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300"></IoChevronUp>

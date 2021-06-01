@@ -1,8 +1,5 @@
 import Container from "../components/Container"
-import MainCategoriesBar from "../components/MainCategoriesBar"
 import storeBanner from '../assets/images/store-banner.png';
-import GridIcon from "../components/GridIcon";
-import ListIcon from "../components/ListIcon";
 import Checkbox from "../components/Checkbox";
 import StarIcon from "../components/StarIcon";
 import TextField from "../components/TextField";
@@ -13,13 +10,21 @@ import burger from '../assets/images/hamburguesa.jpg';
 import burgerKing from '../assets/images/burger-king.png';
 import Badge from "../components/Badge";
 import { useState } from "react";
-import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
 import DiscountsSlider from "../components/DiscountsSlider";
 import { discounts } from "../util/discounts";
 import { cards } from '../util/cards';
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
 import CategoryCheckbox from "../components/CategoryCheckbox";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import {
+  IoHeartOutline,
+  IoStorefrontSharp,
+  IoCartOutline,
+  IoLocationSharp,
+  IoHeart
+} from "react-icons/io5";
+import StoreCart from "../components/StoreCart";
 
 const products = Array.from(Array(12).keys()).map(_ => ({
   name: 'Product name',
@@ -31,56 +36,67 @@ const products = Array.from(Array(12).keys()).map(_ => ({
 
 const Store = () => {
   const [isInGridView, setIsInGridView] = useState(true);
+  const [favorite, setFavorite] = useState(false);
+  const [showCart, setShowCart] = useState(false);
 
   return <>
-    <div className="bg-white">
-
+    {/* <div className="bg-white">
       <MainCategoriesBar />
+    </div> */}
 
-    </div>
-
-    <img
-      src={storeBanner}
-      alt="Tienda"
-      className="h-80 w-full"
-    />
-
-    <div className="bg-white shadow-sm">
-      <Container className="py-3">
-        <div className="flex justify-between items-center">
+    <div>
+      <Swiper
+        navigation
+        onSlideChange={() => console.log('slide change')}
+        spaceBetween={50}
+        onSwiper={(swiper) => console.log(swiper)}
+        className="bg-red-500"
+      >
+        <SwiperSlide className="w-full relative z-[2]">
           <img
-            src={burgerKing}
-            alt="Burger king"
-            className="h-16 w-16 rounded border border-gray-50 object-contain shadow-sm"
+            src={storeBanner}
+            alt="Tienda"
+            className="h-[60vh] w-full"
           />
-
-          <div className="flex space-x-4">
-            <span
-              className={clsx(['inline-flex items-center space-x-1 cursor-pointer', !isInGridView && 'opacity-75'])}
-              onClick={() => setIsInGridView(true)}
-            >
-              <GridIcon className="w-4 h-4" />
-              <span>Vista de grilla</span>
-            </span>
-            <span
-              className={clsx(['inline-flex items-center space-x-1 cursor-pointer', isInGridView && 'opacity-75'])}
-              onClick={() => setIsInGridView(false)}
-            >
-              <ListIcon className="w-4 h-4" />
-              <span>Vista de lista</span>
-            </span>
-            <a href="/#" className="inline-flex items-center space-x-1">
-              <Badge>110</Badge>
-              <span>Productos</span>
-            </a>
+          <div className="bg-black justify-between items-center bg-opacity-50 flex absolute z-1 bottom-0 w-full left-0 p-6 text-white">
+            <div className="flex items-center">
+              <div>
+                <img className="w-[50px] rounded" src={burgerKing} alt="" />
+              </div>
+              <div className="ml-4">
+                <p className="text-2xl mb-2">BurguerKing</p>
+                <p>Juncal 2930</p>
+              </div>
+            </div>
+            <IoLocationSharp className="text-4xl cursor-pointer hover:text-main transition duration-500" />
           </div>
-        </div>
-      </Container>
+        </SwiperSlide>
+        <SwiperSlide className="w-full text-center">
+          <iframe
+            className="w-full h-[60vh]"
+            src="https://www.youtube.com/embed/uRICh6qoca0"
+            title="YouTube video player"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+        </SwiperSlide>
+      </Swiper>
     </div>
 
     <Container withMargin className="mb-20">
       <LeftSidebarLayout
         leftSide={<div className="w-60 space-y-6">
+          <h1 className="text-xl text-gray-600 font-bold flex items-center">
+            <IoStorefrontSharp className="mr-4 text-4xl" />
+            <p>Informacion de la tienda</p>
+          </h1>
+          <div>
+            <p className="my-2"><span className="text-gray-700 font-bold">Telefono:</span> +5491123916734</p>
+            <p className="my-2"><span className="text-gray-700 font-bold">Descripcion:</span> Vende Comida</p>
+            <p className="my-2"><span className="text-gray-700 font-bold">Instagram:</span> @BurguerKing</p>
+            <p className="my-2"><span className="text-gray-700 font-bold">Facebook:</span> @BurguerKing</p>
+            <p className="my-2"><span className="text-gray-700 font-bold">Whatsapp:</span> +5491123916734</p>
+          </div>
           {/* Categories */}
           <div>
             <h4 className="text-xl font-semibold mb-2">Categories</h4>
@@ -199,8 +215,30 @@ const Store = () => {
           </Button>
         </div>}
       >
-        <div className="mb-10">
-          <DiscountsSlider discounts={discounts} />
+        <div className="mb-10 flex items-center justify-between">
+          <div className="w-10/12">
+            <DiscountsSlider discounts={discounts} />
+          </div>
+
+          {/* Cart and Favorite Button */}
+          <div className="w-2/12 p-4 flex items-center justify-between">
+            {
+              favorite ?
+                <IoHeart onClick={() => {
+                  setFavorite((actualValue) => {
+                    return !actualValue;
+                  })
+                }} className="text-[50px] bg-white p-2 rounded-full shadow-lg text-main cursor-pointer" />
+                :
+                <IoHeartOutline onClick={() => {
+                  setFavorite((actualValue) => {
+                    return !actualValue;
+                  })
+                }} className="text-[50px] bg-white p-2 rounded-full shadow-lg text-main hover:text-main cursor-pointer" />
+            }
+
+            <IoCartOutline onClick={() => { setShowCart(true) }} className="text-[50px] bg-white p-2 rounded-full text-gray-500 shadow-lg transition duration-500 hover:text-main cursor-pointer"></IoCartOutline>
+          </div>
         </div>
 
         <ProductsCollection
@@ -213,6 +251,7 @@ const Store = () => {
         <Pagination />
       </div>
     </Container>
+    <StoreCart show={showCart} closeCart={() => { setShowCart(false) }} />
   </>;
 };
 

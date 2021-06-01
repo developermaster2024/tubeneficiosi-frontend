@@ -10,7 +10,8 @@ export const UserCarts = [
     id: 1,
     store: {
       name: 'BurguerKing',
-      image: BurguerKing
+      image: BurguerKing,
+      slug: 'burguerking'
     },
     currency: {
       symbol: '$',
@@ -69,7 +70,8 @@ export const UserCarts = [
     id: 1,
     store: {
       name: 'Macdonalds',
-      image: MacDonalds
+      image: MacDonalds,
+      slug: 'mac-donalds'
     },
     products: [
       {
