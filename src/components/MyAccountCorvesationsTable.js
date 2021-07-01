@@ -70,7 +70,7 @@ const MyAccountConversationsTable = (props) => {
               {conversation.status.title}
             </div>
             <div className="w-1/12">
-              <Link className="hover:text-main transition duration-300">
+              <Link to={`/my-account/conversations/${conversation.id}`} className="hover:text-main transition duration-300">
                 Abrir chat
                 <IoArrowForwardOutline className="m-auto text-2xl"></IoArrowForwardOutline>
               </Link>

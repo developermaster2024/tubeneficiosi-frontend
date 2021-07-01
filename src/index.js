@@ -5,6 +5,7 @@ import 'swiper/swiper-bundle.css';
 import SwiperCore, { Navigation, Pagination } from 'swiper';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from './contexts/AuthContext';
 
 import 'animate.css/animate.min.css';
 
@@ -12,7 +13,9 @@ SwiperCore.use([Navigation, Pagination]);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

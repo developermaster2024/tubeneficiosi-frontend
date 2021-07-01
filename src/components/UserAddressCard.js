@@ -6,10 +6,10 @@ import { IoMapOutline } from "react-icons/io5";
 
 const UserAddressCard = (props) => {
 
-  const { name, address, latLng, className } = props;
+  const { name, address, latLng, className, onClick } = props;
 
   return (
-    <div className={className}>
+    <div className={className} onClick={onClick}>
       <IoCloseCircleSharp className="absolute -top-2 -right-2 text-2xl hover:text-main cursor-pointer transition duration-500"></IoCloseCircleSharp>
       <h3 className="font-bold text-2xl my-4">
         <IoLocationOutline></IoLocationOutline> {name}

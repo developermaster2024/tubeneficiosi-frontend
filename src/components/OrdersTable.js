@@ -81,7 +81,9 @@ const OrdersTable = (props) => {
               {order.paidMethod.name}
             </div>
             <div className="w-1/12">
-              <IoEye className="m-auto text-2xl cursor-pointer hover:text-main transition duration-300"></IoEye>
+              <Link to={'/orders/12h3j1h'}>
+                <IoEye className="m-auto text-2xl cursor-pointer hover:text-main transition duration-300"></IoEye>
+              </Link>
             </div>
           </div>
           )

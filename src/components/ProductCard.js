@@ -8,7 +8,9 @@ const ProductCard = ({
   price,
   imgSrc,
   imgAlt,
+  onBuy
 }) => {
+
   return <div
     className="p-5 mt-12 max-w-[250px] space-y-4 relative pt-28 w-full rounded-md transform hover:shadow-2xl hover:-translate-y-3 transition duration-500"
   >
@@ -51,7 +53,7 @@ const ProductCard = ({
         <p>1</p>
         <p className="text-bold text-gray-800 text-lg cursor-pointer hover:text-main">+</p>
       </div>
-      <Button className="w-2/3 rounded-lg" color="main" onClick={e => e.preventDefault()}>Comprar</Button>
+      <Button className="w-2/3 rounded-lg" color="main" onClick={onBuy}>Comprar</Button>
     </div>
   </div>
 };

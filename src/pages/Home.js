@@ -18,8 +18,6 @@ import wix from '../assets/images/wix.jpg';
 import wixBanner from '../assets/images/wix-banner.jpg';
 import amaDeCasa from '../assets/images/ama-de-casa.jpg';
 import amaDeCasaBanner from '../assets/images/ama-de-casa-banner.jpg';
-import tresCepas from '../assets/images/3-cepas.png';
-import fiveAsec from '../assets/images/5asec.png';
 import shield from '../assets/images/shield.png';
 import callCenterAgent from '../assets/images/call-center-agent.png';
 import rent from '../assets/images/rent.png';
@@ -40,6 +38,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import StoreDiscountCard from '../components/StoreDiscountCard';
 import BankDiscountCard from '../components/BankDiscountCard';
 import { storeDiscounts, bankDiscounts } from '../util/discounts'
+import { useEffect, useState } from "react";
+import ProductModal from "../components/ProductModal";
+import burguerKing from '../assets/images/burger-king.png'
+import useAxios from "../hooks/useAxios";
+import { useAuth } from "../contexts/AuthContext";
 
 const categories = [
   { name: 'Espectaculos', img: events },
@@ -49,7 +52,154 @@ const categories = [
   { name: 'Farmacias', img: pharmacy },
 ];
 
+const product = {
+  name: 'BK STACKER 5.0 POWER',
+  isFavorite: false,
+  shortDescription: 'Carrots from Tomissy Farm are one of the best on the market. Tomisso and his family are giving a full love to his Bio products. Tomisso’s carrots are growing on the fields naturally.',
+  mainImgSrc: burger,
+  ref: '76645',
+  categories: [
+    {
+      id: 1,
+      name: 'Gastronomia'
+    },
+    {
+      id: 2,
+      name: 'Hamburguesas'
+    },
+    {
+      id: 3,
+      name: 'Comida rapida'
+    }
+  ],
+  stock: true,
+  store: {
+    id: 1,
+    name: 'burguerKing',
+    image: burguerKing
+  },
+
+  deliveryMethod: {
+    id: 4,
+    name: 'delivery'
+  },
+
+  price: 48.56,
+
+  discount: 20,
+
+  quantity: 42,
+
+  description: 'Hamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se come',
+
+  features: [
+    {
+      name: 'Extras',
+      isGroup: true,
+      onlyOne: true,
+      features: [
+        {
+          name: 'BBQ',
+          selectAble: true,
+          price: 100
+        },
+        {
+          name: 'Bacon',
+          selectAble: true,
+          price: 15
+        },
+        {
+          name: 'Cheddar',
+          selectAble: true,
+          price: 19
+        },
+        {
+          name: 'Doble Carne',
+          selectAble: true,
+          price: 120
+        }
+      ]
+    },
+    {
+      name: 'Bebidas',
+      isGroup: true,
+      onlyOne: true,
+      features: [
+        {
+          name: 'Gaseosas',
+          selectAble: true,
+          price: 130
+        },
+        {
+          name: 'Jugos',
+          selectAble: true,
+          price: 180
+        },
+        {
+          name: 'Agua',
+          selectAble: true,
+          price: 140
+        },
+        {
+          name: 'Agua con gas',
+          selectAble: true,
+          price: 109
+        }
+      ]
+    },
+    {
+      name: 'Acompañantes',
+      isGroup: true,
+      onlyOne: false,
+      features: [
+        {
+          name: 'Papas',
+          selectAble: true,
+          price: 1000
+        },
+        {
+          name: 'Mandioca',
+          selectAble: true,
+          price: 1000
+        },
+        {
+          name: 'Aros de cebolla',
+          selectAble: true,
+          price: 3000
+        },
+      ]
+    }
+  ]
+}
+
 const Home = () => {
+
+  const { setLoading } = useAuth();
+
+  const [imagesPreview, setImagesPreview] = useState({})
+
+  const [{ data: businessSectionData, loading: businessSectionLoading, error: businessSectionError }, getBusinessInfo] = useAxios({ url: "/settings/business-info" }, { useCache: false, manual: true });
+
+  const [{ data: appSectionData, loading: appSectionLoading, error: appSectionError }, getAppSectionData] = useAxios({ url: "settings/app-section" }, { useCache: false, manual: true });
+
+  const [{ data: necessaryInfoSectionData, loading: necessaryInfoSectionLoading, error: necessaryInfoSectionError }, getNecessaryInfoData] = useAxios({ url: "/settings/needed-info" }, { useCache: false, manual: true });
+
+  useEffect(() => {
+    setLoading({ show: true, message: "Cargando datos" });
+    Promise.all([getBusinessInfo(), getAppSectionData(), getNecessaryInfoData()]).then((values) => {
+      setLoading({ show: false, message: "" });
+    }).catch((e) => {
+      console.log(e);
+    });
+    console.log("nwara")
+  }, []);
+
+  useEffect(() => {
+    console.log({ businessSectionData, appSectionData, necessaryInfoSectionData });
+  }, [businessSectionData, appSectionData, necessaryInfoSectionData])
+
+  const [productOnModal, setProductOnModal] = useState(null);
+
   return <>
     <HomeSlider />
 
@@ -122,12 +272,28 @@ const Home = () => {
       {/* HAGAMOSLO JUNTOS */}
       <div className="container">
 
-        <h3 className="text-5xl text-center font-semibold">Hagámoslo juntos</h3>
+        <h3 className="text-5xl text-center font-semibold">{businessSectionData?.sectionTitle ? businessSectionData?.sectionTitle : 'Hagámoslo juntos'}</h3>
 
         <div className="flex space-x-4 mt-20">
           {[
-            { imgSrc: partner, imgAlt: 'Socio', title: 'Hazte Partner', content: '¡Crece con BeneficioSi! ¡Nuestra tecnología y base de usuarios puede ayudarte a aumentar las ventas y descubrir nuevas oportunidades!' },
-            { imgSrc: clients, imgAlt: 'Clientes', title: 'Registrate como cliente', content: 'Pedí online rápido y fácil a reconocidas marcas y +10.000 restaurantes' },
+            {
+              imgSrc: businessSectionData?.leftSectionImage ? process.env.REACT_APP_API_URL + "/" + businessSectionData?.leftSectionImage : partner,
+              title: businessSectionData?.leftSectionTitle ? businessSectionData?.leftSectionTitle : 'Hazte Partner',
+              content: businessSectionData?.leftSectionText ? businessSectionData?.leftSectionText : '¡Crece con BeneficioSi! ¡Nuestra tecnología y base de usuarios puede ayudarte a aumentar las ventas y descubrir nuevas oportunidades!',
+              button: {
+                text: businessSectionData?.leftSectionBtnText ? businessSectionData?.leftSectionBtnText : "UNETE",
+                color: businessSectionData?.leftSectionBtnColor ? businessSectionData?.leftSectionBtnColor : "#F04141",
+              }
+            },
+            {
+              imgSrc: businessSectionData?.rightSectionImage ? process.env.REACT_APP_API_URL + "/" + businessSectionData?.rightSectionImage : clients,
+              title: businessSectionData?.rightSectionTitle ? businessSectionData?.rightSectionTitle : 'Registrate como cliente',
+              content: businessSectionData?.rightSectionText ? businessSectionData?.rightSectionText : 'Pedí online rápido y fácil a reconocidas marcas y +10.000 restaurantes',
+              button: {
+                text: businessSectionData?.rightSectionBtnText ? businessSectionData?.rightSectionBtnText : "UNETE",
+                color: businessSectionData?.rightSectionBtnColor ? businessSectionData?.rightSectionBtnColor : "#F04141",
+              }
+            },
           ].map((item, i) => <div
             key={i}
             className="w-1/2 flex flex-col items-center"
@@ -135,7 +301,7 @@ const Home = () => {
             <div className="flex flex-col items-center space-y-6 mb-6">
               <img
                 src={item.imgSrc}
-                alt={item.imgAlt}
+                alt={`bussinesInfoImageleft + ${i + 1}`}
                 className="h-60 w-60 rounded-full shadow"
               />
               <h4 className="text-3xl font-semibold">{item.title}</h4>
@@ -144,14 +310,12 @@ const Home = () => {
               </p>
             </div>
 
-            <button className="
-              inline-flex items-center justify-center
+            <button className="inline-flex items-center justify-center
               mt-auto px-6 py-4 space-x-2
               leading-4
               border border-white rounded-lg shadow
-              bg-main text-white text-xl font-semibold
-            ">
-              Únete
+              text-white text-xl font-semibold" style={{ background: item.button.color }}>
+              {item.button.text}
             </button>
           </div>)}
         </div>
@@ -182,6 +346,7 @@ const Home = () => {
               imgSrc={burger}
               imgAlt="Hamburguesas"
               price="12.00"
+              onBuy={() => { setProductOnModal(product) }}
             />)}
           </div>
         </div>
@@ -212,6 +377,7 @@ const Home = () => {
               imgSrc={events2}
               imgAlt="Espectaculos"
               price="12.00"
+              onBuy={() => { setProductOnModal(product) }}
             />)}
           </div>
         </div>
@@ -232,6 +398,7 @@ const Home = () => {
               imgSrc={harina}
               imgAlt="Harina"
               price="12.00"
+              onBuy={() => { setProductOnModal(product) }}
             />)}
           </div>
         </div>
@@ -268,6 +435,7 @@ const Home = () => {
               imgSrc={events2}
               imgAlt="Espectaculos"
               price="12.00"
+              onBuy={() => { setProductOnModal(product) }}
             />)}
           </div>
         </div>
@@ -288,6 +456,7 @@ const Home = () => {
               imgSrc={tapaboca}
               imgAlt="Tapa boca"
               price="12.00"
+              onBuy={() => { setProductOnModal(product) }}
             />)}
           </div>
         </div>
@@ -431,11 +600,13 @@ const Home = () => {
     </div>
 
     {/* MOBILE APP SECTION */}
-    <div className="relative py-32 mt-20 bg-main bg-gradient-to-r from-main to-main-light text-white">
+    <div className="relative py-32 mt-20 text-white"
+      style={{ background: appSectionData?.backgroundColor ? appSectionData?.backgroundColor : "#F04141", }}
+    >
       <div className="container">
         <div className="absolute inset-y-0 right-0">
           <img
-            src={appBg}
+            src={appSectionData?.rightSideImage ? process.env.REACT_APP_API_URL + "/" + appSectionData?.rightSideImage : appBg}
             alt="App"
             className="h-full"
           />
@@ -443,14 +614,18 @@ const Home = () => {
         <div className="flex">
           <div className="w-1/2 flex flex-col items-center space-y-6">
             <img
-              src={smartphone}
+              src={appSectionData?.leftSideImage ? process.env.REACT_APP_API_URL + "/" + appSectionData?.leftSideImage : appBg}
               alt="Smartphone"
               className="w-32 h-32"
             />
 
-            <h4 className="text-5xl font-bold">Descárgate  la app</h4>
+            <h4 className="text-5xl font-bold" style={{ color: appSectionData?.titleColor ? appSectionData?.titleColor : "white" }}>{appSectionData?.title ? appSectionData?.title : "Descárgate  la app"}</h4>
 
-            <p>Pide lo que sea y síguelo en tiempo real con la app BeneficioSi.</p>
+            <p style={{ color: appSectionData?.descriptionColor ? appSectionData?.descriptionColor : "white" }}>
+              {
+                appSectionData?.description ? appSectionData?.description : "Pide lo que sea y síguelo en tiempo real con la app BeneficioSi."
+              }
+            </p>
 
             <a href="/#">
               <img
@@ -467,9 +642,21 @@ const Home = () => {
     <div className="container my-20">
       <div className="flex justify-evenly">
         {[
-          { imgSrc: shield, title: 'Publicaciones verificadas', content: 'Nuestras publicaciones requieren una validación por datos y controlamos lo publicado' },
-          { imgSrc: rent, title: 'Compra protegida', content: 'Podés señar el auto que quieras y si la compra no se hace efectiva se te devuelve el importe al 100%' },
-          { imgSrc: callCenterAgent, title: 'Soporte', content: 'Acompañamos el proceso asegurandonos de que todo salga correctamente' },
+          {
+            imgSrc: necessaryInfoSectionData?.leftSectionImage ? process.env.REACT_APP_API_URL + "/" + necessaryInfoSectionData?.leftSectionImage : shield,
+            title: necessaryInfoSectionData?.leftSectionTitle ? necessaryInfoSectionData?.leftSectionTitle : 'Publicaciones verificadas',
+            content: necessaryInfoSectionData?.leftSectionDescription ? necessaryInfoSectionData?.leftSectionDescription : 'Nuestras publicaciones requieren una validación por datos y controlamos lo publicado'
+          },
+          {
+            imgSrc: necessaryInfoSectionData?.middleSectionImage ? process.env.REACT_APP_API_URL + "/" + necessaryInfoSectionData?.middleSectionImage : rent,
+            title: necessaryInfoSectionData?.middleSectionTitle ? necessaryInfoSectionData?.middleSectionTitle : 'Compra protegida',
+            content: necessaryInfoSectionData?.middleSectionDescription ? necessaryInfoSectionData?.middleSectionDescription : 'Podés señar el auto que quieras y si la compra no se hace efectiva se te devuelve el importe al 100%'
+          },
+          {
+            imgSrc: necessaryInfoSectionData?.rightSectionImage ? process.env.REACT_APP_API_URL + "/" + necessaryInfoSectionData?.rightSectionImage : callCenterAgent,
+            title: necessaryInfoSectionData?.rightSectionTitle ? necessaryInfoSectionData?.rightSectionTitle : 'Soporte',
+            content: necessaryInfoSectionData?.rightSectionDescription ? necessaryInfoSectionData?.rightSectionDescription : 'Acompañamos el proceso asegurandonos de que todo salga correctamente'
+          },
         ].map(item => <div
           className="flex flex-col items-center space-y-4 w-full max-w-xs"
           key={item.title}
@@ -485,6 +672,7 @@ const Home = () => {
           <p className="text-center">{item.content}</p>
         </div>)}
       </div>
+      <ProductModal product={productOnModal} closeModal={() => { setProductOnModal(null) }} />
     </div>
   </>;
 };

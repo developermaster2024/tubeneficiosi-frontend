@@ -6,6 +6,8 @@ import MyAccountAddress from './pages/my-account/Address';
 import MyAccountOrders from './pages/my-account/Orders';
 import MyAccountConversations from './pages/my-account/Conversations';
 import MyAccountCarts from './pages/my-account/Carts';
+import CreateAddress from "./pages/my-account/CreateAddress";
+import ConversationsChat from "./pages/my-account/ConversationsChat";
 
 const MyAccountRoutes = () => {
 
@@ -15,9 +17,15 @@ const MyAccountRoutes = () => {
         <Redirect path="/my-account" to="/my-account/dashboard" exact />
         <Route path="/my-account/dashboard" exact component={MyAccountDashboard} />
         <Route path="/my-account/info" exact component={MyAccountInfo} />
+
         <Route path="/my-account/address" exact component={MyAccountAddress} />
+        <Route path="/my-account/address/new" exact component={CreateAddress} />
+
         <Route path="/my-account/orders" exact component={MyAccountOrders} />
+
         <Route path="/my-account/conversations" exact component={MyAccountConversations} />
+        <Route path="/my-account/conversations/:id" exact component={ConversationsChat} />
+
         <Route path="/my-account/carts" exact component={MyAccountCarts} />
       </Switch>
     </MyAccountLayout>

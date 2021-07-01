@@ -62,7 +62,7 @@ const Navbar = () => {
         </div>
         <div className="flex items-center justify-center">
           <nav className="flex items-center space-x-7">
-            <a href="/#">Ofertas del dia</a>
+            <a href="/benefits">Ofertas del dia</a>
             <a href="/#">Servicio al cliente</a>
             <Link to="/stores">Comercios</Link>
           </nav>

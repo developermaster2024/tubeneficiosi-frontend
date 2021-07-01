@@ -10,8 +10,12 @@ import zensushi from '../assets/images/zensushi.png';
 import r301 from '../assets/images/r301.png';
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
 import BankExpandableButton from "../components/BankExpandableButton";
+import Pagination from "../components/Pagination";
+import { useState } from "react";
 
 const Benefits = () => {
+  const [activePage, setActivePage] = useState(1);
+
   return <>
     <div className="h-80 flex flex-col" style={{
       backgroundImage: `url(${savings})`,
@@ -50,7 +54,7 @@ const Benefits = () => {
       <LeftSidebarLayout
         leftSide={<div>
           <h4 className="mb-6 text-center text-xl font-bold">Bancos</h4>
-          
+
           <div className="space-y-2">
             {[
               'Galicia', 'Santander', 'Patagonia', 'Frances', 'HSBC', 'ICBC', 'Comafi', 'Credicoop', 'La pampa', 'Itaú', 'Superville', 'Hipotecario', 'Tarjeta naranja'
@@ -60,15 +64,15 @@ const Benefits = () => {
       >
         <div className="grid grid-cols-3 gap-8">
           {[
-            {imgSrc: tresCepas, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves'},
-            {imgSrc: fiveAsec, imgAlt: '5 asec', promo: 'Hasta 40%', title: 'De ahorro', subtitle: 'Todos los dias'},
-            {imgSrc: fiveAsec, imgAlt: '5 asec', promo: '15%', title: 'De ahorro', subtitle: 'Todos los jueves'},
-            {imgSrc: theKickBack, imgAlt: 'The kickback', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves'},
-            {imgSrc: tucson, imgAlt: 'Tucson', promo: '25%', title: 'De ahorro', subtitle: 'Todos los dias'},
-            {imgSrc: vaqueria, imgAlt: 'Vaquería', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves'},
-            {imgSrc: zapateriatendencias, imgAlt: 'Zapaterpia tendencias', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves'},
-            {imgSrc: zensushi, imgAlt: 'Zen Sushi', promo: '25%', title: 'De ahorro', subtitle: 'Todos los dias'},
-            {imgSrc: r301, imgAlt: 'R301 Jeanswear', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jeuves'},
+            { imgSrc: tresCepas, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
+            { imgSrc: fiveAsec, imgAlt: '5 asec', promo: 'Hasta 40%', title: 'De ahorro', subtitle: 'Todos los dias' },
+            { imgSrc: fiveAsec, imgAlt: '5 asec', promo: '15%', title: 'De ahorro', subtitle: 'Todos los jueves' },
+            { imgSrc: theKickBack, imgAlt: 'The kickback', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
+            { imgSrc: tucson, imgAlt: 'Tucson', promo: '25%', title: 'De ahorro', subtitle: 'Todos los dias' },
+            { imgSrc: vaqueria, imgAlt: 'Vaquería', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
+            { imgSrc: zapateriatendencias, imgAlt: 'Zapaterpia tendencias', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
+            { imgSrc: zensushi, imgAlt: 'Zen Sushi', promo: '25%', title: 'De ahorro', subtitle: 'Todos los dias' },
+            { imgSrc: r301, imgAlt: 'R301 Jeanswear', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jeuves' },
           ].map((promo, i) => <div
             className="flex flex-col justify-center items-center p-8 max-w-[300px] bg-white rounded-md shadow hover:shadow-lg transition"
             key={i}
@@ -86,6 +90,7 @@ const Benefits = () => {
             <p className="text-xl leading-none text-gray-600 tracking-tight mt-8">{promo.subtitle}</p>
           </div>)}
         </div>
+        <Pagination className="mt-6" pages={10} activePage={activePage} onChange={setActivePage} />
       </LeftSidebarLayout>
     </Container>
   </>;

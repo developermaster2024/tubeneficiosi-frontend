@@ -32,6 +32,84 @@ const products = Array.from(Array(12).keys()).map(_ => ({
   mainImgSrc: burger,
   mainImgAlt: 'Hamburguesa',
   price: '36.00',
+  features: [
+    {
+      name: 'Extras',
+      isGroup: true,
+      onlyOne: true,
+      features: [
+        {
+          name: 'BBQ',
+          selectAble: true,
+          price: 100
+        },
+        {
+          name: 'Bacon',
+          selectAble: true,
+          price: 15
+        },
+        {
+          name: 'Cheddar',
+          selectAble: true,
+          price: 19
+        },
+        {
+          name: 'Doble Carne',
+          selectAble: true,
+          price: 120
+        }
+      ]
+    },
+    {
+      name: 'Bebidas',
+      isGroup: true,
+      onlyOne: true,
+      features: [
+        {
+          name: 'Gaseosas',
+          selectAble: true,
+          price: 130
+        },
+        {
+          name: 'Jugos',
+          selectAble: true,
+          price: 180
+        },
+        {
+          name: 'Agua',
+          selectAble: true,
+          price: 140
+        },
+        {
+          name: 'Agua con gas',
+          selectAble: true,
+          price: 109
+        }
+      ]
+    },
+    {
+      name: 'Acompañantes',
+      isGroup: true,
+      onlyOne: false,
+      features: [
+        {
+          name: 'Papas',
+          selectAble: true,
+          price: 1000
+        },
+        {
+          name: 'Mandioca',
+          selectAble: true,
+          price: 1000
+        },
+        {
+          name: 'Aros de cebolla',
+          selectAble: true,
+          price: 3000
+        },
+      ]
+    }
+  ]
 }));
 
 const Store = () => {
