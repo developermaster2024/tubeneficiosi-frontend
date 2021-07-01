@@ -188,15 +188,8 @@ const Home = () => {
     setLoading({ show: true, message: "Cargando datos" });
     Promise.all([getBusinessInfo(), getAppSectionData(), getNecessaryInfoData()]).then((values) => {
       setLoading({ show: false, message: "" });
-    }).catch((e) => {
-      console.log(e);
-    });
-    console.log("nwara")
+    })
   }, []);
-
-  useEffect(() => {
-    console.log({ businessSectionData, appSectionData, necessaryInfoSectionData });
-  }, [businessSectionData, appSectionData, necessaryInfoSectionData])
 
   const [productOnModal, setProductOnModal] = useState(null);
 
@@ -526,10 +519,10 @@ const Home = () => {
       <Swiper
         navigation
         style={{ padding: '0 100px' }}
-        onSlideChange={() => console.log('slide change')}
+        onSlideChange={() => { }}
         slidesPerView={3}
         spaceBetween={50}
-        onSwiper={(swiper) => console.log(swiper)}
+        onSwiper={(swiper) => { }}
       >
         {
           storeDiscounts.map((storeDiscount, i) =>
@@ -551,10 +544,10 @@ const Home = () => {
       <Swiper
         navigation
         style={{ padding: '0 100px' }}
-        onSlideChange={() => console.log('slide change')}
+        onSlideChange={() => { }}
         slidesPerView={2}
         spaceBetween={50}
-        onSwiper={(swiper) => console.log(swiper)}
+        onSwiper={(swiper) => { }}
       >
         {
           bankDiscounts.map((banckDiscount, i) =>
