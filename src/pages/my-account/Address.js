@@ -2,6 +2,7 @@ import UserAddressCard from '../../components/UserAddressCard';
 import { userAddress } from '../../util/user-address';
 import { IoAdd } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
+import { Link } from 'react-router-dom';
 
 const MyAccountAddress = () => {
   return (
@@ -10,11 +11,11 @@ const MyAccountAddress = () => {
         <IoLocationSharp className="text-4xl"></IoLocationSharp>
         <span className="ml-4">Mis Direcciones</span>
       </h1>
-      <div className="my-6">
-        <button className="ml-auto items-center font-bold flex bg-main px-12 py-2 rounded text-white">
+      <div className="my-6 text-right">
+        <Link to={'/my-account/address/new'} className="items-center font-bold inline-flex bg-main px-12 py-2 rounded text-white">
           <IoAdd className="font-bold text-xl"></IoAdd>
           Añadir Nueva
-        </button>
+        </Link>
       </div>
       <div className="flex flex-wrap">
         {

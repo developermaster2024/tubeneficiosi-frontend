@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Button from "./Button";
 import ProductFeature from "./ProductFeature";
 import StarIcon from "./StarIcon";
+import { IoChevronForwardSharp } from "react-icons/io5";
 
 const ProductHorizontalCard = ({
   imgSrc,
@@ -10,23 +11,26 @@ const ProductHorizontalCard = ({
   description,
   price,
   // rating,
+  onBuy,
+  store
 }) => {
-  return <Link
-    to={`/products/slug-del-producto`}
-    className="flex bg-white shadow hover:shadow-lg rounded-md"
+  return <div
+    className="flex bg-white border hover:shadow-2xl transform transition duration-500 hover:-translate-y-2 rounded-md p-4 animate__animated animate__rotateInUpLeft"
   >
     <img
       src={imgSrc}
       alt={imgAlt}
-      className="w-56 h-56 rounded-l-md"
+      className="w-56 h-56 rounded-xl"
     />
     <div className="flex-grow p-4">
-      <h4 className="text-xl font-semibold mb-1">{name}</h4>
-      <span className="block mb-1">{description}</span>
+      <Link className="hover:text-main" to={`/products/slug-del-producto`}>
+        <h4 className="text-lg font-semibold mb-1">{name}</h4>
+      </Link>
+      <span className="block text-gray-500 mb-1">{description}</span>
       <div className="flex space-x-1 mb-2">
         {[1, 2, 3, 4, 5].map(n => <StarIcon
           key={n}
-          className="h-5 w-5"
+          className="h-5 w-5 text-yellow-300"
           fill={n === 5 ? 'none' : 'currentColor'}
         />)}
       </div>
@@ -34,25 +38,26 @@ const ProductHorizontalCard = ({
       <div className="space-y-2">
         <ProductFeature
           className="w-full"
-          name="Fresheness"
-          value="New (Extra fresh)"
-        />
-        
-        <ProductFeature
-          className="w-full"
-          name="Farm"
-          value="Grocery Tarm Fields"
-        />
-
-        <ProductFeature
-          className="w-full"
-          name="Delivery"
-          value="Europe"
+          name="Tienda"
+          value={
+            <Link className="text-blue-500 hover:text-main" to={'stores/burguerking'}>
+              <div className="flex items-center">
+                <img className='w-8 h-8' src={store.image} alt={store.name} />
+                <p className="ml-2">{store.name}</p>
+              </div>
+            </Link>
+          }
         />
 
         <ProductFeature
           className="w-full"
-          name="Stock"
+          name="Envíos"
+          value="Delivery"
+        />
+
+        <ProductFeature
+          className="w-full"
+          name="Cantidad"
           value={<span className="text-main">320 pcs</span>}
         />
       </div>
@@ -68,9 +73,12 @@ const ProductHorizontalCard = ({
         <p className="text-gray-600 opacity-75">Entrega en un dia</p>
       </div>
 
-      <Button color="main" onClick={e => e.preventDefault()}>Comprar ahora</Button>
+      <button className="bg-main rounded-2xl p-4 text-white flex justify-between items-center font-bold text-md hover:bg-gray-100 transition duration-500 hover:text-main hover:shadow-xl" onClick={onBuy}>
+        Comprar ahora
+        <IoChevronForwardSharp className="text-xl" />
+      </button>
     </div>
-  </Link>;
+  </div >;
 };
 
 export default ProductHorizontalCard;

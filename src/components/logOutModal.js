@@ -9,16 +9,21 @@ import BeneficioSiLogo from '../assets/images/logo.jpg';
 
 //
 import { useHistory } from 'react-router-dom';
+import { useAuth } from "../contexts/AuthContext";
 
 const LogOutModal = (props) => {
 
   const history = useHistory();
 
+  const auth = useAuth()
+
   const { show, setShow } = props;
 
 
   const handleContinue = () => {
-    history.push('/');
+    auth.logout(() => {
+      history.push('/');
+    });
     closeModal();
   }
 

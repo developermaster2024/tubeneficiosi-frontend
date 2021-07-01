@@ -35,7 +35,7 @@ const NavigationButton = ({ icon, color, className, onClick, canNext, hidden }) 
 
 const Pagination = (props) => {
 
-  const { pages, onChange, activePage } = props;
+  const { pages, onChange, activePage, className } = props;
 
   const [canNext, setCanNext] = useState(true);
   const [canBack, setCanBack] = useState(false);
@@ -67,7 +67,7 @@ const Pagination = (props) => {
     }
   }, [activePage])
 
-  return <ul className="flex items-center space-x-2">
+  return <ul className={`flex items-center space-x-2 ${className}`}>
     <li>
       <li>
         <NavigationButton hidden={!canBack} disable={!canBack} onClick={() => { backPage(activePage - 1) }} color="main" className="text-xl hover:text-gray-500 transition duraion-500 transform hover:scale-150" icon={<IoChevronBack />}></NavigationButton>

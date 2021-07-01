@@ -30,7 +30,7 @@ const MyAccountLayout = ({ children }) => {
   return (
     <div>
       <div className="flex">
-        <div className="w-[5vw] bg-white h-[100vh] text-gray-500 text-[2vw]">
+        <div className="w-[5vw] bg-white h-screen text-gray-500 text-[2vw]">
           <div>
             <Link to={'/my-account/dashboard'}>
               <IoHomeSharp className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {

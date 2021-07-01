@@ -17,17 +17,103 @@ import { discounts } from "../util/discounts";
 import CategoryCheckbox from "../components/CategoryCheckbox";
 import DiscountsSlider from "../components/DiscountsSlider";
 import { cards } from "../util/cards";
+import burguerKing from '../assets/images/burger-king.png'
 
 const products = Array.from(Array(12).keys()).map(_ => ({
   name: 'Product name',
   description: 'Space for a small product description',
   mainImgSrc: burger,
   mainImgAlt: 'Hamburguesa',
+  store: {
+    id: 1,
+    name: 'burguerKing',
+    image: burguerKing
+  },
   price: '36.00',
+  features: [
+    {
+      name: 'Extras',
+      isGroup: true,
+      onlyOne: true,
+      features: [
+        {
+          name: 'BBQ',
+          selectAble: true,
+          price: 100
+        },
+        {
+          name: 'Bacon',
+          selectAble: true,
+          price: 15
+        },
+        {
+          name: 'Cheddar',
+          selectAble: true,
+          price: 19
+        },
+        {
+          name: 'Doble Carne',
+          selectAble: true,
+          price: 120
+        }
+      ]
+    },
+    {
+      name: 'Bebidas',
+      isGroup: true,
+      onlyOne: true,
+      features: [
+        {
+          name: 'Gaseosas',
+          selectAble: true,
+          price: 130
+        },
+        {
+          name: 'Jugos',
+          selectAble: true,
+          price: 180
+        },
+        {
+          name: 'Agua',
+          selectAble: true,
+          price: 140
+        },
+        {
+          name: 'Agua con gas',
+          selectAble: true,
+          price: 109
+        }
+      ]
+    },
+    {
+      name: 'Acompañantes',
+      isGroup: true,
+      onlyOne: false,
+      features: [
+        {
+          name: 'Papas',
+          selectAble: true,
+          price: 1000
+        },
+        {
+          name: 'Mandioca',
+          selectAble: true,
+          price: 1000
+        },
+        {
+          name: 'Aros de cebolla',
+          selectAble: true,
+          price: 3000
+        },
+      ]
+    }
+  ]
 }));
 
 const Products = () => {
   const [isInGridView, setIsInGridView] = useState(true);
+
+  const [activePage, setActivePage] = useState(1);
 
   return <>
     <div className="bg-white shadow-sm">
@@ -171,7 +257,7 @@ const Products = () => {
       </LeftSidebarLayout>
 
       <div className="flex justify-center items-center mt-10">
-        <Pagination />
+        <Pagination pages={10} activePage={activePage} onChange={setActivePage} />
       </div>
     </Container>
   </>

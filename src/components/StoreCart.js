@@ -3,6 +3,7 @@ import {
   IoArrowForwardOutline,
   IoTrashSharp
 } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 import burger from '../assets/images/hamburguesa.jpg';
 
@@ -64,7 +65,9 @@ const StoreCart = (props) => {
 
         <div className="text-center my-6">
           <button className="px-6 py-2 bg-main rounded w-8/12 text-white font-bold text-xl transition duration-300 hover:text-main hover:bg-gray-100">
-            Pagar
+            <Link to={'/checkout'}>
+              Pagar
+            </Link>
           </button>
         </div>
       </div>

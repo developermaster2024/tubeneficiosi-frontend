@@ -2,10 +2,33 @@
 import BeneficioSiLogo from '../assets/images/logo.jpg';
 import DeliveryMotion from '../assets/images/delivery-motion.gif';
 import { Link, useHistory } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Login = () => {
 
   const history = useHistory();
+
+  const [email, setEmail] = useState('');
+
+  const auth = useAuth();
+
+  const [password, setPassword] = useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    auth.login({ email, password }, () => {
+      history.push('/my-account/dashboard');
+    })
+  }
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  }
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  }
 
   return (
     <div className="py-24">
@@ -31,23 +54,23 @@ const Login = () => {
             </h2>
           </div>
 
-          <form className="text-2xl mt-5" action="">
+          <form className="text-2xl mt-5" onSubmit={handleLogin}>
             <div className="my-12">
               <h2 className="text-gray-600 font-bold">
                 E-Mail Address
               </h2>
-              <input className="rounded w-full mt-1" type="text" placeholder="Correo Electronico" />
+              <input onChange={handleEmail} className="rounded w-full mt-1" type="text" placeholder="Correo Electronico" />
             </div>
 
             <div className="my-12">
               <h2 className="text-gray-600 font-bold">
                 Password
               </h2>
-              <input className="rounded w-full mt-1" type="text" placeholder="Password" />
+              <input onChange={handlePassword} className="rounded w-full mt-1" type="password" placeholder="Password" />
             </div>
 
             <div className="text-center">
-              <button onClick={() => { history.push('/my-account/dashboard') }} className="bg-main px-4 py-2 rounded text-white">
+              <button type="submit" className="bg-main px-4 py-2 rounded text-white">
                 Iniciar sesion
               </button>
             </div>
