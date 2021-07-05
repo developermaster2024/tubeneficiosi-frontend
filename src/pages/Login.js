@@ -2,32 +2,68 @@
 import BeneficioSiLogo from '../assets/images/logo.jpg';
 import DeliveryMotion from '../assets/images/delivery-motion.gif';
 import { Link, useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import useAxios from "../hooks/useAxios";
+import { isEmail, isRequired, validate } from '../helpers/formsValidations';
 
 const Login = () => {
 
   const history = useHistory();
 
-  const [email, setEmail] = useState('');
+  const [loginInfo, setLoginInfo] = useState({ password: "", email: "" });
 
-  const auth = useAuth();
+  const [errorsForm, setErrorsForm] = useState({
+    email: null,
+    password: null,
+  });
 
-  const [password, setPassword] = useState('');
+  const [{ data, loading, error }, login] = useAxios({ url: "/auth/login", method: "POST" }, { manual: true, useCache: false });
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    auth.login({ email, password }, () => {
-      history.push('/my-account/dashboard');
+  const { setAuthInfo, setLoading, setCustomAlert } = useAuth();
+
+  useEffect(() => {
+    setLoading({ show: loading, message: "Iniciando Sesión" });
+  }, [loading]);
+
+
+  useEffect(() => {
+    if (error) {
+      console.log(error);
+      setCustomAlert({ show: true, message: `${error.response?.status === 400 ? error.response?.data.message[0] : error.response?.data.message}.`, severity: "error" });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (data) {
+      setAuthInfo({ isAuthenticated: true, user: data.user, token: data.accessToken });
+      history.push('/my-account');
+    }
+  }, [data]);
+
+  useEffect(() => {
+    setErrorsForm({
+      email: validate(loginInfo.email, [
+        { validator: isRequired, errorMessage: "El email es obligatorio." },
+        { validator: isEmail, errorMessage: "el email debe ser valido." }
+      ]),
+      password: validate(loginInfo.password, [
+        { validator: isRequired, errorMessage: "la contraseña es Obligatoria." },
+      ])
     })
+  }, [loginInfo])
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    login({ data: loginInfo });
   }
 
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-  }
-
-  const handlePassword = (e) => {
-    setPassword(e.target.value);
+  const handleChange = (e) => {
+    setLoginInfo({
+      ...loginInfo,
+      [e.target.name]: e.target.value
+    });
   }
 
   return (
@@ -54,19 +90,31 @@ const Login = () => {
             </h2>
           </div>
 
-          <form className="text-2xl mt-5" onSubmit={handleLogin}>
+          <form className="text-2xl mt-5" onSubmit={handleSubmit}>
             <div className="my-12">
               <h2 className="text-gray-600 font-bold">
                 E-Mail Address
               </h2>
-              <input onChange={handleEmail} className="rounded w-full mt-1" type="text" placeholder="Correo Electronico" />
+              <input name="email" onChange={handleChange} className="rounded w-full mt-1" type="text" placeholder="Correo Electronico" />
+              {
+                errorsForm.email ?
+                  <p className="text-sm mt-2 text-red-500">{errorsForm.email}</p>
+                  :
+                  null
+              }
             </div>
 
             <div className="my-12">
               <h2 className="text-gray-600 font-bold">
                 Password
               </h2>
-              <input onChange={handlePassword} className="rounded w-full mt-1" type="password" placeholder="Password" />
+              <input name="password" onChange={handleChange} className="rounded w-full mt-1" type="password" placeholder="Password" />
+              {
+                errorsForm.password ?
+                  <p className="text-sm mt-2 text-red-500">{errorsForm.password}</p>
+                  :
+                  null
+              }
             </div>
 
             <div className="text-center">
@@ -88,7 +136,7 @@ const Login = () => {
           </form>
           <div className="text-sm mt-auto absolute bottom-2 right-2">
             © 2019 <span className="text-main">Beneficio Si.</span> Todos los derechos reservados. Diseñado por Jeyver Vegas
-            </div>
+          </div>
         </div>
       </div>
     </div>

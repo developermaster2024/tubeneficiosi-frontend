@@ -1,12 +1,16 @@
 import AppLayout from './components/AppLayout';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, useHistory } from 'react-router-dom';
 import Routes from './Routes';
 import { useAuth } from './contexts/AuthContext';
 import { useEffect, useState } from 'react';
+import CustomAlert from "./components/CustomAlert";
+
 
 const App = () => {
 
-  const { customLoading } = useAuth();
+  const history = useHistory();
+
+  const { customLoading, customAlert, setCustomAlert } = useAuth();
 
   const [dots, setDots] = useState("");
 
@@ -26,6 +30,16 @@ const App = () => {
     }
   }, [customLoading]);
 
+  useEffect(() => {
+    history?.listen((location, action) => {
+      document?.querySelector('body')?.scrollTo(0, 0)
+    });
+  }, [history]);
+
+  const handleClose = () => {
+    setCustomAlert({ show: false, message: "", severity: null })
+  }
+
   return (
     <Router>
       {
@@ -43,6 +57,9 @@ const App = () => {
           :
           null
       }
+
+      <CustomAlert show={customAlert.show} message={customAlert.message} duration={5000} onClose={handleClose} severity={customAlert.severity} />
+
       <AppLayout>
         <Routes />
       </AppLayout>

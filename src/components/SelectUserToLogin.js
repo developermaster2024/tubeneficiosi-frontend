@@ -11,7 +11,7 @@ import { IoCheckmarkCircleSharp } from "react-icons/io5";
 import BeneficioSiLogo from '../assets/images/logo.jpg';
 
 //
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 const SelectUserToLogin = (props) => {
 
@@ -20,7 +20,12 @@ const SelectUserToLogin = (props) => {
   const history = useHistory();
 
   const handleContinue = () => {
-    history.push('/login');
+    console.log(userType);
+    if (userType === 'client') {
+      history.push('/login');
+    } else {
+      window.location = 'http://stores.tubeneficiosi.com/';
+    }
     closeModal();
   }
 
@@ -66,7 +71,7 @@ const SelectUserToLogin = (props) => {
                 <IoPersonOutline className="m-auto text-[120px]"></IoPersonOutline>
                 <h1 className="text-center text-3xl">
                   Cliente
-              </h1>
+                </h1>
               </div>
             </div>
           </div>
@@ -82,7 +87,7 @@ const SelectUserToLogin = (props) => {
                 <IoStorefrontSharp className="m-auto text-[120px]"></IoStorefrontSharp>
                 <h1 className="text-center text-3xl">
                   Tienda
-              </h1>
+                </h1>
               </div>
             </div>
           </div>
