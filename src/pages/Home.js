@@ -21,7 +21,6 @@ import amaDeCasaBanner from '../assets/images/ama-de-casa-banner.jpg';
 import shield from '../assets/images/shield.png';
 import callCenterAgent from '../assets/images/call-center-agent.png';
 import rent from '../assets/images/rent.png';
-import smartphone from '../assets/images/smartphone.png';
 import appBg from '../assets/images/app-bg.jpg';
 import downloadAndroidApp from '../assets/images/download-android-app.svg';
 import partner from '../assets/images/partner.jpg';
@@ -175,8 +174,6 @@ const product = {
 const Home = () => {
 
   const { setLoading } = useAuth();
-
-  const [imagesPreview, setImagesPreview] = useState({})
 
   const [{ data: businessSectionData, loading: businessSectionLoading, error: businessSectionError }, getBusinessInfo] = useAxios({ url: "/settings/business-info" }, { useCache: false, manual: true });
 
