@@ -92,11 +92,10 @@ const ProfileForm = () => {
     
     try {
       await updateProfile({data: localFormData});
+      setCustomAlert({ show: true, message: "Perfil actualizado", severity: "success" });
     } finally {
       setLoading({ show: false, message: "" });
     }
-
-    setCustomAlert({ show: true, message: "Perfil actualizado", severity: "success" });
   }
   
   return <form
