@@ -1,0 +1,1 @@
+export const generateBackendUrl = (path, appendSlash = true) => `${process.env.REACT_APP_API_URL}${appendSlash ? '/' : ''}${path}`;
