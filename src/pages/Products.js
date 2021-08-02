@@ -9,7 +9,7 @@ import TextField from "../components/TextField";
 import GridIcon from "../components/GridIcon";
 import ListIcon from "../components/ListIcon";
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
 import { categories } from "../util/categories";
@@ -18,6 +18,9 @@ import CategoryCheckbox from "../components/CategoryCheckbox";
 import DiscountsSlider from "../components/DiscountsSlider";
 import { cards } from "../util/cards";
 import burguerKing from '../assets/images/burger-king.png'
+import useAxios from '../hooks/useAxios';
+import { useAuth } from "../contexts/AuthContext";
+import ErrorMsg from "../components/ErrorMsg";
 
 const products = Array.from(Array(12).keys()).map(_ => ({
   name: 'Product name',
@@ -111,10 +114,24 @@ const products = Array.from(Array(12).keys()).map(_ => ({
 }));
 
 const Products = () => {
+  const {setLoading} = useAuth();
+  
   const [isInGridView, setIsInGridView] = useState(true);
 
   const [activePage, setActivePage] = useState(1);
 
+  const [{data: productsData, loading: fetchProductsLoading, error: fetchProductsError}] = useAxios({
+    url: '/products',
+    params: {
+      page: activePage,
+      perPage: 12,
+    }
+  });
+
+  useEffect(() => {
+    setLoading({ show: fetchProductsLoading, message: "Cargando" });
+  }, [fetchProductsLoading]);
+  
   return <>
     <div className="bg-white shadow-sm">
       <Container className="py-5">
@@ -250,14 +267,22 @@ const Products = () => {
           <DiscountsSlider discounts={discounts} />
         </div>
 
-        <ProductsCollection
-          products={products}
-          isInGridView={isInGridView}
-        />
+        {
+          fetchProductsError
+            ? <ErrorMsg message="Error al cargar los productos. Nuestro equipo ha sido notificado, intente más tarde." />
+            : <ProductsCollection
+              products={productsData?.results ?? []}
+              isInGridView={isInGridView}
+            />
+        }
       </LeftSidebarLayout>
 
       <div className="flex justify-center items-center mt-10">
-        <Pagination pages={10} activePage={activePage} onChange={setActivePage} />
+        {productsData && <Pagination
+          pages={productsData.numberOfPages}
+          activePage={activePage}
+          onChange={setActivePage}
+        />}
       </div>
     </Container>
   </>
