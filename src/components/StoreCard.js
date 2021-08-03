@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import StarIcon from "./StarIcon";
 import { useState } from 'react';
-import { IoStorefrontOutline } from "react-icons/io5";
-import { IoLocationSharp } from "react-icons/io5";
-import { IoHeartOutline } from "react-icons/io5";
-import { IoHeart } from "react-icons/io5";
+import { IoStorefrontOutline, IoLocationSharp, IoHeartOutline, IoHeart, } from "react-icons/io5";
+
 
 
 
@@ -52,11 +50,16 @@ const StoreCard = ({ imgSrc, imgAlt, name, description, rating, i, isFavorite })
         null
     }
 
-    <img
-      src={imgSrc}
-      alt={finalImgAlt}
-      className="h-36 w-full mt-4 object-contain"
-    />
+    {
+      imgSrc ?
+        <img
+          src={`${process.env.REACT_APP_API_URL}/${imgSrc}`}
+          alt={finalImgAlt}
+          className="h-36 w-full mt-4 object-contain rounded-xl"
+        />
+        :
+        <IoStorefrontOutline className="h-36 w-full mt-4 rounded-xl object-contain text-gray-400" />
+    }
 
     <div className="space-y-2">
 
@@ -78,7 +81,7 @@ const StoreCard = ({ imgSrc, imgAlt, name, description, rating, i, isFavorite })
         {
           Array.from(Array(5).keys()).splice(1).map((n) => {
             return (
-              <div className="bg-red-100 w-5/12 px-2 rounded-full text-main font-bold  mx-1 text-[9px] my-2">
+              <div key={n} className="bg-red-100 w-5/12 px-2 rounded-full text-main font-bold  mx-1 text-[9px] my-2">
                 {n + '0% Descuento'}
               </div>
             )

@@ -9,7 +9,7 @@ const StoresCollection = ({ isInGridView, stores }) => {
         className="flex justify-center"
       >
         <StoreCard
-          imgSrc={store.imgSrc}
+          imgSrc={store?.storeProfile?.logo ? `${store.storeProfile.logo}` : null}
           imgAlt={store.imgAlt}
           name={store.name}
           description={store.shortDescription}
@@ -22,7 +22,7 @@ const StoresCollection = ({ isInGridView, stores }) => {
     : <div className="space-y-4">
       {stores.map((store, i) => <StoreHorizontalCard
         key={i}
-        imgSrc={store.imgSrc}
+        imgSrc={store?.storeProfile?.logo ? `${store.storeProfile.logo}` : null}
         imgAlt={store.imgAlt}
         name={store.name}
         shortDescription={store.shortDescription}

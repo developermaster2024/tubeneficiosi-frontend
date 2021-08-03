@@ -49,7 +49,7 @@ const Pagination = (props) => {
       onChange(page);
     }
   }
-  
+
   useEffect(() => {
     if (activePage === pages) {
       setCanNext(false);
@@ -76,7 +76,7 @@ const Pagination = (props) => {
     </li>
     {pages
       ? Array.from(Array(pages).keys()).map(n =>
-        <li>
+        <li key={n}>
           <PaginationButton active={n + 1 === activePage} onClick={() => { onChange(n + 1) }}>{n + 1}</PaginationButton>
         </li>
       )
