@@ -15,11 +15,17 @@ const StoreHorizontalCard = ({ imgSrc, imgAlt, name, description, rating, shortD
   return <div
     className="flex bg-white py-4 px-4 hover:shadow-2xl transition duration-300 rounded-md"
   >
-    <img
-      src={imgSrc}
-      alt={imgAlt}
-      className="w-56 h-56 rounded-l-md"
-    />
+
+    {
+      imgSrc ?
+        <img
+          src={`${process.env.REACT_APP_API_URL}/${imgSrc}`}
+          alt={imgAlt}
+          className="w-56 mr-4 h-56 rounded-xl"
+        />
+        :
+        <IoStorefrontOutline className="w-56 mr-4 h-56 rounded-xl" />
+    }
 
     <div className="flex-grow flex flex-col">
       <div className="flex justify-between">

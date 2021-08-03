@@ -24,16 +24,16 @@ const AppLayout = ({ children }) => {
               <h1 className="text-white font-bold my-5">
                 Get in touch
               </h1>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">About us</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Careers</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Press Releases</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Blog</p>
               </Link>
             </div>
@@ -44,19 +44,19 @@ const AppLayout = ({ children }) => {
               <h1 className="text-white font-bold my-5">
                 Connections
               </h1>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Facebook</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Twitter</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Instagram</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Youtube</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Linkedin</p>
               </Link>
             </div>
@@ -67,13 +67,13 @@ const AppLayout = ({ children }) => {
               <h1 className="text-white font-bold my-5">
                 Earnings
               </h1>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Become an Affiliate</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Adversite your product</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Sell on Market</p>
               </Link>
             </div>
@@ -84,19 +84,19 @@ const AppLayout = ({ children }) => {
               <h1 className="text-white font-bold my-5">
                 Account
               </h1>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Your Account</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Returns Centre</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">100% pucharse protection</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Chat with us</p>
               </Link>
-              <Link>
+              <Link to={`#`}>
                 <p className="my-4 hover:text-main transition duration-500">Help</p>
               </Link>
             </div>
