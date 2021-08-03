@@ -1,30 +1,28 @@
 import Container from "../components/Container"
-import burger2 from "../assets/images/burger2.jpg";
 import burger from '../assets/images/hamburguesa.jpg';
 import StarIcon from "../components/StarIcon";
-import MainCategoriesBar from "../components/MainCategoriesBar";
 import ProductFeature from "../components/ProductFeature";
-import Button from "../components/Button";
 import Select from "../components/Select";
 import PlusIcon from "../components/PlusIcon";
 import { TabsProvider } from "../contexts/TabsContext";
 import TabsContainer from "../components/TabsContainer";
 import Tab from "../components/Tab";
 import TabPanel from "../components/TabPanel";
-import TextField from "../components/TextField";
-import ChatAlt2Icon from "../components/ChatAlt2Icon";
 import Table from "../components/Table";
 import TableHead from "../components/TableHead";
 import TableRow from "../components/TableRow";
 import TableCell from "../components/TableCell";
 import TableBody from "../components/TableBody";
 import ProductCard from "../components/ProductCard";
-import { Link } from "react-router-dom";
-import ChevronRightIcon from "../components/ChevronRightIcon";
-import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import burguerKing from '../assets/images/burger-king.png';
 import QuestionsAnswer from '../components/QuestionsAnswer';
+import useAxios from "../hooks/useAxios";
+import { useAuth } from "../contexts/AuthContext";
+import { generateBackendUrl } from "../helpers/url";
+import noImage from '../assets/images/no-image.png';
 
 const product = {
   name: 'BK STACKER 5.0 POWER',
@@ -145,59 +143,52 @@ const product = {
   ]
 }
 
-const questions = [
-  {
-    id: 1,
-    message: 'Hola Buen dia existe oferta?',
-    user: {
-      name: 'Jeyver Vegas',
-      id: 1
-    },
-    createdAt: new Date().toLocaleString(),
-    answer: {
-      id: 2,
-      message: 'Hola Buen dia Si tenemos oferta del 20%',
-      user: {
-        name: 'BurguerKing',
-        id: 2
-      },
-      createdAt: new Date().toLocaleString(),
-    }
-  },
-  {
-    id: 2,
-    message: 'Hola... hacen envios en la zona de C.A.B.A',
-    user: {
-      name: 'Jesus Vicuña',
-      id: 3
-    },
-    createdAt: new Date().toLocaleString(),
-    answers: null
-  }
-]
-
-
 const Product = () => {
+  const {setLoading} = useAuth();
+  
+  const {slug} = useParams();
 
+  const [{data: product2, loading: productLoading, error: productError}] = useAxios({url: `/products/${slug}`});
+
+  const [{data: questionsData, loading: questionsDataLoading, error: questionsDataError}, fetchQuestions] = useAxios({url: `/questions`}, {manual: true});
+  
   const [favorite, setFavorite] = useState(false);
 
-  return <div className="p-16">
+  useEffect(() => {
+    setLoading({show: productLoading, message: 'Cargando'});
+  }, [productLoading]);
 
+  useEffect(() => {
+    product2 && fetchQuestions({params: {
+      productId: product2.id,
+    }});
+  }, [fetchQuestions, product2]);
+
+  /**
+   * Si no existe el producto redireccionar a un 404
+   */
+  
+  if (!product2) {
+    return null;
+  }
+
+  return <div className="p-16">
+    <pre>{JSON.stringify(questionsData, null, 2)}</pre>
     <Container>
       <div className="flex space-x-6">
         {/* Images */}
         <div className="w-1/2 flex flex-col space-x-3">
           <img
-            src={burger2}
+            src={generateBackendUrl(product2.productImages[0].path)}
             alt="Hamburguesa"
             className="rounded-xl w-full"
           />
 
           <div className="flex justify-center mt-6 space-x-3">
-            {[1, 2, 3].map(n => <img
-              key={n}
-              src={burger2}
-              alt="Hamburgesa"
+            {product2.productImages.map(image => <img
+              key={image.id}
+              src={generateBackendUrl(image.path)}
+              alt={product2.name}
               className="h-20 w-20 rounded-xl border border-gray-100 rounded"
             />)}
           </div>
@@ -206,7 +197,7 @@ const Product = () => {
         {/* Information */}
         <div className="w-1/2">
           <div className="flex itemx-center text-3xl justify-between">
-            <h3 className="font-bold mb-2">BK STACKER 5.0 POWER</h3>
+            <h3 className="font-bold mb-2 uppercase">{product2.name}</h3>
             {
               favorite ?
                 <IoHeart onClick={() => {
@@ -232,9 +223,7 @@ const Product = () => {
           </div>
 
           <p className="mt-6">
-            Carrots from Tomissy Farm are one of the best on the market. Tomisso
-            and his family are giving a full love to his Bio products. Tomisso’s
-            carrots are growing on the fields naturally.
+            {product2.shortDescription}
           </p>
 
           {/* Características */}
@@ -243,12 +232,12 @@ const Product = () => {
               <ProductFeature
                 className="w-1/2"
                 name="Referencia"
-                value={product.ref}
+                value={product2.reference || 'Sin referencia'}
               />
               <ProductFeature
                 className="w-1/2"
                 name="Metodo de Envio"
-                value={product.deliveryMethod.name}
+                value={product2.deliveryMethodTypes.map(item => item.name).join(', ')}
               />
             </div>
 
@@ -256,12 +245,14 @@ const Product = () => {
               <ProductFeature
                 className="w-1/2"
                 name="Categorias"
-                value={product.categories.map((category) => category.name).join(', ')}
+                value={product2.categories.length === 0
+                  ? 'Sin categorias'
+                  : product2.categories.map((category) => category.name).join(', ')}
               />
               <ProductFeature
                 className="w-1/2"
                 name="Stock"
-                value={product.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
+                value={product2.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
               />
             </div>
 
@@ -269,13 +260,16 @@ const Product = () => {
               <ProductFeature
                 className="w-1/2"
                 name="Tienda"
-                value={
-                  <div className="text-center hover:shadow-xl transition duration-500">
-                    <Link to={'/stores/burguerKing'}>
-                      <img className="w-12 h-12 rounded m-auto" src={product.store.image} alt="" />
-                      <p className="text-blue-500">{product.store.name}</p>
-                    </Link>
-                  </div>}
+                value={<div className="text-center hover:shadow-xl transition duration-500">
+                  <Link to={`/stores/${product2.store.name}`}>
+                    <img
+                      className="w-12 h-12 rounded m-auto"
+                      src={product2.store.storeProfile?.logo ? generateBackendUrl(product2.store.storeProfile.logo) : noImage}
+                      alt={product2.name}
+                    />
+                    <p className="text-blue-500">{product2.store.name}</p>
+                  </Link>
+                </div>}
               />
             </div>
           </div>
@@ -283,25 +277,22 @@ const Product = () => {
           {/* Precio */}
           <div className="flex items-center p-4 bg-white rounded-md mt-10">
             <div className="w-56 flex-shrink-0">
-
               {
-                product.discount ?
+                product2.discount ?
                   <div>
                     <p className="text-main text-3xl font-semibold">{(product.price - ((product.price * product.discount) / 100)).toFixed(2)} USD</p>
                     <p className="line-through text-700 font-semibold opacity-50">{product.price} USD</p>
                   </div>
                   :
-                  <p className="text-main text-3xl font-semibold">{product.price} USD</p>
+                  <p className="text-main text-3xl font-semibold">{product2.finalPrice} USD</p>
               }
             </div>
             <div className="flex-grow">
               <div className="flex items-center justify-end space-x-2">
                 <div className="w-20">
                   <Select>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option></Select>
+                    {[...Array(product2.quantity + 1).keys()].slice(1).map(n => <option value={n}>{n}</option>)}
+                  </Select>
                 </div>
                 <button className="bg-main flex items-center px-4 py-4 rounded-xl text-white font-bold transition duration-500 hover:bg-gray-100 hover:text-main">
                   <PlusIcon className="w-4 h-4 rounded-xl" />
@@ -318,22 +309,28 @@ const Product = () => {
       <TabsProvider>
         {/* Tabs */}
         <TabsContainer>
-          {/* <div className="px-5 py-2 font-semibold text-lg cursor-pointer border-b-2 border-main">Descripción</div> */}
           <Tab value={0}>Descripción</Tab>
           <Tab value={1}>Preguntas</Tab>
           <Tab value={2}>Comparador</Tab>
           <Tab value={3}>Caracteristicas</Tab>
         </TabsContainer>
 
-        {/* Tab panels */}
+        {/* TAB PANELS */}
+        {/* Description */}
         <TabPanel className="py-4 animate__animated animate__fadeInUp" value={0}>
-          {product.description}
+          {product2.description}
         </TabPanel>
 
+        {/* Questions */}
         <TabPanel className="py-4 space-y-6 animate__animated animate__fadeInUp" value={1}>
-          <QuestionsAnswer questions={questions} owner={product.store} />
+          <QuestionsAnswer
+            questions={questionsData?.results ?? []}
+            ownerName={product2.store.name}
+            ownerImage={generateBackendUrl(product2.store.storeProfile.logo)}
+          />
         </TabPanel>
 
+        {/* Price table */}
         <TabPanel className="py-4 animate__animated animate__fadeInUp" value={2}>
           <Table>
             <TableHead>
@@ -373,6 +370,7 @@ const Product = () => {
           </Table>
         </TabPanel>
 
+        {/* Features */}
         <TabPanel className="py-4 animate__animated animate__fadeInUp" value={3}>
           {product.features.map((featuresGroup, i) => {
             return (
