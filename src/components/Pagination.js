@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 
 const PaginationButton = ({ children, active, onClick }) => {
   return <div
-
     onClick={onClick}
     className={clsx([
       `inline-flex items-center justify-center cursor-pointer
@@ -41,7 +40,6 @@ const Pagination = (props) => {
   const [canBack, setCanBack] = useState(false);
 
   const nextPage = (page) => {
-    console.log(page);
     if (page <= pages) {
       onChange(page);
     }
@@ -51,9 +49,8 @@ const Pagination = (props) => {
       onChange(page);
     }
   }
-
+  
   useEffect(() => {
-    console.log('hlle');
     if (activePage === pages) {
       setCanNext(false);
     } else {
@@ -67,24 +64,33 @@ const Pagination = (props) => {
     }
   }, [activePage])
 
+  if (pages === 1) {
+    return null;
+  }
+
   return <ul className={`flex items-center space-x-2 ${className}`}>
     <li>
       <li>
         <NavigationButton hidden={!canBack} disable={!canBack} onClick={() => { backPage(activePage - 1) }} color="main" className="text-xl hover:text-gray-500 transition duraion-500 transform hover:scale-150" icon={<IoChevronBack />}></NavigationButton>
       </li>
     </li>
-    {
-      pages ?
-        Array.from(Array(pages).keys()).map(n =>
-          <li>
-            <PaginationButton active={n + 1 === activePage} onClick={() => { onChange(n + 1) }}>{n + 1}</PaginationButton>
-          </li>
-        )
-        :
-        null
+    {pages
+      ? Array.from(Array(pages).keys()).map(n =>
+        <li>
+          <PaginationButton active={n + 1 === activePage} onClick={() => { onChange(n + 1) }}>{n + 1}</PaginationButton>
+        </li>
+      )
+      : null
     }
     <li>
-      <NavigationButton hidden={!canNext} disable={!canNext} onClick={() => { nextPage(activePage + 1) }} color="main" className="text-xl hover:text-gray-500 transition duraion-500 transform hover:scale-150" icon={<IoChevronForwardSharp />}></NavigationButton>
+      <NavigationButton
+        hidden={!canNext}
+        disable={!canNext}
+        onClick={() => { nextPage(activePage + 1) }}
+        color="main"
+        className="text-xl hover:text-gray-500 transition duraion-500 transform hover:scale-150"
+        icon={<IoChevronForwardSharp />}
+      />
     </li>
   </ul>;
 };

@@ -8,11 +8,15 @@ const ProductHorizontalCard = ({
   imgSrc,
   imgAlt,
   name,
+  slug,
   description,
   price,
   // rating,
   onBuy,
-  store
+  storeName,
+  storeImageSrc,
+  storeImageAlt,
+  deliveryMethodTypes,
 }) => {
   return <div
     className="flex bg-white border hover:shadow-2xl transform transition duration-500 hover:-translate-y-2 rounded-md p-4 animate__animated animate__rotateInUpLeft"
@@ -23,7 +27,7 @@ const ProductHorizontalCard = ({
       className="w-56 h-56 rounded-xl"
     />
     <div className="flex-grow p-4">
-      <Link className="hover:text-main" to={`/products/slug-del-producto`}>
+      <Link className="hover:text-main" to={`/products/${slug}`}>
         <h4 className="text-lg font-semibold mb-1">{name}</h4>
       </Link>
       <span className="block text-gray-500 mb-1">{description}</span>
@@ -42,8 +46,8 @@ const ProductHorizontalCard = ({
           value={
             <Link className="text-blue-500 hover:text-main" to={'stores/burguerking'}>
               <div className="flex items-center">
-                <img className='w-8 h-8' src={store.image} alt={store.name} />
-                <p className="ml-2">{store.name}</p>
+                <img className="w-8 h-8" src={storeImageSrc} alt={storeImageAlt} />
+                <p className="ml-2">{storeName}</p>
               </div>
             </Link>
           }
@@ -52,7 +56,7 @@ const ProductHorizontalCard = ({
         <ProductFeature
           className="w-full"
           name="Envíos"
-          value="Delivery"
+          value={deliveryMethodTypes.join(', ')}
         />
 
         <ProductFeature
@@ -62,7 +66,7 @@ const ProductHorizontalCard = ({
         />
       </div>
     </div>
-    <div className="w-64 flex flex-col p-4 space-y-4">
+    <div className="w-64 flex-shrink-0 flex flex-col p-4 space-y-4">
       <div>
         <p className="font-semibold text-xl">{price} USD</p>
         <span className="text-xs text-gray-600 line-through">48.56</span>

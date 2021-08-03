@@ -3,6 +3,7 @@ import Button from "./Button"
 
 const ProductCard = ({
   name,
+  slug,
   description,
   // rating,
   price,
@@ -14,7 +15,6 @@ const ProductCard = ({
   return <div
     className="p-5 mt-12 max-w-[250px] space-y-4 relative pt-28 w-full rounded-md transform hover:shadow-2xl hover:-translate-y-3 transition duration-500"
   >
-
     <img
       src={imgSrc}
       alt={imgAlt}
@@ -23,8 +23,11 @@ const ProductCard = ({
 
     <div className="space-y-2">
 
-      <Link to={`/products/slug-del-producto`}>
-        <p className="font-bold text-center text-gray-600 text-xl hover:text-main">{name}</p>
+      <Link
+        to={`/products/${slug}`}
+        title={name}
+      >
+        <p className="font-bold text-center text-gray-600 text-xl hover:text-main truncate">{name}</p>
       </Link>
 
       <div className="flex space-x-1 justify-center">

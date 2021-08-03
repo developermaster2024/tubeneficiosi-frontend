@@ -12,6 +12,10 @@ export const isRequired = (value) => {
   return value ? true : false
 }
 
+export const minLength = (length) => (value) => {
+  return `${value}`.length >= length;
+}
+
 export const validate = (value, rules) => {
   for (let i = 0; i < rules.length; i++) {
     if (!rules[i].validator(value)) {
