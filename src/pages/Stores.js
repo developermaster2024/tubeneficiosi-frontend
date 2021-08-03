@@ -49,6 +49,9 @@ const stores = Array.from(Array(12).keys()).map(n => ({
 }));
 
 const Stores = () => {
+
+  const [{ stores, total, size, numberOfPages, error, loading }, getStores] = useStores();
+
   const [viewType, setViewType] = useState('grid');
 
   const [activePage, setActivePage] = useState(1);
