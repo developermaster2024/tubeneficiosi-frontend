@@ -1,13 +1,12 @@
+import { useEffect, useState } from "react";
 import Container from "../components/Container";
 import GridIcon from "../components/GridIcon";
 import ListIcon from "../components/ListIcon";
 import StarIcon from "../components/StarIcon";
-import burgerKing from "../assets/images/burger-king.png";
 import Pagination from "../components/Pagination";
 import Button from "../components/Button";
 import ChevronRightIcon from "../components/ChevronRightIcon";
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
-import { useState } from "react";
 import clsx from "clsx";
 import StoresCollection from "../components/StoresCollection";
 import { Link } from "react-router-dom";
@@ -15,12 +14,16 @@ import LocationMarker from "../components/LocationMarker";
 import StoresInMap from "./StoresInMap";
 import CategoryCheckbox from "../components/CategoryCheckbox";
 import { categories } from "../util/categories";
-import DiscountsSlider from "../components/DiscountsSlider";
-import { discounts, storeDiscounts } from "../util/discounts";
+import { storeDiscounts } from "../util/discounts";
 import { cards } from "../util/cards";
 import adsBanner from '../assets/images/banner.jpg';
 import adsBanner2 from '../assets/images/banner2.jpg';
 import storesBanner from '../assets/images/storesbanner.webp';
+
+
+import useStores from "../hooks/useStores";
+import useCategories from "../hooks/useCategories";
+import { useAuth } from "../contexts/AuthContext";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import StoreDiscountCard from "../components/StoreDiscountCard";
@@ -38,25 +41,89 @@ const latLngs = [
   { lat: -34.584943, lng: -58.435809 },
 ];
 
-const stores = Array.from(Array(12).keys()).map(n => ({
-  imgSrc: burgerKing,
-  imgAlt: 'Burger King',
-  name: 'Afialiado A',
-  shortDescription: 'Space for a small store description',
-  description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus quia architecto ullam optio nulla odio nesciunt, sunt voluptatem minima libero eum tempore in adipisci? Recusandae molestias vitae consequatur aliquam delectus.',
-  rating: 4,
-  latLng: latLngs[n],
-}));
-
 const Stores = () => {
 
-  const [{ stores, total, size, numberOfPages, error, loading }, getStores] = useStores();
+  const { setLoading, setCustomAlert } = useAuth();
 
+  const [filters, setFilters] = useState({ page: 1, perPage: 12, categoryIds: [], rating: null, cardDiscount: null });
   const [viewType, setViewType] = useState('grid');
+  const [canShowLoading, setCanShowLoading] = useState(false);
 
-  const [activePage, setActivePage] = useState(1);
+  const [{ stores, total, size, numberOfPages, error, loading }, getStores] = useStores({
+    params: {
+      ...filters
+    }
+  });
+
+  const [{ categories, error: errorCategories }, getCategories] = useCategories()
+
+
+  useEffect(() => {
+    setLoading({ show: true, message: "Obteniendo Informacion" });
+    Promise.all([getStores(), getCategories()]).then((values) => {
+      setLoading({ show: false, message: "" });
+      setCanShowLoading(true);
+    })
+  }, []);
+
+  useEffect(() => {
+    console.log(stores);
+  }, [stores])
+
+  useEffect(() => {
+    if (canShowLoading) {
+      setLoading({ show: loading, message: "Cargando tiendas" });
+    }
+  }, [loading]);
+
+  useEffect(() => {
+    if (error) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${error?.response?.status === 400 ? error?.response?.data.message[0] : error?.response?.data.message}.`, severity: "error" });
+    }
+    if (errorCategories) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
+    }
+  }, [error, errorCategories]);
+
+  const handleChange = (e) => {
+    if (e.target.type === "checkbox") {
+      const value = filters[e.target.name].includes(Number(e.target.value));
+      if (value) {
+        const newValues = filters[e.target.name].filter(n => n !== Number(e.target.value));
+        console.log(newValues);
+        setFilters((oldFilters) => {
+          return {
+            ...oldFilters,
+            [e.target.name]: newValues
+          }
+        });
+      } else {
+        setFilters((oldFilters) => {
+          return {
+            ...oldFilters,
+            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]]
+          }
+        });
+      }
+      return;
+    }
+
+
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        [e.target.name]: e.target.value
+      }
+    })
+  }
 
   return <>
+    <Link to={'/stores/burguerking'}>
+      <div className="h-[35vh] w-full" style={{ backgroundImage: `url(${storesBanner})`, backgroundSize: '100% 100%' }}>
+      </div>
+    </Link>
     <div className="bg-white shadow-sm">
       <Container className="py-5">
         <div className="flex justify-between items-center">
@@ -85,31 +152,28 @@ const Stores = () => {
               <span>Ver en mapa</span>
             </span>
             <Link to="/stores" className="inline-flex items-center space-x-1">
-              <span className="px-1.5 py-0.5 text-xs bg-yellow-100 text-red-500 font-semibold rounded-lg">110</span>
+              <span className="px-1.5 py-0.5 text-xs bg-yellow-100 text-red-500 font-semibold rounded-lg">{total}</span>
               <span>Comercios</span>
             </Link>
           </div>
         </div>
       </Container>
     </div>
-
-    <Link to={'/stores/burguerking'}>
-      <div className="h-[35vh] w-full" style={{ backgroundImage: `url(${storesBanner})`, backgroundSize: '100% 100%' }}>
-      </div>
-    </Link>
-
     <Container withMargin className="mb-20">
       <LeftSidebarLayout
         leftSide={<div className="space-y-5">
           <div>
-            <h4 className="text-xl font-semibold mb-2">Categories</h4>
+            <h4 className="text-xl font-semibold mb-2">Categorias</h4>
 
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
-              {categories.map((category, i) => <CategoryCheckbox
-                key={i}
-                label={category.name}
-                children={category.children}
-              />)}
+              {categories.map((category, i) =>
+                <div key={i} className="flex items-center space-x-4">
+                  <input onChange={handleChange} name="categoryIds" value={category.id} checked={filters.categoryIds.includes(category.id)} className="text-main focus:ring-white" id={`${category.name}-${i}`} type="checkbox" />
+                  <label htmlFor={`${category.name}-${i}`}>
+                    <p>{category.name}</p>
+                  </label>
+                </div>
+              )}
             </ul>
           </div>
 
@@ -174,15 +238,15 @@ const Stores = () => {
           <Swiper
             navigation
             style={{ padding: '0 100px' }}
-            onSlideChange={() => console.log('slide change')}
+            onSlideChange={() => { }}
             autoplay={true}
             slidesPerView={2}
             spaceBetween={50}
-            onSwiper={(swiper) => console.log(swiper)}
+            onSwiper={(swiper) => { }}
           >
             {
               storeDiscounts.map((storeDiscount, i) =>
-                <SwiperSlide>
+                <SwiperSlide key={i}>
                   <StoreDiscountCard storeDiscount={storeDiscount}></StoreDiscountCard>
                 </SwiperSlide>
               )
@@ -190,14 +254,24 @@ const Stores = () => {
           </Swiper>
         </div>
 
-        {viewType === 'map' && <StoresInMap stores={stores} />}
-        {viewType !== 'map' && <StoresCollection stores={stores} isInGridView={viewType === 'grid'} />}
+        {
+          stores.length > 0 ?
+            <div>
+              {viewType === 'map' && <StoresInMap stores={stores} />}
+              {viewType !== 'map' && <StoresCollection stores={stores} isInGridView={viewType === 'grid'} />}
+            </div>
+            :
+            <div className="text-center text-red-500 text-xl">
+              No se encontraron resultados.
+            </div>
+        }
+
 
 
       </LeftSidebarLayout>
 
       <div className="flex w-full justify-center items-center mt-10">
-        <Pagination pages={10} activePage={activePage} onChange={setActivePage}></Pagination>
+        <Pagination pages={numberOfPages} activePage={filters.page} onChange={(e) => { handleChange({ target: { name: "page", value: e, type: "number" } }) }}></Pagination>
       </div>
     </Container>
   </>;
