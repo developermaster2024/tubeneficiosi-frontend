@@ -24,19 +24,24 @@ import { generateBackendUrl } from "../helpers/url";
 import noImage from '../assets/images/no-image.png';
 import { isRequired, validate } from "../helpers/formsValidations";
 import { getErrorMessage } from "../helpers/axiosErrors";
+import ProductModal from "../components/ProductModal";
+import ProductFeatureGroup from "../components/ProductFeatureGroup";
+import ProductFeatureCheckbox from "../components/ProductFeatureCheckbox";
 
 const Product = () => {
   const {setLoading, setCustomAlert} = useAuth();
   
   const {slug} = useParams();
 
-  const [{data: product2, loading: productLoading}] = useAxios({url: `/products/${slug}`});
+  const [{data: product, loading: productLoading}] = useAxios({url: `/products/${slug}`});
 
   const [{data: questionsData, loading: questionsDataLoading}, fetchQuestions] = useAxios({url: `/questions`}, {manual: true});
 
   const [_, createQuestion] = useAxios({url: '/questions', method: 'POST'}, {manual: true});
   
   const [favorite, setFavorite] = useState(false);
+
+  const [productOnModal, setProductOnModal] = useState(null);
 
   const [questionFormData, setQuestionFormData] = useState({
     question: '',
@@ -64,18 +69,18 @@ const Product = () => {
   }, [questionsDataLoading]);
 
   useEffect(() => {
-    if (product2) {
+    if (product) {
       fetchQuestions({params: {
-        productId: product2.id,
+        productId: product.id,
         sort: 'createdAt,DESC',
       }});
 
       setQuestionFormData(prevData => ({
         ...prevData,
-        productId: product2.id,
+        productId: product.id,
       }));
     }
-  }, [fetchQuestions, product2]);
+  }, [fetchQuestions, product]);
 
   const handleQuestionChange = (e) => {
     setQuestionFormData(prevData => ({
@@ -99,7 +104,7 @@ const Product = () => {
     try {
       await createQuestion({data: questionFormData});
       fetchQuestions({params: {
-        productId: product2.id,
+        productId: product.id,
         sort: 'createdAt,DESC',
       }});
       setCustomAlert({ show: true, message: 'Pregunta agregada', severity: "success" });
@@ -116,7 +121,7 @@ const Product = () => {
 
   const handleSeeMoreClick = () => {
     fetchQuestions({params: {
-      productId: product2.id,
+      productId: product.id,
       sort: 'createdAt,DESC',
       perPage: questionsData.size + 10,
     }});
@@ -126,7 +131,7 @@ const Product = () => {
    * Si no existe el producto redireccionar a un 404
    */
   
-  if (!product2) {
+  if (!product) {
     return null;
   }
 
@@ -136,16 +141,16 @@ const Product = () => {
         {/* Images */}
         <div className="w-1/2 flex flex-col space-x-3">
           <img
-            src={generateBackendUrl(product2.productImages[0].path)}
+            src={generateBackendUrl(product.productImages[0].path)}
             alt="Hamburguesa"
             className="rounded-xl w-full"
           />
 
           <div className="flex justify-center mt-6 space-x-3">
-            {product2.productImages.map(image => <img
+            {product.productImages.map(image => <img
               key={image.id}
               src={generateBackendUrl(image.path)}
-              alt={product2.name}
+              alt={product.name}
               className="h-20 w-20 rounded-xl border border-gray-100 rounded"
             />)}
           </div>
@@ -154,7 +159,7 @@ const Product = () => {
         {/* Information */}
         <div className="w-1/2">
           <div className="flex itemx-center text-3xl justify-between">
-            <h3 className="font-bold mb-2 uppercase">{product2.name}</h3>
+            <h3 className="font-bold mb-2 uppercase">{product.name}</h3>
             {
               favorite ?
                 <IoHeart onClick={() => {
@@ -180,7 +185,7 @@ const Product = () => {
           </div>
 
           <p className="mt-6">
-            {product2.shortDescription}
+            {product.shortDescription}
           </p>
 
           {/* Características */}
@@ -189,12 +194,12 @@ const Product = () => {
               <ProductFeature
                 className="w-1/2"
                 name="Referencia"
-                value={product2.reference || 'Sin referencia'}
+                value={product.reference || 'Sin referencia'}
               />
               <ProductFeature
                 className="w-1/2"
                 name="Metodo de Envio"
-                value={product2.deliveryMethodTypes.map(item => item.name).join(', ')}
+                value={product.deliveryMethodTypes.map(item => item.name).join(', ')}
               />
             </div>
 
@@ -202,14 +207,14 @@ const Product = () => {
               <ProductFeature
                 className="w-1/2"
                 name="Categorias"
-                value={product2.categories.length === 0
+                value={product.categories.length === 0
                   ? 'Sin categorias'
-                  : product2.categories.map((category) => category.name).join(', ')}
+                  : product.categories.map((category) => category.name).join(', ')}
               />
               <ProductFeature
                 className="w-1/2"
                 name="Stock"
-                value={product2.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
+                value={product.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
               />
             </div>
 
@@ -218,13 +223,13 @@ const Product = () => {
                 className="w-1/2"
                 name="Tienda"
                 value={<div className="text-center hover:shadow-xl transition duration-500">
-                  <Link to={`/stores/${product2.store.name}`}>
+                  <Link to={`/stores/${product.store.name}`}>
                     <img
                       className="w-12 h-12 rounded m-auto"
-                      src={product2.store.storeProfile?.logo ? generateBackendUrl(product2.store.storeProfile.logo) : noImage}
-                      alt={product2.name}
+                      src={product.store.storeProfile?.logo ? generateBackendUrl(product.store.storeProfile.logo) : noImage}
+                      alt={product.name}
                     />
-                    <p className="text-blue-500">{product2.store.name}</p>
+                    <p className="text-blue-500">{product.store.name}</p>
                   </Link>
                 </div>}
               />
@@ -235,23 +240,26 @@ const Product = () => {
           <div className="flex items-center p-4 bg-white rounded-md mt-10">
             <div className="w-56 flex-shrink-0">
               {
-                product2.discount ?
+                product.discount ?
                   <div>
-                    <p className="text-main text-3xl font-semibold">{(product2.price - ((product2.price * product2.discount) / 100)).toFixed(2)} USD</p>
-                    <p className="line-through text-700 font-semibold opacity-50">{product2.price} USD</p>
+                    <p className="text-main text-3xl font-semibold">{(product.price - ((product.price * product.discount) / 100)).toFixed(2)} USD</p>
+                    <p className="line-through text-700 font-semibold opacity-50">{product.price} USD</p>
                   </div>
                   :
-                  <p className="text-main text-3xl font-semibold">{product2.finalPrice} USD</p>
+                  <p className="text-main text-3xl font-semibold">{product.finalPrice} USD</p>
               }
             </div>
             <div className="flex-grow">
               <div className="flex items-center justify-end space-x-2">
                 <div className="w-20">
                   <Select>
-                    {[...Array(product2.quantity + 1).keys()].slice(1).map(n => <option value={n}>{n}</option>)}
+                    {[...Array(product.quantity + 1).keys()].slice(1).map(n => <option value={n}>{n}</option>)}
                   </Select>
                 </div>
-                <button className="bg-main flex items-center px-4 py-4 rounded-xl text-white font-bold transition duration-500 hover:bg-gray-100 hover:text-main">
+                <button
+                  className="bg-main flex items-center px-4 py-4 rounded-xl text-white font-bold transition duration-500 hover:bg-gray-100 hover:text-main"
+                  onClick={() => setProductOnModal(product)}
+                >
                   <PlusIcon className="w-4 h-4 rounded-xl" />
                   Comprar
                 </button>
@@ -275,15 +283,15 @@ const Product = () => {
         {/* TAB PANELS */}
         {/* Description */}
         <TabPanel className="py-4 animate__animated animate__fadeInUp" value={0}>
-          {product2.description}
+          {product.description}
         </TabPanel>
 
         {/* Questions */}
         <TabPanel className="py-4 space-y-6 animate__animated animate__fadeInUp" value={1}>
           <QuestionsAnswer
             questions={questionsData?.results ?? []}
-            ownerName={product2.store.name}
-            ownerImage={generateBackendUrl(product2.store.storeProfile.logo)}
+            ownerName={product.store.name}
+            ownerImage={generateBackendUrl(product.store.storeProfile.logo)}
             onChange={handleQuestionChange}
             value={questionFormData.question}
             error={questionsFormErrors.question}
@@ -335,41 +343,29 @@ const Product = () => {
 
         {/* Features */}
         <TabPanel className="py-4 animate__animated animate__fadeInUp" value={3}>
-          <div className="text-center mb-8 bg-white p-8 rounded shadow-lg">
-            <h3 className="text-xl text-gray-700 font-bold mb-4">Características</h3>
-            <div className="grid grid-cols-4 w-full">
-              {product2.productFeatures.map((feature) => <div className="flex" key={feature.id}>
-                <input
-                  className="text-main ring-main border-main focus:ring-main"
-                  type="checkbox"
-                  name=""
-                  id={`${feature.name}-${feature.id}`}
-                />
-                <label htmlFor={`${feature.name}-${feature.id}`} className="flex ml-4 space-x-3">
-                  <span className="block">{feature.name} ({feature.value})</span>
-                  <span className="block">{feature.price}</span>
-                </label>
-              </div>)}
-            </div>
-          </div>
-          {product2.productFeatureGroups.map((featuresGroup) => <div key={featuresGroup.id} className="text-center mb-8 bg-white p-8 rounded shadow-lg">
-            <h3 className="text-xl text-gray-700 font-bold mb-4">{featuresGroup.name}</h3>
-            <div className="grid grid-cols-4 w-full">
-              {featuresGroup.productFeatureForGroups.map((feature) => <div className="flex" key={feature.id}>
-                <input
-                  className="text-main ring-main border-main focus:ring-main"
-                  type="checkbox"
-                  name=""
-                  id={`${feature.name}-${feature.id}`}
-                  readOnly={!feature.isSelectable}
-                />
-                <label htmlFor={`${feature.name}-${feature.id}`} className="flex ml-4 space-x-3">
-                  <span className="block">{feature.name} ({feature.value})</span>
-                  <span className="block">{feature.price}</span>
-                </label>
-              </div>)}
-            </div>
-          </div>)}
+          <ProductFeatureGroup name="Características">
+            {product.productFeatures.map((feature) => <ProductFeatureCheckbox
+              key={feature.id}
+              id={feature.id}
+              name={feature.name}
+              value={feature.value}
+              price={feature.price}
+              isSelectable={feature.isSelectable}
+            />)}
+          </ProductFeatureGroup>
+          {product.productFeatureGroups.map((featuresGroup) => <ProductFeatureGroup
+            key={featuresGroup.id}
+            name={featuresGroup.name}
+          >
+            {featuresGroup.productFeatureForGroups.map((feature) => <ProductFeatureCheckbox
+              key={feature.id}
+              id={feature.id}
+              name={feature.name}
+              value={feature.value}
+              price={feature.price}
+              isSelectable={feature.isSelectable}
+            />)}
+          </ProductFeatureGroup>)}
         </TabPanel>
       </TabsProvider>
     </Container>
@@ -391,6 +387,11 @@ const Product = () => {
           />)}
       </div>
     </Container>
+
+    <ProductModal
+      product={productOnModal}
+      closeModal={() => { setProductOnModal(null) }}
+    />
   </div>
 };
 
