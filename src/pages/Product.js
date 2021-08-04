@@ -17,7 +17,6 @@ import ProductCard from "../components/ProductCard";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
-import burguerKing from '../assets/images/burger-king.png';
 import QuestionsAnswer from '../components/QuestionsAnswer';
 import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
@@ -26,131 +25,12 @@ import noImage from '../assets/images/no-image.png';
 import { isRequired, validate } from "../helpers/formsValidations";
 import { getErrorMessage } from "../helpers/axiosErrors";
 
-const product = {
-  name: 'BK STACKER 5.0 POWER',
-  isFavorite: false,
-  shortDescription: 'Carrots from Tomissy Farm are one of the best on the market. Tomisso and his family are giving a full love to his Bio products. Tomisso’s carrots are growing on the fields naturally.',
-  ref: '76645',
-  categories: [
-    {
-      id: 1,
-      name: 'Gastronomia'
-    },
-    {
-      id: 2,
-      name: 'Hamburguesas'
-    },
-    {
-      id: 3,
-      name: 'Comida rapida'
-    }
-  ],
-  stock: true,
-  store: {
-    id: 1,
-    name: 'burguerKing',
-    image: burguerKing
-  },
-
-  deliveryMethod: {
-    id: 4,
-    name: 'delivery'
-  },
-
-  price: 48.56,
-
-  discount: 20,
-
-  quantity: 42,
-
-  description: 'Hamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se come',
-
-  features: [
-    {
-      name: 'Extras',
-      isGroup: true,
-      onlyOne: true,
-      features: [
-        {
-          name: 'BBQ',
-          selectAble: true,
-          price: 100
-        },
-        {
-          name: 'Bacon',
-          selectAble: true,
-          price: 15
-        },
-        {
-          name: 'Cheddar',
-          selectAble: true,
-          price: 19
-        },
-        {
-          name: 'Doble Carne',
-          selectAble: true,
-          price: 120
-        }
-      ]
-    },
-    {
-      name: 'Bebidas',
-      isGroup: true,
-      onlyOne: true,
-      features: [
-        {
-          name: 'Gaseosas',
-          selectAble: true,
-          price: 130
-        },
-        {
-          name: 'Jugos',
-          selectAble: true,
-          price: 180
-        },
-        {
-          name: 'Agua',
-          selectAble: true,
-          price: 140
-        },
-        {
-          name: 'Agua con gas',
-          selectAble: true,
-          price: 109
-        }
-      ]
-    },
-    {
-      name: 'Acompañantes',
-      isGroup: true,
-      onlyOne: false,
-      features: [
-        {
-          name: 'Papas',
-          selectAble: true,
-          price: 1000
-        },
-        {
-          name: 'Mandioca',
-          selectAble: true,
-          price: 1000
-        },
-        {
-          name: 'Aros de cebolla',
-          selectAble: true,
-          price: 3000
-        },
-      ]
-    }
-  ]
-}
-
 const Product = () => {
   const {setLoading, setCustomAlert} = useAuth();
   
   const {slug} = useParams();
 
-  const [{data: product2, loading: productLoading, error: productError}] = useAxios({url: `/products/${slug}`});
+  const [{data: product2, loading: productLoading}] = useAxios({url: `/products/${slug}`});
 
   const [{data: questionsData, loading: questionsDataLoading}, fetchQuestions] = useAxios({url: `/questions`}, {manual: true});
 
@@ -357,8 +237,8 @@ const Product = () => {
               {
                 product2.discount ?
                   <div>
-                    <p className="text-main text-3xl font-semibold">{(product.price - ((product.price * product.discount) / 100)).toFixed(2)} USD</p>
-                    <p className="line-through text-700 font-semibold opacity-50">{product.price} USD</p>
+                    <p className="text-main text-3xl font-semibold">{(product2.price - ((product2.price * product2.discount) / 100)).toFixed(2)} USD</p>
+                    <p className="line-through text-700 font-semibold opacity-50">{product2.price} USD</p>
                   </div>
                   :
                   <p className="text-main text-3xl font-semibold">{product2.finalPrice} USD</p>
@@ -455,29 +335,41 @@ const Product = () => {
 
         {/* Features */}
         <TabPanel className="py-4 animate__animated animate__fadeInUp" value={3}>
-          {product.features.map((featuresGroup, i) => {
-            return (
-              <div key={i} className="text-center mb-8 bg-white p-8 rounded shadow-lg">
-                <h1 className="text-xl text-gray-700 font-bold mb-4">{featuresGroup.name}</h1>
-                <div className="flex justify-around w-full">
-                  {featuresGroup.features.map((feature, ifeat) => {
-                    return (
-                      <div className="flex">
-                        {
-                          feature.selectAble ?
-                            <input className="text-main ring-main border-main focus:ring-main" type="checkbox" name="" id="" />
-                            :
-                            null
-                        }
-                        <p className="ml-4">{feature.name}</p>
-                        <p className="ml-4">$ {feature.price}</p>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
+          <div className="text-center mb-8 bg-white p-8 rounded shadow-lg">
+            <h3 className="text-xl text-gray-700 font-bold mb-4">Características</h3>
+            <div className="grid grid-cols-4 w-full">
+              {product2.productFeatures.map((feature) => <div className="flex" key={feature.id}>
+                <input
+                  className="text-main ring-main border-main focus:ring-main"
+                  type="checkbox"
+                  name=""
+                  id={`${feature.name}-${feature.id}`}
+                />
+                <label htmlFor={`${feature.name}-${feature.id}`} className="flex ml-4 space-x-3">
+                  <span className="block">{feature.name} ({feature.value})</span>
+                  <span className="block">{feature.price}</span>
+                </label>
+              </div>)}
+            </div>
+          </div>
+          {product2.productFeatureGroups.map((featuresGroup) => <div key={featuresGroup.id} className="text-center mb-8 bg-white p-8 rounded shadow-lg">
+            <h3 className="text-xl text-gray-700 font-bold mb-4">{featuresGroup.name}</h3>
+            <div className="grid grid-cols-4 w-full">
+              {featuresGroup.productFeatureForGroups.map((feature) => <div className="flex" key={feature.id}>
+                <input
+                  className="text-main ring-main border-main focus:ring-main"
+                  type="checkbox"
+                  name=""
+                  id={`${feature.name}-${feature.id}`}
+                  readOnly={!feature.isSelectable}
+                />
+                <label htmlFor={`${feature.name}-${feature.id}`} className="flex ml-4 space-x-3">
+                  <span className="block">{feature.name} ({feature.value})</span>
+                  <span className="block">{feature.price}</span>
+                </label>
+              </div>)}
+            </div>
+          </div>)}
         </TabPanel>
       </TabsProvider>
     </Container>
