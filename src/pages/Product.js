@@ -291,7 +291,7 @@ const Product = () => {
           <QuestionsAnswer
             questions={questionsData?.results ?? []}
             ownerName={product.store.name}
-            ownerImage={generateBackendUrl(product.store.storeProfile.logo)}
+            ownerImage={generateBackendUrl(product.store?.storeProfile?.logo)}
             onChange={handleQuestionChange}
             value={questionFormData.question}
             error={questionsFormErrors.question}
