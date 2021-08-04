@@ -23,6 +23,8 @@ import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
 import { generateBackendUrl } from "../helpers/url";
 import noImage from '../assets/images/no-image.png';
+import { isRequired, validate } from "../helpers/formsValidations";
+import { getErrorMessage } from "../helpers/axiosErrors";
 
 const product = {
   name: 'BK STACKER 5.0 POWER',
@@ -144,25 +146,101 @@ const product = {
 }
 
 const Product = () => {
-  const {setLoading} = useAuth();
+  const {setLoading, setCustomAlert} = useAuth();
   
   const {slug} = useParams();
 
   const [{data: product2, loading: productLoading, error: productError}] = useAxios({url: `/products/${slug}`});
 
-  const [{data: questionsData, loading: questionsDataLoading, error: questionsDataError}, fetchQuestions] = useAxios({url: `/questions`}, {manual: true});
+  const [{data: questionsData, loading: questionsDataLoading}, fetchQuestions] = useAxios({url: `/questions`}, {manual: true});
+
+  const [_, createQuestion] = useAxios({url: '/questions', method: 'POST'}, {manual: true});
   
   const [favorite, setFavorite] = useState(false);
+
+  const [questionFormData, setQuestionFormData] = useState({
+    question: '',
+    productId: null,
+  });
+
+  const [questionsFormErrors, setQuestionsFormErrors] = useState({
+    question: null,
+  });
+
+  useEffect(() => {
+    setQuestionsFormErrors({
+      question: validate(questionFormData.question, [
+        { validator: isRequired, errorMessage: 'La pregunta es requerida' },
+      ]),
+    });
+  }, [questionFormData]);
 
   useEffect(() => {
     setLoading({show: productLoading, message: 'Cargando'});
   }, [productLoading]);
 
   useEffect(() => {
-    product2 && fetchQuestions({params: {
-      productId: product2.id,
-    }});
+    setLoading({show: questionsDataLoading, message: 'Cargando preguntas'});
+  }, [questionsDataLoading]);
+
+  useEffect(() => {
+    if (product2) {
+      fetchQuestions({params: {
+        productId: product2.id,
+        sort: 'createdAt,DESC',
+      }});
+
+      setQuestionFormData(prevData => ({
+        ...prevData,
+        productId: product2.id,
+      }));
+    }
   }, [fetchQuestions, product2]);
+
+  const handleQuestionChange = (e) => {
+    setQuestionFormData(prevData => ({
+      ...prevData,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleQuestionSubmit = async (e) => {
+    e.preventDefault();
+
+    for (let errorName in questionsFormErrors) {
+      if (questionsFormErrors[errorName] !== null) {
+        setCustomAlert({ show: true, message: questionsFormErrors[errorName], severity: "error" });
+        return;
+      }
+    }
+
+    setLoading({ show: true, message: "Guardando pregunta" });
+    
+    try {
+      await createQuestion({data: questionFormData});
+      fetchQuestions({params: {
+        productId: product2.id,
+        sort: 'createdAt,DESC',
+      }});
+      setCustomAlert({ show: true, message: 'Pregunta agregada', severity: "success" });
+      setQuestionFormData(currentData => ({
+        ...currentData,
+        question: '',
+      }))
+    } catch(error) {
+      setCustomAlert({ show: true, message: getErrorMessage(error), severity: "error" });
+    } finally {
+      setLoading({ show: false, message: "" });
+    }
+  }
+
+  const handleSeeMoreClick = () => {
+    fetchQuestions({params: {
+      productId: product2.id,
+      sort: 'createdAt,DESC',
+      perPage: questionsData.size + 10,
+    }});
+  };
 
   /**
    * Si no existe el producto redireccionar a un 404
@@ -173,7 +251,6 @@ const Product = () => {
   }
 
   return <div className="p-16">
-    <pre>{JSON.stringify(questionsData, null, 2)}</pre>
     <Container>
       <div className="flex space-x-6">
         {/* Images */}
@@ -327,6 +404,12 @@ const Product = () => {
             questions={questionsData?.results ?? []}
             ownerName={product2.store.name}
             ownerImage={generateBackendUrl(product2.store.storeProfile.logo)}
+            onChange={handleQuestionChange}
+            value={questionFormData.question}
+            error={questionsFormErrors.question}
+            onSubmit={handleQuestionSubmit}
+            onSeeMoreClick={handleSeeMoreClick}
+            canSeeMore={questionsData?.results?.length < (questionsData?.total || 0)}
           />
         </TabPanel>
 
@@ -419,4 +502,4 @@ const Product = () => {
   </div>
 };
 
-export default Product;
+export default Product;;
