@@ -10,7 +10,7 @@ import { IoStorefrontOutline, IoLocationSharp, IoHeartOutline, IoHeart, } from "
 
 
 
-const StoreCard = ({ imgSrc, imgAlt, name, description, rating, i, isFavorite }) => {
+const StoreCard = ({ imgSrc, imgAlt, name, description, rating, i, isFavorite, slug }) => {
   const finalImgAlt = imgAlt ?? name;
 
   const [storeSelected, setStoreSelected] = useState(null);
@@ -26,7 +26,7 @@ const StoreCard = ({ imgSrc, imgAlt, name, description, rating, i, isFavorite })
       storeSelected == `${name} - ${i}` ?
         <div className="absolute p-6 flex h-full w-full bg-white bg-opacity-50 left-0 top-0 z-[9999999999999] animate__animated animate__fadeIn">
           <div className="m-auto flex bg-gray-300 w-full justify-between px-5 py-1 rounded animate__animated animate__fadeInUp animate__faster">
-            <Link to={`/stores/nombre-de-tienda`}>
+            <Link to={`/stores/${slug}`}>
               <IoStorefrontOutline className="text-[40px] text-gray-600 hover:text-main cursor-pointer" />
             </Link>
             <IoLocationSharp className="text-[40px] text-gray-600 hover:text-main cursor-pointer" />

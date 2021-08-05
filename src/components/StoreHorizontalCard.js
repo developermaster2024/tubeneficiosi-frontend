@@ -8,7 +8,7 @@ import { IoStorefrontOutline } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 
 
-const StoreHorizontalCard = ({ imgSrc, imgAlt, name, description, rating, shortDescription, isFavorite }) => {
+const StoreHorizontalCard = ({ imgSrc, imgAlt, name, description, rating, shortDescription, isFavorite, slug }) => {
 
   const [favorite, setFavorite] = useState(isFavorite);
 
@@ -30,7 +30,7 @@ const StoreHorizontalCard = ({ imgSrc, imgAlt, name, description, rating, shortD
     <div className="flex-grow flex flex-col">
       <div className="flex justify-between">
         <div>
-          <Link to={`/stores/nombre-de-tienda`}>
+          <Link to={`/stores/${slug}`}>
             <h4 className="text-lg font-semibold hover:text-main transition duration-300">{name}</h4>
           </Link>
           <p className="mt-4">{shortDescription}</p>
@@ -81,7 +81,7 @@ const StoreHorizontalCard = ({ imgSrc, imgAlt, name, description, rating, shortD
         </div>
         <div className="flex justify-right w-1/2">
 
-          <Link to={`/stores/nombre-de-tienda`} className="ml-auto text-gray-600 flex items-center hover:text-main">
+          <Link to={`/stores/${slug}`} className="ml-auto text-gray-600 flex items-center hover:text-main">
             <IoStorefrontOutline className="text-[30px] mr-1" />
             <p>Ver tienda</p>
           </Link>
