@@ -21,7 +21,7 @@ const ProductsCollection = ({ products, isInGridView }) => {
             <ProductCard
               name={product.name}
               slug={product.slug}
-              description={product.shortDescription || 'Sin descripción'}
+              description={product.shortDescription ||'Sin descripción'}
               imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
               imgAlt={product.name}
               price={product.price}

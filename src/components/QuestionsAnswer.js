@@ -1,9 +1,19 @@
 import { IoSendSharp } from "react-icons/io5";
 import { generateImageUrl } from "../helpers/url";
 
-const QuestionsAnswer = (props) => {
-  const { questions, className, ownerImage, ownerName } = props;
-
+const QuestionsAnswer = ({
+  questions,
+  className,
+  ownerImage,
+  ownerName,
+  value,
+  onChange,
+  name = 'question',
+  error,
+  onSubmit,
+  onSeeMoreClick,
+  canSeeMore = true,
+}) => {
   return (
     <div className={className}>
       <h1 className="text-2xl text-gray-800 mb-4">Preguntale a: </h1>
@@ -12,13 +22,24 @@ const QuestionsAnswer = (props) => {
         {ownerName}
       </div>
 
-      <div className="flex items-center">
-        <input className="p-2 bg-gray-200 w-11/12 rounded-xl border-none focus:shadow-xl focus:ring-white focus:bg-white transition duration-500 transform" placeholder=" Escribe tu pregunta..." type="text" />
-        <button className="ml-4 flex items-center font-bold bg-main px-8 py-2.5 text-white rounded-xl transition transform duration-500 hover:bg-gray-100 hover:text-main hover:scale-110 hover:shadow-xl">
-          Enviar
-          <IoSendSharp className="ml-2" />
-        </button>
-      </div>
+      <form onSubmit={onSubmit} className="space-y-1">
+        <div className="flex items-center">
+          <input
+            className="py-2 px-3 bg-gray-200 w-11/12 rounded-xl border-none focus:shadow-xl focus:ring-white focus:bg-white transition duration-500 transform"
+            placeholder=" Escribe tu pregunta..."
+            type="text"
+            name={name}
+            onChange={onChange}
+            value={value}
+          />
+          <button className="ml-4 flex items-center font-bold bg-main px-8 py-2.5 text-white rounded-xl transition transform duration-500 hover:bg-gray-100 hover:text-main hover:scale-110 hover:shadow-xl">
+            Enviar
+            <IoSendSharp className="ml-2" />
+          </button>
+        </div>
+
+        {error && <span className="block text-red-500 text-xs">{error}</span>}
+      </form>
 
       {questions.map(({id, answeredBy, question, createdAt, answer, answeredAt}) => <div key={id} className="my-8">
         <div className="flex items-center">
@@ -33,9 +54,9 @@ const QuestionsAnswer = (props) => {
         </div>}
       </div>)}
 
-      <button className="text-main mt-2">
+      {canSeeMore && <button type="button" className="text-main mt-2" onClick={onSeeMoreClick}>
         Ver mas preguntas
-      </button>
+      </button>}
     </div>
   )
 }
