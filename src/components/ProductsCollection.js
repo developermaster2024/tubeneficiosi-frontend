@@ -14,8 +14,8 @@ const ProductsCollection = ({ products, isInGridView, isStore }) => {
       {isInGridView
         ?
         <ProductsGrid>
-          {products.map((product, i) => <div
-            key={i}
+          {products.map((product) => <div
+            key={product.id}
             className="flex justify-center"
           >
             <ProductCard
@@ -32,8 +32,8 @@ const ProductsCollection = ({ products, isInGridView, isStore }) => {
           </div>)}
         </ProductsGrid>
         : <div className="space-y-4">
-          {products.map((product, i) => <ProductHorizontalCard
-            key={i}
+          {products.map((product) => <ProductHorizontalCard
+            key={product.id}
             name={product.name}
             slug={product.slug}
             description={product.shortDescription}

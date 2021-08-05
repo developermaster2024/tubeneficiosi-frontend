@@ -19,13 +19,21 @@ import RatingsFilter from "../components/RatingsFilter";
 import PriceFilter from "../components/PriceFilter";
 import useProducts from "../hooks/useProducts";
 import useCategories from "../hooks/useCategories";
+import useTags from "../hooks/useTags";
 
 const Products = () => {
   const { setLoading } = useAuth();
 
   const [isInGridView, setIsInGridView] = useState(true);
-  const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryId: [], rating: null, cardDiscount: null });
-  const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" })
+  const [filters, setFilters] = useState({
+    page: 1,
+    perPage: 12,
+    storeCategoryIds: [],
+    tagIds: [],
+    rating: null,
+    cardDiscount: null,
+  });
+  const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" });
   const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({
     params: {
       ...filters
@@ -33,6 +41,7 @@ const Products = () => {
   });
 
   const [{ categories, error: errorCategories }, getCategories] = useCategories();
+  const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), }});
 
   useEffect(() => {
     setLoading({ show: loading, message: "Cargando" });
@@ -42,19 +51,19 @@ const Products = () => {
     getProducts({
       params: {
         ...filters,
-        storeCategoryId: filters.storeCategoryId.join(","),
+        storeCategoryIds: filters.storeCategoryIds.join(","),
+        tagIds: filters.tagIds.join(","),
         ...priceFilter
       }
     });
-  }, [filters])
-
+  }, [filters]);
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
       const value = filters[e.target.name].includes(Number(e.target.value));
       if (value) {
         const newValues = filters[e.target.name].filter(n => n !== Number(e.target.value));
-        console.log(newValues);
+
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
@@ -126,12 +135,17 @@ const Products = () => {
             <h4 className="text-xl font-semibold mb-2">Categorias</h4>
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
               {categories.map((category, i) =>
-                <div key={i} className="flex items-center space-x-4">
-                  <input onChange={handleChange} name="storeCategoryId" value={category.id} checked={filters.storeCategoryId.includes(category.id)} className="text-main focus:ring-white" id={`${category.name}-${i}`} type="checkbox" />
-                  <label htmlFor={`${category.name}-${i}`}>
-                    <p>{category.name}</p>
-                  </label>
-                </div>
+                <li key={i} className="flex items-center space-x-4">
+                  <Checkbox
+                    className="capitalize"
+                    onChange={handleChange}
+                    name="storeCategoryIds"
+                    value={category.id}
+                    checked={filters.storeCategoryIds.includes(category.id)}
+                    id={`${category.name}-${i}`}
+                    label={category.name}
+                  />
+                </li>
               )}
             </ul>
           </div>
@@ -152,20 +166,25 @@ const Products = () => {
           />
 
           {/* Categories */}
-          <div>
+          {tags?.length > 0 && <div>
             <h4 className="text-xl font-semibold mb-2">Etiquetas</h4>
 
             <ul className="max-h-40 overflow-y-auto text-gray-800 space-y-2">
-              <li><Checkbox label="Arepas" /></li>
-              <li><Checkbox label="Televisores" /></li>
-              <li><Checkbox label="Empanadas" /></li>
-              <li><Checkbox label="Alguna otra" /></li>
-              <li><Checkbox label="Arepas" /></li>
-              <li><Checkbox label="Televisores" /></li>
-              <li><Checkbox label="Empanadas" /></li>
-              <li><Checkbox label="Alguna otra" /></li>
+              {tags?.map((tag) => <li key={tag.id}>
+                <li>
+                  <Checkbox
+                    onChange={handleChange}
+                    name="tagIds"
+                    value={tag.id}
+                    checked={filters.tagIds.includes(tag.id)}
+                    id={`${tag.name}-${tag.id}`}
+                    label={tag.name}
+                  />
+                </li>
+              </li>)}
             </ul>
-          </div>
+          </div>}
+
           {/*Cards*/}
           <div>
             <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
@@ -194,19 +213,16 @@ const Products = () => {
           <DiscountsSlider discounts={discounts} />
         </div>
 
-        {
-          error
-            ? <ErrorMsg message="Error al cargar los productos. Nuestro equipo ha sido notificado, intente más tarde." />
-            :
-            products.length > 0 ?
-              <ProductsCollection
-                products={products}
-                isInGridView={isInGridView}
-              />
-              :
-              <div className="text-center text-red-500 text-xl">
-                No se encontraron productos.
-              </div>
+        {error
+          ? <ErrorMsg message="Error al cargar los productos. Nuestro equipo ha sido notificado, intente más tarde." />
+          : products.length > 0
+            ? <ProductsCollection
+              products={products}
+              isInGridView={isInGridView}
+            />
+            : <div className="text-center text-red-500 text-xl">
+              No se encontraron productos.
+            </div>
         }
       </LeftSidebarLayout>
 
