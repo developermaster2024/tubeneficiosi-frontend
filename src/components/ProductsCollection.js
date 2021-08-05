@@ -21,8 +21,8 @@ const ProductsCollection = ({ products, isInGridView }) => {
             <ProductCard
               name={product.name}
               slug={product.slug}
-              description={product.shortDescription ||'Sin descripción'}
-              imgSrc={generateImageUrl(product.productImages[0].path)}
+              description={product.shortDescription || 'Sin descripción'}
+              imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
               imgAlt={product.name}
               price={product.price}
               onBuy={() => { setProductOnModal(product) }}
@@ -35,7 +35,7 @@ const ProductsCollection = ({ products, isInGridView }) => {
             name={product.name}
             slug={product.slug}
             description={product.shortDescription}
-            imgSrc={generateImageUrl(product.productImages[0].path)}
+            imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
             imgAlt={product.name}
             price={product.price}
             onBuy={() => { setProductOnModal(product) }}
