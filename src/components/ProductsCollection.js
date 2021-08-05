@@ -35,6 +35,7 @@ const ProductsCollection = ({ products, isInGridView }) => {
             name={product.name}
             slug={product.slug}
             description={product.shortDescription}
+            quantity={product.quantity}
             imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
             imgAlt={product.name}
             price={product.price}
@@ -44,6 +45,7 @@ const ProductsCollection = ({ products, isInGridView }) => {
             storeImageAlt={product.store.name}
             storeSlug={product?.store?.slug}
             deliveryMethodTypes={product.deliveryMethodTypes.map(item => item.name)}
+
           />)}
         </div>
       }

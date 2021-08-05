@@ -11,6 +11,7 @@ const ProductHorizontalCard = ({
   slug,
   description,
   price,
+  quantity,
   // rating,
   onBuy,
   storeName,
@@ -63,7 +64,7 @@ const ProductHorizontalCard = ({
         <ProductFeature
           className="w-full"
           name="Cantidad"
-          value={<span className="text-main">320 pcs</span>}
+          value={<span className="text-main">{quantity} pcs</span>}
         />
       </div>
     </div>
