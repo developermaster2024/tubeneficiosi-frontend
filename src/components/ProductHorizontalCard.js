@@ -16,6 +16,7 @@ const ProductHorizontalCard = ({
   storeName,
   storeImageSrc,
   storeImageAlt,
+  storeSlug,
   deliveryMethodTypes,
 }) => {
   return <div
@@ -44,7 +45,7 @@ const ProductHorizontalCard = ({
           className="w-full"
           name="Tienda"
           value={
-            <Link className="text-blue-500 hover:text-main" to={'stores/burguerking'}>
+            <Link className="text-blue-500 hover:text-main" to={`stores/${storeSlug}`}>
               <div className="flex items-center">
                 <img className="w-8 h-8" src={storeImageSrc} alt={storeImageAlt} />
                 <p className="ml-2">{storeName}</p>

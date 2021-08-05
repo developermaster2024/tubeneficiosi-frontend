@@ -38,7 +38,7 @@ const Store = () => {
 
   const [videoPreview, setVideoPreview] = useState(null);
 
-  const [filters, setFilters] = useState({ page: 1, categoryStoreIds: [], rating: [], minPrice: null, maxPrice: null, tagsIds: [], size: 12, storeId: null });
+  const [filters, setFilters] = useState({ page: 1, categoryStoreIds: [], rating: [], minPrice: null, maxPrice: null, tagsIds: [], perPage: 12, storeId: null });
 
   const [{ data: store, error: storeError, loading: loadingStore }, getStore] = useAxios({ url: `/stores/${params?.slug}` }, { useCache: false });
 
@@ -139,7 +139,13 @@ const Store = () => {
 
       return;
     }
-    console.log(e);
+
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        [e.target.name]: e.target.value
+      }
+    });
   }
 
   return <>
@@ -270,19 +276,30 @@ const Store = () => {
           </div>
           {
             loading ?
-              <div className="text-center text-4xl">
+              <div className="text-center text-4xl animate__animated animate__fadeIn">
                 Cargando Productos...
               </div>
               :
-              <ProductsCollection
-                products={products}
-                isInGridView={isInGridView}
-              />
+              products.length > 0 ?
+                <div className="animate__animated animate__fadeIn">
+                  <ProductsCollection
+                    products={products}
+                    isInGridView={isInGridView}
+                  />
+                </div>
+                :
+                <div className="text-center text-red-500 animate__animated animate__fadeIn">
+                  No se han encontrado productos.
+                </div>
           }
-
-          <div>
-            <Pagination pages={numberOfPages} activePage={filters.page} onChange={e => { handleChange({ target: { name: "page", value: e } }) }} />
-          </div>
+          {
+            numberOfPages > 0 ?
+              <div className="mt-12">
+                <Pagination pages={numberOfPages} activePage={filters.page} onChange={e => { handleChange({ target: { name: "page", value: e } }) }} />
+              </div>
+              :
+              null
+          }
         </div>
       </div>
     </Container>
