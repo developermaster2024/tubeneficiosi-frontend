@@ -6,12 +6,18 @@ const TextField = ({
   className,
   inputClassName,
   placeHolder,
+  onChange,
+  name,
+  value
 }) => {
   const finalId = id ?? Math.random().toString(36).substring(7);
-  
+
   return <div className={clsx('flex items-center', className)}>
     <label htmlFor={finalId}></label>
     <input
+      onChange={onChange}
+      name={name}
+      value={value}
       type={type}
       id={finalId}
       className={clsx([

@@ -2,44 +2,92 @@ import Button from "../components/Button";
 import ChevronRightIcon from "../components/ChevronRightIcon";
 import Container from "../components/Container";
 import Pagination from "../components/Pagination";
-import StarIcon from "../components/StarIcon";
-import burger from '../assets/images/hamburguesa.jpg';
 import Checkbox from "../components/Checkbox";
-import TextField from "../components/TextField";
 import GridIcon from "../components/GridIcon";
 import ListIcon from "../components/ListIcon";
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
-import { categories } from "../util/categories";
 import { discounts } from "../util/discounts";
 import CategoryCheckbox from "../components/CategoryCheckbox";
 import DiscountsSlider from "../components/DiscountsSlider";
 import { cards } from "../util/cards";
-import useAxios from '../hooks/useAxios';
 import { useAuth } from "../contexts/AuthContext";
 import ErrorMsg from "../components/ErrorMsg";
+import RatingsFilter from "../components/RatingsFilter";
+import PriceFilter from "../components/PriceFilter";
+import useProducts from "../hooks/useProducts";
+import useCategories from "../hooks/useCategories";
 
 const Products = () => {
-  const {setLoading} = useAuth();
-  
+  const { setLoading } = useAuth();
+
   const [isInGridView, setIsInGridView] = useState(true);
-
-  const [activePage, setActivePage] = useState(1);
-
-  const [{data: productsData, loading: fetchProductsLoading, error: fetchProductsError}] = useAxios({
-    url: '/products',
+  const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryId: [], rating: null, cardDiscount: null });
+  const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" })
+  const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({
     params: {
-      page: activePage,
-      perPage: 12,
+      ...filters
     }
   });
 
+  const [{ categories, error: errorCategories }, getCategories] = useCategories();
+
   useEffect(() => {
-    setLoading({ show: fetchProductsLoading, message: "Cargando" });
-  }, [fetchProductsLoading]);
-  
+    setLoading({ show: loading, message: "Cargando" });
+  }, [loading]);
+
+  useEffect(() => {
+    getProducts({
+      params: {
+        ...filters,
+        storeCategoryId: filters.storeCategoryId.join(","),
+        ...priceFilter
+      }
+    });
+  }, [filters])
+
+
+  const handleChange = (e) => {
+    if (e.target.type === "checkbox") {
+      const value = filters[e.target.name].includes(Number(e.target.value));
+      if (value) {
+        const newValues = filters[e.target.name].filter(n => n !== Number(e.target.value));
+        console.log(newValues);
+        setFilters((oldFilters) => {
+          return {
+            ...oldFilters,
+            [e.target.name]: newValues
+          }
+        });
+      } else {
+        setFilters((oldFilters) => {
+          return {
+            ...oldFilters,
+            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]]
+          }
+        });
+      }
+      return;
+    }
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        [e.target.name]: e.target.value
+      }
+    })
+  }
+
+  const handleChangePriceFilter = (e) => {
+    setPriceFilter((oldPriceFilter) => {
+      return {
+        ...oldPriceFilter,
+        [e.target.name]: e.target.value
+      }
+    })
+  }
+
   return <>
     <div className="bg-white shadow-sm">
       <Container className="py-5">
@@ -62,7 +110,7 @@ const Products = () => {
               <span>Vista de lista</span>
             </span>
             <span className="inline-flex items-center space-x-1 cursor-pointer">
-              <span className="px-1.5 py-0.5 text-xs bg-yellow-100 text-red-500 font-semibold rounded-lg">110</span>
+              <span className="px-1.5 py-0.5 text-xs bg-yellow-100 text-red-500 font-semibold rounded-lg">{total}</span>
               <span>Productos</span>
             </span>
           </div>
@@ -73,64 +121,35 @@ const Products = () => {
     <Container withMargin className="mb-20">
       <LeftSidebarLayout
         leftSide={<div className="space-y-6">
-          {/* Categories */}
-          <div>
-            <h4 className="text-xl font-semibold mb-2">Categories</h4>
 
+          <div>
+            <h4 className="text-xl font-semibold mb-2">Categorias</h4>
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
-              {categories.map((category, i) => <CategoryCheckbox
-                key={i}
-                label={category.name}
-                children={category.children}
-              />)}
+              {categories.map((category, i) =>
+                <div key={i} className="flex items-center space-x-4">
+                  <input onChange={handleChange} name="storeCategoryId" value={category.id} checked={filters.storeCategoryId.includes(category.id)} className="text-main focus:ring-white" id={`${category.name}-${i}`} type="checkbox" />
+                  <label htmlFor={`${category.name}-${i}`}>
+                    <p>{category.name}</p>
+                  </label>
+                </div>
+              )}
             </ul>
           </div>
 
-          {/* Rating */}
-          <div>
-            <h4 className="text-xl font-semibold mb-2">Rating</h4>
+          <RatingsFilter
+            className="my-8"
+            onChange={handleChange}
+            name="rating"
+            values={filters.rating}
+          />
 
-            <ul className="text-gray-800 space-y-3">
-              {[1, 2, 3, 4, 5].map(i => <li
-                key={i}
-                className="flex items-center space-x-2"
-              >
-                <Checkbox label={<div className="flex space-x-1">
-                  {[1, 2, 3, 4, 5].map(n => <StarIcon
-                    key={n}
-                    className="w-4 h-4 text-yellow-400"
-                  />)}
-                </div>} />
-              </li>)}
-            </ul>
-          </div>
-
-          {/* Precio */}
-          <div>
-            <h4 className="text-xl font-semibold mb-2">Precio</h4>
-
-            <ul className="space-y-1 mb-1">
-              <li><Checkbox label="Menos de 10$" /></li>
-              <li><Checkbox label="10$ a 100$" /></li>
-              <li><Checkbox label="100$ a 500$" /></li>
-              <li><Checkbox label="500$ a 1000$" /></li>
-              <li><Checkbox label="Más de 1000$" /></li>
-            </ul>
-
-            <div className="flex space-x-2">
-              <TextField
-                className="w-20"
-                placeHolder="Min $"
-              />
-
-              <TextField
-                className="w-20"
-                placeHolder="Max $"
-              />
-
-              <Button color="main">Ir</Button>
-            </div>
-          </div>
+          <PriceFilter
+            className=" my-8"
+            min={{ value: priceFilter.minPrice, name: "minPrice" }}
+            max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
+            onChange={handleChangePriceFilter}
+            onSubmit={() => { getProducts({ params: { ...filters, ...priceFilter } }) }}
+          />
 
           {/* Categories */}
           <div>
@@ -176,21 +195,32 @@ const Products = () => {
         </div>
 
         {
-          fetchProductsError
+          error
             ? <ErrorMsg message="Error al cargar los productos. Nuestro equipo ha sido notificado, intente más tarde." />
-            : <ProductsCollection
-              products={productsData?.results ?? []}
-              isInGridView={isInGridView}
-            />
+            :
+            products.length > 0 ?
+              <ProductsCollection
+                products={products}
+                isInGridView={isInGridView}
+              />
+              :
+              <div className="text-center text-red-500 text-xl">
+                No se encontraron productos.
+              </div>
         }
       </LeftSidebarLayout>
 
       <div className="flex justify-center items-center mt-10">
-        {productsData && <Pagination
-          pages={productsData.numberOfPages}
-          activePage={activePage}
-          onChange={setActivePage}
-        />}
+        {
+          numberOfPages > 0 ?
+            <Pagination
+              pages={numberOfPages}
+              activePage={filters.page}
+              onChange={e => { handleChange({ target: { name: "page", value: e } }) }}
+            />
+            :
+            null
+        }
       </div>
     </Container>
   </>

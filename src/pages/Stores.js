@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Container from "../components/Container";
 import GridIcon from "../components/GridIcon";
 import ListIcon from "../components/ListIcon";
-import StarIcon from "../components/StarIcon";
 import Pagination from "../components/Pagination";
 import Button from "../components/Button";
 import ChevronRightIcon from "../components/ChevronRightIcon";
@@ -13,7 +12,6 @@ import { Link } from "react-router-dom";
 import LocationMarker from "../components/LocationMarker";
 import StoresInMap from "./StoresInMap";
 import CategoryCheckbox from "../components/CategoryCheckbox";
-import { categories } from "../util/categories";
 import { storeDiscounts } from "../util/discounts";
 import { cards } from "../util/cards";
 import adsBanner from '../assets/images/banner.jpg';
@@ -27,6 +25,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import StoreDiscountCard from "../components/StoreDiscountCard";
+import RatingsFilter from "../components/RatingsFilter";
 
 const latLngs = [
   { lat: -34.605349, lng: -58.478619 },
@@ -45,7 +44,7 @@ const Stores = () => {
 
   const { setLoading, setCustomAlert } = useAuth();
 
-  const [filters, setFilters] = useState({ page: 1, perPage: 12, categoryIds: [], rating: null, cardDiscount: null });
+  const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryId: [], rating: null, cardDiscount: null });
   const [viewType, setViewType] = useState('grid');
   const [canShowLoading, setCanShowLoading] = useState(false);
 
@@ -164,11 +163,10 @@ const Stores = () => {
         leftSide={<div className="space-y-5">
           <div>
             <h4 className="text-xl font-semibold mb-2">Categorias</h4>
-
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
               {categories.map((category, i) =>
                 <div key={i} className="flex items-center space-x-4">
-                  <input onChange={handleChange} name="categoryIds" value={category.id} checked={filters.categoryIds.includes(category.id)} className="text-main focus:ring-white" id={`${category.name}-${i}`} type="checkbox" />
+                  <input onChange={handleChange} name="storeCategoryId" value={category.id} checked={filters.storeCategoryId.includes(category.id)} className="text-main focus:ring-white" id={`${category.name}-${i}`} type="checkbox" />
                   <label htmlFor={`${category.name}-${i}`}>
                     <p>{category.name}</p>
                   </label>
@@ -178,27 +176,7 @@ const Stores = () => {
           </div>
 
           {/* Rating */}
-          <div>
-            <h4 className="text-xl font-semibold mb-2">Rating</h4>
-
-            <ul className="text-gray-800 space-y-3">
-              {[1, 2, 3, 4, 5].map(i => <li
-                key={i}
-                className="flex items-center space-x-2"
-              >
-                <input
-                  type="checkbox"
-                  className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-offset-0 focus:ring-blue-200 focus:ring-opacity-50"
-                />
-                <div className="flex space-x-1">
-                  {[1, 2, 3, 4, 5].map(n => <StarIcon
-                    key={n}
-                    className="w-4 h-4 text-yellow-400"
-                  />)}
-                </div>
-              </li>)}
-            </ul>
-          </div>
+          <RatingsFilter />
 
           {/*Cards*/}
           <div>

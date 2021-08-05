@@ -283,6 +283,7 @@ const Store = () => {
               products.length > 0 ?
                 <div className="animate__animated animate__fadeIn">
                   <ProductsCollection
+                    isStore
                     products={products}
                     isInGridView={isInGridView}
                   />

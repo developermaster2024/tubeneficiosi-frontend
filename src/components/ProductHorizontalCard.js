@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import Button from "./Button";
 import ProductFeature from "./ProductFeature";
 import StarIcon from "./StarIcon";
 import { IoChevronForwardSharp } from "react-icons/io5";
@@ -79,10 +78,17 @@ const ProductHorizontalCard = ({
         <p className="text-gray-600 opacity-75">Entrega en un dia</p>
       </div>
 
-      <button className="bg-main rounded-2xl p-4 text-white flex justify-between items-center font-bold text-md hover:bg-gray-100 transition duration-500 hover:text-main hover:shadow-xl" onClick={onBuy}>
-        Comprar ahora
-        <IoChevronForwardSharp className="text-xl" />
-      </button>
+      {
+        quantity > 0 ?
+          <button className="bg-main rounded-2xl p-4 text-white flex justify-between items-center font-bold text-md hover:bg-gray-100 transition duration-500 hover:text-main hover:shadow-xl" onClick={onBuy}>
+            Comprar ahora
+            <IoChevronForwardSharp className="text-xl" />
+          </button>
+          :
+          <div className="text-center text-red-500 text-xl">
+            No Disponible
+          </div>
+      }
     </div>
   </div >;
 };

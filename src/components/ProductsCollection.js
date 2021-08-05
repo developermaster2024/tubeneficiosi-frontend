@@ -5,7 +5,7 @@ import ProductsGrid from "./ProductsGrid";
 import { useState } from 'react';
 import { generateImageUrl } from "../helpers/url";
 
-const ProductsCollection = ({ products, isInGridView }) => {
+const ProductsCollection = ({ products, isInGridView, isStore }) => {
 
   const [productOnModal, setProductOnModal] = useState(null);
 
@@ -22,10 +22,12 @@ const ProductsCollection = ({ products, isInGridView }) => {
               name={product.name}
               slug={product.slug}
               description={product.shortDescription || 'Sin descripción'}
+              quantity={product.quantity}
               imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
               imgAlt={product.name}
               price={product.price}
               onBuy={() => { setProductOnModal(product) }}
+              buttonText={isStore ? "Añadir al carrito" : "Comprar"}
             />
           </div>)}
         </ProductsGrid>

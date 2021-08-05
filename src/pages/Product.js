@@ -29,16 +29,16 @@ import ProductFeatureGroup from "../components/ProductFeatureGroup";
 import ProductFeatureCheckbox from "../components/ProductFeatureCheckbox";
 
 const Product = () => {
-  const {setLoading, setCustomAlert} = useAuth();
-  
-  const {slug} = useParams();
+  const { setLoading, setCustomAlert } = useAuth();
 
-  const [{data: product, loading: productLoading}] = useAxios({url: `/products/${slug}`});
+  const { slug } = useParams();
 
-  const [{data: questionsData, loading: questionsDataLoading}, fetchQuestions] = useAxios({url: `/questions`}, {manual: true});
+  const [{ data: product, loading: productLoading }] = useAxios({ url: `/products/${slug}` });
 
-  const [_, createQuestion] = useAxios({url: '/questions', method: 'POST'}, {manual: true});
-  
+  const [{ data: questionsData, loading: questionsDataLoading }, fetchQuestions] = useAxios({ url: `/questions` }, { manual: true });
+
+  const [_, createQuestion] = useAxios({ url: '/questions', method: 'POST' }, { manual: true });
+
   const [favorite, setFavorite] = useState(false);
 
   const [productOnModal, setProductOnModal] = useState(null);
@@ -61,19 +61,21 @@ const Product = () => {
   }, [questionFormData]);
 
   useEffect(() => {
-    setLoading({show: productLoading, message: 'Cargando'});
+    setLoading({ show: productLoading, message: 'Cargando' });
   }, [productLoading]);
 
   useEffect(() => {
-    setLoading({show: questionsDataLoading, message: 'Cargando preguntas'});
+    setLoading({ show: questionsDataLoading, message: 'Cargando preguntas' });
   }, [questionsDataLoading]);
 
   useEffect(() => {
     if (product) {
-      fetchQuestions({params: {
-        productId: product.id,
-        sort: 'createdAt,DESC',
-      }});
+      fetchQuestions({
+        params: {
+          productId: product.id,
+          sort: 'createdAt,DESC',
+        }
+      });
 
       setQuestionFormData(prevData => ({
         ...prevData,
@@ -100,19 +102,21 @@ const Product = () => {
     }
 
     setLoading({ show: true, message: "Guardando pregunta" });
-    
+
     try {
-      await createQuestion({data: questionFormData});
-      fetchQuestions({params: {
-        productId: product.id,
-        sort: 'createdAt,DESC',
-      }});
+      await createQuestion({ data: questionFormData });
+      fetchQuestions({
+        params: {
+          productId: product.id,
+          sort: 'createdAt,DESC',
+        }
+      });
       setCustomAlert({ show: true, message: 'Pregunta agregada', severity: "success" });
       setQuestionFormData(currentData => ({
         ...currentData,
         question: '',
       }))
-    } catch(error) {
+    } catch (error) {
       setCustomAlert({ show: true, message: getErrorMessage(error), severity: "error" });
     } finally {
       setLoading({ show: false, message: "" });
@@ -120,17 +124,19 @@ const Product = () => {
   }
 
   const handleSeeMoreClick = () => {
-    fetchQuestions({params: {
-      productId: product.id,
-      sort: 'createdAt,DESC',
-      perPage: questionsData.size + 10,
-    }});
+    fetchQuestions({
+      params: {
+        productId: product.id,
+        sort: 'createdAt,DESC',
+        perPage: questionsData.size + 10,
+      }
+    });
   };
 
   /**
    * Si no existe el producto redireccionar a un 404
    */
-  
+
   if (!product) {
     return null;
   }
@@ -223,7 +229,7 @@ const Product = () => {
                 className="w-1/2"
                 name="Tienda"
                 value={<div className="text-center hover:shadow-xl transition duration-500">
-                  <Link to={`/stores/${product.store.name}`}>
+                  <Link to={`/stores/${product.store.slug}`}>
                     <img
                       className="w-12 h-12 rounded m-auto"
                       src={product.store.storeProfile?.logo ? generateBackendUrl(product.store.storeProfile.logo) : noImage}

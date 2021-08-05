@@ -7,9 +7,11 @@ const ProductCard = ({
   description,
   // rating,
   price,
+  quantity,
   imgSrc,
   imgAlt,
-  onBuy
+  onBuy,
+  buttonText
 }) => {
 
   return <div
@@ -46,18 +48,25 @@ const ProductCard = ({
       <p className="opacity-75 text-xs text-center text-gray-800">{description}</p>
 
       <div className="text-center">
-        <p className="font-bold text-gray-600 text-xl">$ {price}</p>
+        <p className="font-bold text-gray-600 text-xl">{price > 0 ? `$${price}` : "Gratis"}</p>
       </div>
     </div>
 
-    <div className="flex items-center w-full justify-between space-x-1">
-      <div className="flex justify-around w-1/3 items-center text-lg">
-        <p className="text-bold text-gray-800 text-lg cursor-pointer hover:text-main">-</p>
-        <p>1</p>
-        <p className="text-bold text-gray-800 text-lg cursor-pointer hover:text-main">+</p>
-      </div>
-      <Button className="w-2/3 rounded-lg" color="main" onClick={onBuy}>Comprar</Button>
-    </div>
+    {
+      quantity > 0 ?
+        <div className="flex items-center w-full justify-between space-x-1">
+          <div className="flex justify-around w-1/3 items-center text-lg">
+            <p className="text-bold text-gray-800 text-lg cursor-pointer hover:text-main">-</p>
+            <p>1</p>
+            <p className="text-bold text-gray-800 text-lg cursor-pointer hover:text-main">+</p>
+          </div>
+          <Button className="w-2/3 rounded-lg" color="main" onClick={onBuy}>{buttonText ? buttonText : "Comprar"}</Button>
+        </div>
+        :
+        <div className="text-center text-red-500 text-xl">
+          No Disponible
+        </div>
+    }
   </div>
 };
 

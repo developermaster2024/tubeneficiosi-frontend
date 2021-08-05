@@ -16,7 +16,7 @@ const RatingsFilter = (props) => {
                 >
                     <Checkbox
                         value={i}
-                        checked={values.includes(i)}
+                        checked={values?.includes(i)}
                         onChange={onChange}
                         name={name}
                         label={
