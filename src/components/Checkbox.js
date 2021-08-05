@@ -2,14 +2,14 @@ import clsx from "clsx";
 
 const Checkbox = ({id, name, label, checked, value, onChange, className, nameClassName}) => {
   const finalId = id ?? Math.random().toString(36).substring(7);
-  
+
   return <label
     htmlFor={finalId}
     className={clsx("inline-flex items-center space-x-2 cursor-pointer", className)}
   >
     <input
-      id={finalId}
       name={name}
+      id={finalId}
       type="checkbox"
       value={value}
       checked={checked}

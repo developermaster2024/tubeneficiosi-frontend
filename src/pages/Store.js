@@ -27,6 +27,7 @@ import CategoryFilter from "../components/CategoryFilter";
 import RatingsFilter from "../components/RatingsFilter";
 import PriceFilter from "../components/PriceFilter";
 import TagsFilter from "../components/TagsFilter";
+import useTags from "../hooks/useTags";
 
 const Store = () => {
 
@@ -36,9 +37,10 @@ const Store = () => {
 
   const [storeInfo, setStoreInfo] = useState({ phoneNumber: "", shortDescription: "", instagram: "", facebook: "", whatsapp: "" });
 
-  const [videoPreview, setVideoPreview] = useState(null);
+  const [videoPreview, setVideoPreview] = useState("");
 
-  const [filters, setFilters] = useState({ page: 1, categoryStoreIds: [], rating: [], minPrice: null, maxPrice: null, tagsIds: [], perPage: 12, storeId: null });
+  const [filters, setFilters] = useState({ page: 1, categoryStoreIds: [], rating: [], tagsIds: [], perPage: 12, storeId: "" });
+  const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" });
 
   const [{ data: store, error: storeError, loading: loadingStore }, getStore] = useAxios({ url: `/stores/${params?.slug}` }, { useCache: false });
 
@@ -53,11 +55,17 @@ const Store = () => {
 
   const [{ categoriesStores, error: errorCategoriesStores, loading: loadingCategoriesStores }, getCategoriesStores] = useCategoriesStores({ params: { parentOnly: true, storeId: store?.storeId }, options: { useCache: false, manual: true } });
 
+  const [{ tags, error: errorTags, loading: loadingTags }, getTags] = useTags({ params: { storeCategoryId: store?.storeCategory?.id }, options: { useCache: false, manual: true } });
+
   const [isInGridView, setIsInGridView] = useState(true);
 
   const [favorite, setFavorite] = useState(false);
 
   const [showCart, setShowCart] = useState(false);
+
+  useEffect(() => {
+    console.log(store);
+  }, [store])
 
   useEffect(() => {
     setLoading({ show: loadingStore, message: "Cargando Informacion de la tienda." })
@@ -77,7 +85,12 @@ const Store = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${storeError?.response?.status === 400 ? storeError?.response?.data.message[0] : storeError?.response?.data.message}.`, severity: "error" });
     }
-  }, [error, errorCategoriesStores, storeError]);
+
+    if (errorTags) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorTags?.response?.status === 400 ? errorTags?.response?.data.message[0] : errorTags?.response?.data.message}.`, severity: "error" });
+    }
+  }, [error, errorCategoriesStores, storeError, errorTags]);
 
   useEffect(() => {
     if (store) {
@@ -110,18 +123,28 @@ const Store = () => {
       });
 
       getCategoriesStores();
+      getTags();
     }
   }, [store]);
 
   useEffect(() => {
-    getProducts({ params: { ...filters } });
+    getProducts({
+      params: {
+        ...filters,
+        tagsIds: filters.tagsIds.join(","),
+        categoryStoreIds: filters.categoryStoreIds.join(","),
+        rating: filters.rating.join(","),
+        ...priceFilter
+      }
+    });
   }, [filters]);
 
   const handleChange = (e) => {
+
     if (e.target.type === "checkbox") {
-      const value = filters[e.target.name].includes(e.target.value);
+      const value = filters[e.target.name].includes(Number(e.target.value));
       if (value) {
-        const newValues = filters[e.target.name].filter(n => n !== e.target.value);
+        const newValues = filters[e.target.name].filter(n => n !== Number(e.target.value));
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
@@ -132,7 +155,7 @@ const Store = () => {
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
-            [e.target.name]: [e.target.value, ...oldFilters[e.target.name]]
+            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]]
           }
         });
       }
@@ -146,6 +169,15 @@ const Store = () => {
         [e.target.name]: e.target.value
       }
     });
+  }
+
+  const handleChangePriceFilter = (e) => {
+    setPriceFilter((oldPriceFilter) => {
+      return {
+        ...oldPriceFilter,
+        [e.target.name]: e.target.value
+      }
+    })
   }
 
   return <>
@@ -183,9 +215,9 @@ const Store = () => {
                 className="w-full h-[60vh]"
                 src={videoPreview}
                 title="YouTube video player"
-                frameborder="0"
+                frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
+                allowFullScreen></iframe>
             </SwiperSlide>
             :
             null
@@ -216,13 +248,28 @@ const Store = () => {
 
           <PriceFilter
             className=" my-8"
-            min={{ value: filters.minPrice, name: "minPrice" }}
-            max={{ value: filters.maxPrice, name: "maxPrice" }}
-            onChange={handleChange}
-            onSubmit={() => { getProducts() }}
+            min={{ value: priceFilter.minPrice, name: "minPrice" }}
+            max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
+            onChange={handleChangePriceFilter}
+            onSubmit={() => {
+              getProducts({
+                params: {
+                  ...filters,
+                  tagsIds: filters.tagsIds.join(","),
+                  categoryStoreIds: filters.categoryStoreIds.join(","),
+                  rating: filters.rating.join(","),
+                  ...priceFilter
+                }
+              })
+            }}
           />
 
           <TagsFilter
+            values={filters.tagsIds}
+            loading={loadingTags}
+            tags={tags}
+            onChange={handleChange}
+            name="tagsIds"
             className="my-8" />
           {/*Cards*/}
           <div className="my-8">

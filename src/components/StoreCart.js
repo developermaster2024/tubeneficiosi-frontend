@@ -30,7 +30,7 @@ const StoreCart = (props) => {
           {
             Array.from(Array(5).keys()).splice(1).map((n) => {
               return (
-                <div className="my-4">
+                <div key={n} className="my-4">
                   <p className="text-right mb-2">$ 4,58</p>
                   <div className="flex justify-between w-full">
                     <div className="w-1/2 flex items-center">
