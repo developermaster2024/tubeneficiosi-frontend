@@ -1,4 +1,4 @@
-const Checkbox = ({id, label, checked, onChange}) => {
+const Checkbox = ({id, name, label, checked, value, onChange}) => {
   const finalId = id ?? Math.random().toString(36).substring(7);
   
   return <label
@@ -7,7 +7,9 @@ const Checkbox = ({id, label, checked, onChange}) => {
   >
     <input
       id={finalId}
+      name={name}
       type="checkbox"
+      value={value}
       checked={checked}
       onChange={onChange}
       className="rounded border-gray-300 text-main shadow-sm focus:border-main-light focus:ring focus:ring-offset-0 focus:ring-main-light focus:ring-opacity-50 cursor-pointer"

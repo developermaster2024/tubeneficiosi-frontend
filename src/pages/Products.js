@@ -24,7 +24,7 @@ const Products = () => {
   const { setLoading } = useAuth();
 
   const [isInGridView, setIsInGridView] = useState(true);
-  const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryId: [], rating: null, cardDiscount: null });
+  const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryIds: [], rating: null, cardDiscount: null });
   const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" })
   const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({
     params: {
@@ -42,19 +42,18 @@ const Products = () => {
     getProducts({
       params: {
         ...filters,
-        storeCategoryId: filters.storeCategoryId.join(","),
+        storeCategoryIds: filters.storeCategoryIds.join(","),
         ...priceFilter
       }
     });
-  }, [filters])
-
+  }, [filters]);
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
       const value = filters[e.target.name].includes(Number(e.target.value));
       if (value) {
         const newValues = filters[e.target.name].filter(n => n !== Number(e.target.value));
-        console.log(newValues);
+
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
@@ -127,10 +126,14 @@ const Products = () => {
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
               {categories.map((category, i) =>
                 <div key={i} className="flex items-center space-x-4">
-                  <input onChange={handleChange} name="storeCategoryId" value={category.id} checked={filters.storeCategoryId.includes(category.id)} className="text-main focus:ring-white" id={`${category.name}-${i}`} type="checkbox" />
-                  <label htmlFor={`${category.name}-${i}`}>
-                    <p>{category.name}</p>
-                  </label>
+                  <Checkbox
+                    onChange={handleChange}
+                    name="storeCategoryIds"
+                    value={category.id}
+                    checked={filters.storeCategoryIds.includes(category.id)}
+                    id={`${category.name}-${i}`}
+                    label={category.name}
+                  />
                 </div>
               )}
             </ul>
