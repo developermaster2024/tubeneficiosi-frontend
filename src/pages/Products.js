@@ -148,7 +148,7 @@ const Products = () => {
             min={{ value: priceFilter.minPrice, name: "minPrice" }}
             max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
             onChange={handleChangePriceFilter}
-            onSubmit={() => { getProducts({ params: { ...filters, ...priceFilter } }) }}
+            onSubmit={() => { getProducts({ params: { ...filters, ...priceFilter, storeCategoryId: filters.storeCategoryId.join(",") } }) }}
           />
 
           {/* Categories */}

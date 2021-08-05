@@ -1,12 +1,14 @@
-const Checkbox = ({id, label, checked, onChange}) => {
+const Checkbox = ({ id, label, checked, onChange, name, value }) => {
   const finalId = id ?? Math.random().toString(36).substring(7);
-  
+
   return <label
     htmlFor={finalId}
     className="inline-flex items-center space-x-2 cursor-pointer"
   >
     <input
+      name={name}
       id={finalId}
+      value={value}
       type="checkbox"
       checked={checked}
       onChange={onChange}
