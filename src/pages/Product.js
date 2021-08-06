@@ -16,7 +16,7 @@ import TableBody from "../components/TableBody";
 import ProductCard from "../components/ProductCard";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IoHeart, IoHeartOutline } from "react-icons/io5";
+import { IoChevronBackOutline, IoChevronForwardOutline, IoHeart, IoHeartOutline } from "react-icons/io5";
 import QuestionsAnswer from '../components/QuestionsAnswer';
 import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
@@ -27,13 +27,28 @@ import { getErrorMessage } from "../helpers/axiosErrors";
 import ProductModal from "../components/ProductModal";
 import ProductFeatureGroup from "../components/ProductFeatureGroup";
 import ProductFeatureCheckbox from "../components/ProductFeatureCheckbox";
+import useProducts from "../hooks/useProducts";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+
+const NavigationButton = ({ icon, color, className, onClick, canNext, hidden }) => {
+  return (
+    <button hidden={hidden} onClick={onClick} className={`text-${color} ${className}`} disabled={canNext}>
+      {icon}
+    </button>
+  )
+};
 
 const Product = () => {
   const { setLoading, setCustomAlert } = useAuth();
 
   const { slug } = useParams();
 
+  const [swiper, setSwiper] = useState(null);
+
   const [{ data: product, loading: productLoading }] = useAxios({ url: `/products/${slug}` });
+
+  const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({ options: { manual: true } });
 
   const [{ data: questionsData, loading: questionsDataLoading }, fetchQuestions] = useAxios({ url: `/questions` }, { manual: true });
 
@@ -81,8 +96,20 @@ const Product = () => {
         ...prevData,
         productId: product.id,
       }));
+
+      console.log(product);
+
+      getProducts({
+        params: {
+          storeId: product.store.storeId
+        }
+      })
     }
   }, [fetchQuestions, product]);
+
+  useEffect(() => {
+    console.log(products)
+  }, [products])
 
   const handleQuestionChange = (e) => {
     setQuestionFormData(prevData => ({
@@ -132,6 +159,18 @@ const Product = () => {
       }
     });
   };
+
+  const handleSwiper = (swiper) => {
+    setSwiper(swiper);
+  }
+
+  const handleNext = () => {
+    swiper?.slideNext();
+  }
+
+  const handleBack = () => {
+    swiper?.slidePrev();
+  }
 
   /**
    * Si no existe el producto redireccionar a un 404
@@ -376,23 +415,43 @@ const Product = () => {
       </TabsProvider>
     </Container>
 
-    <Container className="my-10">
-      <div>
-        <h3 className="text-xl text-gray-500 font-bold mb-12 text-center w-full">Tambien te puede interesar...</h3>
-      </div>
 
-      <div className="flex justify-between">
-        {[1, 2, 3, 4].map(n =>
-          <ProductCard
-            key={n}
-            name="Product name"
-            description="Space for a small product description"
-            imgSrc={burger}
-            imgAlt="Hamburguesas"
-            price="12.00"
-          />)}
-      </div>
-    </Container>
+    <div className="mt-24">
+      <h3 className="text-xl text-gray-500 font-bold mb-12 text-center w-full">Tambien te puede interesar...</h3>
+    </div>
+
+    <div className="flex justify-between">
+      <NavigationButton className="text-4xl text-main focus:outlined-none focus:border-none" onClick={handleBack} icon={<IoChevronBackOutline />}></NavigationButton>
+      <Swiper
+        slidesPerView={4}
+        style={{ width: "80%", padding: "40px 0" }}
+        onSlideChange={() => { }}
+        onSwiper={(swiper) => { handleSwiper(swiper) }}
+        spaceBetween={80}
+      >
+        {
+          products.map((product, i) => {
+            return (
+              <SwiperSlide key={product.id}>
+                <ProductCard
+                  key={product.id}
+                  name={product.name}
+                  description={product.shortDescription}
+                  imgSrc={`${generateBackendUrl(product.productImages[0].path)}`}
+                  imgAlt={product.name}
+                  price={product.price}
+                  quantity={product.quantity}
+                  slug={product.slug}
+                />
+              </SwiperSlide>
+            )
+          }
+          )
+        }
+      </Swiper>
+      <NavigationButton className="text-4xl text-main focus:outlined-none focus:border-none" onClick={handleNext} icon={<IoChevronForwardOutline />}></NavigationButton>
+    </div>
+
 
     <ProductModal
       product={productOnModal}
