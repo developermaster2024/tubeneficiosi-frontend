@@ -1,14 +1,36 @@
+import { useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import banner1 from '../assets/images/banner.jpg';
 import banner2 from '../assets/images/banner2.jpg';
 
-const HomeSlider = () => {
+const HomeSlider = ({ banners }) => {
+
+  useEffect(() => {
+    console.log(banners);
+  }, [banners])
+
   return <Swiper
     navigation
+    autoplay
     pagination={{ clickable: true }}
     onSlideChange={() => console.log('slide change')}
     onSwiper={(swiper) => console.log(swiper)}
   >
+    {
+      banners.map((banner, i) => {
+        return (
+          <SwiperSlide key={banner.id}>
+            <a href={banner.url} target="_blank">
+              <img
+                src={`${process.env.REACT_APP_API_URL}/${banner.imgPath}`}
+                alt={`banner-${banner?.store?.name}-${i}`}
+                className="h-72 w-full"
+              />
+            </a>
+          </SwiperSlide>
+        )
+      })
+    }
     <SwiperSlide>
       <img
         src={banner1}

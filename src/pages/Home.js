@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import events from '../assets/images/espectaculos.jpg';
-import events2 from '../assets/images/espectaculos2.jpg';
 import gastronomy from '../assets/images/gastronomia.jpg';
 import supermarkets from '../assets/images/supermercados.jpg';
 import bars from '../assets/images/boliches.jpg';
@@ -8,16 +7,7 @@ import pharmacy from '../assets/images/farmacias.jpg';
 import motorola from '../assets/images/motorola.jpg';
 import aires from '../assets/images/aires.jpg';
 import burger from '../assets/images/hamburguesa.jpg';
-import harina from '../assets/images/harina.jpg';
 import tapaboca from '../assets/images/tapaboca.jpg';
-import ecology from '../assets/images/ecology.jpg';
-import ecologyBanner from '../assets/images/ecology-banner.jpg';
-import dell from '../assets/images/dell.jpg';
-import dellBanner from '../assets/images/dell-banner.jpg';
-import wix from '../assets/images/wix.jpg';
-import wixBanner from '../assets/images/wix-banner.jpg';
-import amaDeCasa from '../assets/images/ama-de-casa.jpg';
-import amaDeCasaBanner from '../assets/images/ama-de-casa-banner.jpg';
 import shield from '../assets/images/shield.png';
 import callCenterAgent from '../assets/images/call-center-agent.png';
 import rent from '../assets/images/rent.png';
@@ -42,6 +32,15 @@ import ProductModal from "../components/ProductModal";
 import burguerKing from '../assets/images/burger-king.png'
 import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
+import useBanners from "../hooks/useBanners";
+import useStoreAds from "../hooks/useStoreAds";
+import FeaturedStores from "../components/FeaturedStores";
+import useFeaturedProducts from "../hooks/useFeaturedProducts";
+import GastronomyFeaturedProducts from "../components/GastronomyFeaturedProducts";
+import ShowsFeaturedProducts from "../components/ShowsFeaturedProducts";
+import SuperMarketsFeaturedProducts from "../components/SuperMarketsFeaturedProducts";
+import BolichesFeaturedProducts from "../components/BolichesFeaturedProducts";
+import PharmacyFeaturedProducts from "../components/PharmacyFeaturedProducts";
 
 const categories = [
   { name: 'Espectaculos', img: events },
@@ -173,25 +172,63 @@ const product = {
 
 const Home = () => {
 
-  const { setLoading } = useAuth();
+  const { setLoading, setCustomAlert } = useAuth();
 
-  const [{ data: businessSectionData, loading: businessSectionLoading, error: businessSectionError }, getBusinessInfo] = useAxios({ url: "/settings/business-info" }, { useCache: false, manual: true });
+  const [{ data: businessSectionData, error: businessSectionError }, getBusinessInfo] = useAxios({ url: "/settings/business-info" }, { useCache: false, manual: true });
 
-  const [{ data: appSectionData, loading: appSectionLoading, error: appSectionError }, getAppSectionData] = useAxios({ url: "settings/app-section" }, { useCache: false, manual: true });
+  const [{ data: appSectionData, error: appSectionError }, getAppSectionData] = useAxios({ url: "settings/app-section" }, { useCache: false, manual: true });
 
-  const [{ data: necessaryInfoSectionData, loading: necessaryInfoSectionLoading, error: necessaryInfoSectionError }, getNecessaryInfoData] = useAxios({ url: "/settings/needed-info" }, { useCache: false, manual: true });
+  const [{ data: necessaryInfoSectionData, error: necessaryInfoSectionError }, getNecessaryInfoData] = useAxios({ url: "/settings/needed-info" }, { useCache: false, manual: true });
+
+  const [{ banners, error: errorBanners, }, getBanners] = useBanners({ options: { manual: true, useCache: false } });
+
+  const [{ storeAds, error: errorStoresAds }, getStoreAds] = useStoreAds({ options: { manual: true, useCache: false } });
+
+  const [{ featuredProducts, error: featuredProductError, loading: featuredProductLoading }, getFeaturedProducts] = useFeaturedProducts({ options: { manual: true, useCache: false } });
 
   useEffect(() => {
     setLoading({ show: true, message: "Cargando datos" });
-    Promise.all([getBusinessInfo(), getAppSectionData(), getNecessaryInfoData()]).then((values) => {
+    Promise.all([getBusinessInfo(), getAppSectionData(), getNecessaryInfoData(), getBanners(), getStoreAds(), getFeaturedProducts()]).then((values) => {
       setLoading({ show: false, message: "" });
     })
   }, []);
 
+  useEffect(() => {
+    if (businessSectionError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${businessSectionError?.response?.status === 400 ? businessSectionError?.response?.data.message[0] : businessSectionError?.response?.data.message}.`, severity: "error" });
+    }
+
+    if (appSectionError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${appSectionError?.response?.status === 400 ? appSectionError?.response?.data.message[0] : appSectionError?.response?.data.message}.`, severity: "error" });
+    }
+
+    if (necessaryInfoSectionError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${necessaryInfoSectionError?.response?.status === 400 ? necessaryInfoSectionError?.response?.data.message[0] : necessaryInfoSectionError?.response?.data.message}.`, severity: "error" });
+    }
+
+    if (errorBanners) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorBanners?.response?.status === 400 ? errorBanners?.response?.data.message[0] : errorBanners?.response?.data.message}.`, severity: "error" });
+    }
+
+    if (errorStoresAds) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorStoresAds?.response?.status === 400 ? errorStoresAds?.response?.data.message[0] : errorStoresAds?.response?.data.message}.`, severity: "error" });
+    }
+
+    if (featuredProductError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${featuredProductError?.response?.status === 400 ? featuredProductError?.response?.data.message[0] : featuredProductError?.response?.data.message}.`, severity: "error" });
+    }
+  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError]);
+
   const [productOnModal, setProductOnModal] = useState(null);
 
   return <>
-    <HomeSlider />
+    <HomeSlider banners={banners} />
 
     {/* CATEGORIES */}
     <div className="container mt-20">
@@ -324,80 +361,17 @@ const Home = () => {
 
     {/* GASTRONOMIA */}
     <div className="container mt-20">
-      <div className="flex space-x-4">
-        <div className="w-full">
-          <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
-
-          <div className="flex justify-evenly space-x-3">
-            {[1, 2].map(n => <ProductCard
-              key={n}
-              name="Product name"
-              description="Space for a small product description"
-              imgSrc={burger}
-              imgAlt="Hamburguesas"
-              price="12.00"
-              onBuy={() => { setProductOnModal(product) }}
-            />)}
-          </div>
-        </div>
-
-        <CategorySectionCard
-          text="Gastronomia"
-          imgSrc={gastronomy}
-        />
-      </div>
+      <GastronomyFeaturedProducts featuredProducts={featuredProducts.filter(product => product?.storeCategory?.id === 1)} />
     </div>
 
     {/* ESPECTACULOS */}
     <div className="container mt-20">
-      <div className="flex space-x-4">
-        <CategorySectionCard
-          text="Espectaculos"
-          imgSrc={events}
-        />
-
-        <div className="w-full">
-          <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
-
-          <div className="flex justify-evenly space-x-3">
-            {[1, 2].map(n => <ProductCard
-              key={n}
-              name="Product name"
-              description="Space for a small product description"
-              imgSrc={events2}
-              imgAlt="Espectaculos"
-              price="12.00"
-              onBuy={() => { setProductOnModal(product) }}
-            />)}
-          </div>
-        </div>
-      </div>
+      <ShowsFeaturedProducts featuredProducts={featuredProducts} />
     </div>
 
     {/* Supermercados */}
     <div className="container mt-20">
-      <div className="flex space-x-4">
-        <div className="w-full">
-          <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
-
-          <div className="flex justify-evenly space-x-3">
-            {[1, 2].map(n => <ProductCard
-              key={n}
-              name="Product name"
-              description="Space for a small product description"
-              imgSrc={harina}
-              imgAlt="Harina"
-              price="12.00"
-              onBuy={() => { setProductOnModal(product) }}
-            />)}
-          </div>
-        </div>
-
-        <CategorySectionCard
-          text="Supermercados"
-          imgSrc={supermarkets}
-        />
-      </div>
+      <SuperMarketsFeaturedProducts featuredProducts={featuredProducts} />
     </div>
 
     <Link to={`/products/slug-del-producto`}>
@@ -408,54 +382,12 @@ const Home = () => {
 
     {/* Boliches */}
     <div className="container mt-20">
-      <div className="flex space-x-4">
-        <CategorySectionCard
-          text="Boliches"
-          imgSrc={bars}
-        />
-
-        <div className="w-full">
-          <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
-
-          <div className="flex justify-evenly space-x-3">
-            {[1, 2].map(n => <ProductCard
-              key={n}
-              name="Product name"
-              description="Space for a small product description"
-              imgSrc={events2}
-              imgAlt="Espectaculos"
-              price="12.00"
-              onBuy={() => { setProductOnModal(product) }}
-            />)}
-          </div>
-        </div>
-      </div>
+      <BolichesFeaturedProducts featuredProducts={featuredProducts} />
     </div>
 
     {/* Farmcias */}
     <div className="container mt-20">
-      <div className="flex space-x-4">
-        <div className="w-full">
-          <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
-
-          <div className="flex justify-evenly space-x-3">
-            {[1, 2].map(n => <ProductCard
-              key={n}
-              name="Product name"
-              description="Space for a small product description"
-              imgSrc={tapaboca}
-              imgAlt="Tapa boca"
-              price="12.00"
-              onBuy={() => { setProductOnModal(product) }}
-            />)}
-          </div>
-        </div>
-
-        <CategorySectionCard
-          text="Farmacia"
-          imgSrc={pharmacy}
-        />
-      </div>
+      <PharmacyFeaturedProducts featuredProducts={featuredProducts} />
     </div>
 
     <div className="container mt-20">
@@ -463,48 +395,8 @@ const Home = () => {
     </div>
 
     {/* TIENDA DESTACADAS */}
-    <div className="container mt-20">
-      <div className="flex justify-between space-x-4">
-        {[
-          { name: 'Ecology', bannerSrc: ecologyBanner, logoSrc: ecology },
-          { name: 'Dell', bannerSrc: dellBanner, logoSrc: dell },
-          { name: 'Wix', bannerSrc: wixBanner, logoSrc: wix },
-          { name: 'Ama de Casa', bannerSrc: amaDeCasaBanner, logoSrc: amaDeCasa },
-        ].map(tienda => <div
-          key={tienda.name}
-          className="relative bg-white max-w-xs w-full rounded-md overflow-hidden shadow"
-        >
-          <img
-            src={tienda.bannerSrc}
-            alt={tienda.name}
-            className="h-20 w-full"
-          />
 
-          <img
-            src={tienda.logoSrc}
-            alt={tienda.name}
-            className="absolute left-1/2 top-[40px] h-20 w-20 transform -translate-x-1/2 rounded shadow-md"
-          />
-
-          <div className="p-4 pt-16 space-y-7">
-            <h4 className="text-2xl text-center">{tienda.name}</h4>
-
-            <div className="flex justify-evenly space-x-2">
-              {[1, 2, 3].map(n => <img
-                key={n}
-                src={tapaboca}
-                alt=""
-                className="w-14 h-14 border border-gray-200 rounded"
-              />)}
-            </div>
-
-            <div className="text-center">
-              <a href="/#" className="opacity-75">Ver tienda</a>
-            </div>
-          </div>
-        </div>)}
-      </div>
-    </div>
+    <FeaturedStores storesAds={storeAds} />
 
     {/*Descuentos*/}
 
