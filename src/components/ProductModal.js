@@ -5,7 +5,7 @@ import { generateImageUrl } from "../helpers/url";
 import ProductFeatureCheckbox from "./ProductFeatureCheckbox";
 import ProductFeatureGroup from "./ProductFeatureGroup";
 
-const ProductModal = ({product, closeModal}) => {
+const ProductModal = ({ product, closeModal }) => {
   const history = useHistory();
 
   const [quantity, setQuantity] = useState(1);
@@ -13,7 +13,7 @@ const ProductModal = ({product, closeModal}) => {
   if (!product) {
     return null;
   }
-  
+
   return <div className="fixed flex z-10 h-screen w-screen bg-black bg-opacity-50 left-0 top-0 animate__animated animate__fade">
     <div className="w-7/12 h-5/6 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
       <div className="bg-main p-4 flex justify-between items-center text-white">
@@ -35,8 +35,11 @@ const ProductModal = ({product, closeModal}) => {
       </div>
 
       <div className="px-6 my-4 overflow-y-auto h-[45%] features-container">
+        {
+
+        }
         <ProductFeatureGroup name="Características">
-          {product.productFeatures.map((feature) => <ProductFeatureCheckbox
+          {product?.productFeatures?.map((feature) => <ProductFeatureCheckbox
             key={feature.id}
             id={feature.id}
             name={feature.name}
@@ -45,7 +48,7 @@ const ProductModal = ({product, closeModal}) => {
             isSelectable={feature.isSelectable}
           />)}
         </ProductFeatureGroup>
-        {product.productFeatureGroups.map((featuresGroup) => <ProductFeatureGroup
+        {product?.productFeatureGroups?.map((featuresGroup) => <ProductFeatureGroup
           key={featuresGroup.id}
           name={featuresGroup.name}
         >
