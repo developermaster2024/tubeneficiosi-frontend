@@ -7,7 +7,6 @@ import pharmacy from '../assets/images/farmacias.jpg';
 import motorola from '../assets/images/motorola.jpg';
 import aires from '../assets/images/aires.jpg';
 import burger from '../assets/images/hamburguesa.jpg';
-import tapaboca from '../assets/images/tapaboca.jpg';
 import shield from '../assets/images/shield.png';
 import callCenterAgent from '../assets/images/call-center-agent.png';
 import rent from '../assets/images/rent.png';
@@ -17,10 +16,8 @@ import partner from '../assets/images/partner.jpg';
 import clients from '../assets/images/clients.jpg';
 import waveUp from '../assets/images/wave-up.png';
 import waveDown from '../assets/images/wave-down.png';
-import CategorySectionCard from "../components/CategorySectionCard";
 import HomeSlider from "../components/HomeSlider";
 import ProductAdCard from "../components/ProductAdCard";
-import ProductCard from "../components/ProductCard";
 import SectionHeading from "../components/SectionHeading";
 import banner2 from '../assets/images/banner2.jpg';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -415,7 +412,7 @@ const Home = () => {
       >
         {
           storeDiscounts.map((storeDiscount, i) =>
-            <SwiperSlide>
+            <SwiperSlide key={i}>
               <StoreDiscountCard storeDiscount={storeDiscount}></StoreDiscountCard>
             </SwiperSlide>
           )
@@ -440,7 +437,7 @@ const Home = () => {
       >
         {
           bankDiscounts.map((banckDiscount, i) =>
-            <SwiperSlide>
+            <SwiperSlide key={i}>
               <BankDiscountCard bankDiscount={banckDiscount} ></BankDiscountCard>
             </SwiperSlide>
           )

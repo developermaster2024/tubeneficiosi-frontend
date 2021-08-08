@@ -11,8 +11,19 @@ import MyAccountRoutes from './MyAccountRoutes';
 import Checkout from "./pages/Checkout";
 import OrderDetails from "./pages/OrderDetails";
 import PrivateRoute from "./components/PrivateRoute";
+import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
 
 const Routes = () => {
+
+  const history = useHistory();
+
+  useEffect(() => {
+    history?.listen((location, action) => {
+      window.scrollTo({ top: 0 });
+    });
+  }, [history]);
+
   return (
     <Switch>
       <Route path="/" exact component={Home} />
