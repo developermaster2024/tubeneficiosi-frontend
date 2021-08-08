@@ -8,10 +8,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 const BolichesFeaturedProducts = ({ featuredProducts }) => {
 
-    useEffect(() => {
-        console.log(featuredProducts);
-    }, [featuredProducts])
-
     const [productOnModal, setProductOnModal] = useState(null);
 
     return (

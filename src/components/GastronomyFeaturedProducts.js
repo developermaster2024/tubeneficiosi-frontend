@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CategorySectionCard from "./CategorySectionCard";
 import ProductCard from "./ProductCard";
 import gastronomy from '../assets/images/gastronomia.jpg';
@@ -7,10 +7,6 @@ import ProductModal from "./ProductModal";
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 const GastronomyFeaturedProducts = ({ featuredProducts }) => {
-
-    useEffect(() => {
-        console.log(featuredProducts);
-    }, [featuredProducts])
 
     const [productOnModal, setProductOnModal] = useState(null);
 

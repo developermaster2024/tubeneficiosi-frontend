@@ -41,7 +41,7 @@ const Products = () => {
   });
 
   const [{ categories, error: errorCategories }, getCategories] = useCategories();
-  const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), }});
+  const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });
 
   useEffect(() => {
     setLoading({ show: loading, message: "Cargando" });
@@ -162,7 +162,7 @@ const Products = () => {
             min={{ value: priceFilter.minPrice, name: "minPrice" }}
             max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
             onChange={handleChangePriceFilter}
-            onSubmit={() => { getProducts({ params: { ...filters, ...priceFilter, storeCategoryId: filters.storeCategoryId.join(",") } }) }}
+            onSubmit={(e) => { if (e) { e?.preventDefault() } getProducts({ params: { ...filters, ...priceFilter, storeCategoryId: filters?.storeCategoryId?.join(",") } }) }}
           />
 
           {/* Categories */}

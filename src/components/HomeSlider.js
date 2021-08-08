@@ -1,20 +1,15 @@
-import { useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import banner1 from '../assets/images/banner.jpg';
 import banner2 from '../assets/images/banner2.jpg';
 
 const HomeSlider = ({ banners }) => {
 
-  useEffect(() => {
-    console.log(banners);
-  }, [banners])
-
   return <Swiper
     navigation
     autoplay
     pagination={{ clickable: true }}
-    onSlideChange={() => console.log('slide change')}
-    onSwiper={(swiper) => console.log(swiper)}
+    onSlideChange={() => { }}
+    onSwiper={(swiper) => { }}
   >
     {
       banners.map((banner, i) => {

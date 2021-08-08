@@ -39,7 +39,7 @@ const Store = () => {
 
   const [videoPreview, setVideoPreview] = useState("");
 
-  const [filters, setFilters] = useState({ page: 1, categoryStoreIds: [], rating: [], tagsIds: [], perPage: 12, storeId: "" });
+  const [filters, setFilters] = useState({ page: 1, categoryIds: [], rating: [], tagIds: [], perPage: 12, storeId: "" });
   const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" });
 
   const [{ data: store, error: storeError, loading: loadingStore }, getStore] = useAxios({ url: `/stores/${params?.slug}` }, { useCache: false });
@@ -131,9 +131,9 @@ const Store = () => {
     getProducts({
       params: {
         ...filters,
-        tagsIds: filters.tagsIds.join(","),
-        categoryStoreIds: filters.categoryStoreIds.join(","),
-        rating: filters.rating.join(","),
+        tagIds: filters?.tagIds?.join(","),
+        categoryIds: filters?.categoryIds?.join(","),
+        rating: filters?.rating?.join(","),
         ...priceFilter
       }
     });
@@ -234,9 +234,9 @@ const Store = () => {
           <CategoryFilter
             className="my-8 max-h-64 overflow-y-auto"
             loading={loadingCategoriesStores}
-            categoryStoreIds={filters.categoryStoreIds}
+            categoryStoreIds={filters.categoryIds}
             onChange={handleChange}
-            name="categoryStoreIds"
+            name="categoryIds"
             categoriesStores={categoriesStores} />
 
           <RatingsFilter
@@ -251,11 +251,14 @@ const Store = () => {
             min={{ value: priceFilter.minPrice, name: "minPrice" }}
             max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
             onChange={handleChangePriceFilter}
-            onSubmit={() => {
+            onSubmit={(e) => {
+              if (e) {
+                e.preventDefault();
+              }
               getProducts({
                 params: {
                   ...filters,
-                  tagsIds: filters.tagsIds.join(","),
+                  tagIds: filters.tagIds.join(","),
                   categoryStoreIds: filters.categoryStoreIds.join(","),
                   rating: filters.rating.join(","),
                   ...priceFilter
@@ -265,11 +268,11 @@ const Store = () => {
           />
 
           <TagsFilter
-            values={filters.tagsIds}
+            values={filters.tagIds}
             loading={loadingTags}
             tags={tags}
             onChange={handleChange}
-            name="tagsIds"
+            name="tagIds"
             className="my-8" />
           {/*Cards*/}
           <div className="my-8">

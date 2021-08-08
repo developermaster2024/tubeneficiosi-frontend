@@ -8,8 +8,6 @@ import CustomAlert from "./components/CustomAlert";
 
 const App = () => {
 
-  const history = useHistory();
-
   const { customLoading, customAlert, setCustomAlert } = useAuth();
 
   const [dots, setDots] = useState("");
@@ -29,12 +27,6 @@ const App = () => {
       if (id) clearInterval(id);
     }
   }, [customLoading]);
-
-  useEffect(() => {
-    history?.listen((location, action) => {
-      document?.querySelector('body')?.scrollTo(0, 0)
-    });
-  }, [history]);
 
   const handleClose = () => {
     setCustomAlert({ show: false, message: "", severity: null })

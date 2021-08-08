@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { generateImageUrl } from "../helpers/url";
 
@@ -9,11 +10,12 @@ const FeaturedStores = ({ storesAds }) => {
             <Swiper
                 navigation
                 autoplay
+                style={{ padding: "30px 0" }}
                 slidesPerView={4}
                 spaceBetween={25}
                 pagination={{ clickable: true }}
-                onSlideChange={() => console.log('slide change')}
-                onSwiper={(swiper) => console.log(swiper)}
+                onSlideChange={() => { }}
+                onSwiper={(swiper) => { }}
             >
                 {
                     storesAds?.map((storesAd, i) => {
@@ -57,7 +59,9 @@ const FeaturedStores = ({ storesAds }) => {
                                         </div>
 
                                         <div className="text-center">
-                                            <a href="/#" className="opacity-75">Ver Tienda</a>
+                                            <Link to={`/stores/${storesAd.store?.slug}`}>
+                                                Ver Tienda
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
