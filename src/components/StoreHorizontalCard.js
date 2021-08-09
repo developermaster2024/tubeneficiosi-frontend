@@ -8,7 +8,7 @@ import { IoStorefrontOutline } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 
 
-const StoreHorizontalCard = ({ imgSrc, imgAlt, name, description, rating, shortDescription, isFavorite, slug }) => {
+const StoreHorizontalCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, shortDescription, isFavorite, slug }) => {
 
   const [favorite, setFavorite] = useState(isFavorite);
 
@@ -56,7 +56,12 @@ const StoreHorizontalCard = ({ imgSrc, imgAlt, name, description, rating, shortD
                 })
               }} className="text-[30px] ml-auto text-gray-600 hover:text-main cursor-pointer" />
           }
-          <p className="text-xl font-bold p-4">Desde: $36.99</p>
+          {
+            cheapestProduct?.price ?
+              <p className="text-xl font-bold p-4">Desde: ${cheapestProduct.price}</p>
+              :
+              <p className="text-xl text-red-500 font-bold p-4">Sin Productos</p>
+          }
 
           <p className="text-gray-500 flex items-center">
             <IoLocationSharp className="text-lg mr-2"></IoLocationSharp> <span>A 5km de ti.</span>

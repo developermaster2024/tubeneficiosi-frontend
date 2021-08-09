@@ -17,6 +17,7 @@ const StoresCollection = ({ isInGridView, stores }) => {
           key={i}
           isFavorite={false}
           slug={store.slug}
+          cheapestProduct={store.cheapestProduct}
         />
       </div>)}
     </div>
@@ -32,6 +33,7 @@ const StoresCollection = ({ isInGridView, stores }) => {
         key={i}
         isFavorite={false}
         slug={store.slug}
+        cheapestProduct={store.cheapestProduct}
       />)}
     </div>;
 };

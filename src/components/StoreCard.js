@@ -10,7 +10,7 @@ import { IoStorefrontOutline, IoLocationSharp, IoHeartOutline, IoHeart, } from "
 
 
 
-const StoreCard = ({ imgSrc, imgAlt, name, description, rating, i, isFavorite, slug }) => {
+const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, i, isFavorite, slug }) => {
   const finalImgAlt = imgAlt ?? name;
 
   const [storeSelected, setStoreSelected] = useState(null);
@@ -74,7 +74,12 @@ const StoreCard = ({ imgSrc, imgAlt, name, description, rating, i, isFavorite, s
       <p className="opacity-75 text-xs text-center text-gray-800">{description}</p>
 
       <div className="text-center">
-        <p className="font-bold text-gray-600 text-xl">desde: $4.99</p>
+        {
+          cheapestProduct?.price ?
+            <p className="font-bold text-gray-600 text-xl">desde: ${cheapestProduct?.price}</p>
+            :
+            <p className="font-bold text-red-600 text-xl">Sin productos</p>
+        }
       </div>
 
       <div className="flex flex-wrap">

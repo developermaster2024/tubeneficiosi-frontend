@@ -27,24 +27,11 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import StoreDiscountCard from "../components/StoreDiscountCard";
 import RatingsFilter from "../components/RatingsFilter";
 
-const latLngs = [
-  { lat: -34.605349, lng: -58.478619 },
-  { lat: -34.615521, lng: -58.408581 },
-  { lat: -34.571149, lng: -58.430211 },
-  { lat: -34.654504, lng: -58.486859 },
-  { lat: -34.569453, lng: -58.499905 },
-  { lat: -34.651057, lng: -58.521639 },
-  { lat: -34.638347, lng: -58.433749 },
-  { lat: -34.622245, lng: -58.516489 },
-  { lat: -34.649928, lng: -58.404566 },
-  { lat: -34.584943, lng: -58.435809 },
-];
-
 const Stores = () => {
 
   const { setLoading, setCustomAlert } = useAuth();
 
-  const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryId: [], rating: null, cardDiscount: null });
+  const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryId: [], rating: null, withCheapestProduct: true, cardDiscount: null });
   const [viewType, setViewType] = useState('grid');
   const [canShowLoading, setCanShowLoading] = useState(false);
 
