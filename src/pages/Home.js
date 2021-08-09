@@ -488,31 +488,28 @@ const Home = () => {
       style={{ background: appSectionData?.backgroundColor ? appSectionData?.backgroundColor : "#F04141", }}
     >
       <div className="container flex items-center">
-        <div>
-          <div className="w-7/12 space-y-6">
-            <div className="text-center">
+        <div className="w-7/12 space-y-6">
+          <div className="text-center">
+            <img
+              src={appSectionData?.leftSideImage ? process.env.REACT_APP_API_URL + "/" + appSectionData?.leftSideImage : appBg}
+              alt="Smartphone"
+              className="m-auto w-62 h-28"
+            />
+          </div>
+          <h4 className="text-5xl text-center font-bold flex-wrap" style={{ color: appSectionData?.titleColor ? appSectionData?.titleColor : "white" }}>{appSectionData?.title ? appSectionData?.title : "Descárgate  la app"}</h4>
+          <p className="text-center" style={{ color: appSectionData?.descriptionColor ? appSectionData?.descriptionColor : "white" }}>
+            {
+              appSectionData?.description ? appSectionData?.description : "Pide lo que sea y síguelo en tiempo real con la app BeneficioSi."
+            }
+          </p>
+          <div className="text-center">
+            {/* <a href="/#">
               <img
-                src={appSectionData?.leftSideImage ? process.env.REACT_APP_API_URL + "/" + appSectionData?.leftSideImage : appBg}
-                alt="Smartphone"
-                className="m-auto w-62 h-28"
+                className="m-auto"
+                src={downloadAndroidApp}
+                alt="Descargar app para android"
               />
-            </div>
-            <h4 className="text-5xl text-center font-bold flex-wrap" style={{ color: appSectionData?.titleColor ? appSectionData?.titleColor : "white" }}>{appSectionData?.title ? appSectionData?.title : "Descárgate  la app"}</h4>
-            <p className="text-center" style={{ color: appSectionData?.descriptionColor ? appSectionData?.descriptionColor : "white" }}>
-              {
-                appSectionData?.description ? appSectionData?.description : "Pide lo que sea y síguelo en tiempo real con la app BeneficioSi."
-              }
-            </p>
-            <div className="text-center">
-              {/* <a href="/#">
-                <img
-                  className="m-auto"
-                  src={downloadAndroidApp}
-                  alt="Descargar app para android"
-                />
-              </a> */}
-
-            </div>
+            </a> */}
 
           </div>
         </div>
