@@ -14,9 +14,9 @@ import StoresInMap from "./StoresInMap";
 import CategoryCheckbox from "../components/CategoryCheckbox";
 import { storeDiscounts } from "../util/discounts";
 import { cards } from "../util/cards";
-import adsBanner from '../assets/images/banner.jpg';
-import adsBanner2 from '../assets/images/banner2.jpg';
-import storesBanner from '../assets/images/storesbanner.webp';
+import adsBanner from '../assets/images/tv.jpg';
+import adsBanner2 from '../assets/images/mercadopago.jpg';
+import storesBanner from '../assets/images/bannerstores.jpg';
 
 
 import useStores from "../hooks/useStores";
