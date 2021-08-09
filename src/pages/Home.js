@@ -6,6 +6,11 @@ import bars from '../assets/images/boliches.jpg';
 import pharmacy from '../assets/images/farmacias.jpg';
 import motorola from '../assets/images/motorola.jpg';
 import aires from '../assets/images/aires.jpg';
+
+import laptop from "../assets/images/laptop.jpg";
+import computadora from "../assets/images/monitos.jpg";
+import Tvs from "../assets/images/tv.jpg";
+
 import burger from '../assets/images/hamburguesa.jpg';
 import shield from '../assets/images/shield.png';
 import callCenterAgent from '../assets/images/call-center-agent.png';
@@ -261,24 +266,24 @@ const Home = () => {
       <div className="flex space-x-4">
         <ProductAdCard
           title={<>
-            <p>lo último</p>
-            <p>en celurares</p>
+            <p>Pc de</p>
+            <p>Escritorios</p>
           </>}
           subtitle="black friday"
           btnText="Ver más"
           href="/#"
-          imgSrc={motorola}
+          imgSrc={computadora}
           imgAlt="Celulares"
         />
         <ProductAdCard
           title={<>
-            <p>Refrescá tus</p>
-            <p>espacios</p>
+            <p>Toda una variedad</p>
+            <p>de laptops</p>
           </>}
           subtitle="black friday"
           btnText="Ver más"
           href="/#"
-          imgSrc={aires}
+          imgSrc={laptop}
           imgAlt="Aires acondicionados"
         />
       </div>
@@ -372,7 +377,7 @@ const Home = () => {
     </div>
 
     <Link to={`/products/slug-del-producto`}>
-      <div className="min-h-[50vh] my-8" style={{ backgroundImage: `url(${banner2})`, backgroundSize: '100% 100%' }}>
+      <div className="min-h-[50vh] my-8" style={{ backgroundImage: `url(${Tvs})`, backgroundSize: '100% 100%' }}>
 
       </div>
     </Link>
@@ -455,24 +460,24 @@ const Home = () => {
       <div className="flex space-x-4">
         <ProductAdCard
           title={<>
-            <p>lo último</p>
-            <p>en celurares</p>
+            <p>Pc de</p>
+            <p>Escritorios</p>
           </>}
           subtitle="black friday"
           btnText="Ver más"
           href="/#"
-          imgSrc={motorola}
+          imgSrc={computadora}
           imgAlt="Celulares"
         />
         <ProductAdCard
           title={<>
-            <p>Refrescá tus</p>
-            <p>espacios</p>
+            <p>Toda una variedad</p>
+            <p>de laptops</p>
           </>}
           subtitle="black friday"
           btnText="Ver más"
           href="/#"
-          imgSrc={aires}
+          imgSrc={laptop}
           imgAlt="Aires acondicionados"
         />
       </div>

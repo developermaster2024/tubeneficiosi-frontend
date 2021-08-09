@@ -287,11 +287,25 @@ const Product = () => {
               {
                 product.discount ?
                   <div>
-                    <p className="text-main text-3xl font-semibold">{(product.price - ((product.price * product.discount) / 100)).toFixed(2)} USD</p>
+                    <p className="text-main text-3xl font-semibold">
+                      {
+                        product.price > 0 ?
+                          <span> {(product.price - ((product.price * product.discount) / 100)).toFixed(2)} USD</span>
+                          :
+                          "Gratis"
+                      }
+                    </p>
                     <p className="line-through text-700 font-semibold opacity-50">{product.price} USD</p>
                   </div>
                   :
-                  <p className="text-main text-3xl font-semibold">{product.finalPrice} USD</p>
+                  <p className="text-main text-3xl font-semibold">
+                    {
+                      Number(product.price) > 0 ?
+                        <span> {(Number(product.price)).toFixed(2)} USD</span>
+                        :
+                        "Gratis"
+                    }
+                  </p>
               }
             </div>
             <div className="flex-grow">
