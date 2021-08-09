@@ -1,5 +1,4 @@
 import Container from "../components/Container"
-import burger from '../assets/images/hamburguesa.jpg';
 import StarIcon from "../components/StarIcon";
 import ProductFeature from "../components/ProductFeature";
 import Select from "../components/Select";
@@ -29,11 +28,12 @@ import ProductFeatureGroup from "../components/ProductFeatureGroup";
 import ProductFeatureCheckbox from "../components/ProductFeatureCheckbox";
 import useProducts from "../hooks/useProducts";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import ProductImagesCarousel from "../components/ProductImagesCarousel";
 
 
 const NavigationButton = ({ icon, color, className, onClick, canNext, hidden }) => {
   return (
-    <button hidden={hidden} onClick={onClick} className={`text-${color} ${className}`} disabled={canNext}>
+    <button hidden={hidden} onClick={onClick} className={`text-${color} focus:outline-none ${className}`} disabled={canNext}>
       {icon}
     </button>
   )
@@ -97,8 +97,6 @@ const Product = () => {
         productId: product.id,
       }));
 
-      console.log(product);
-
       getProducts({
         params: {
           storeId: product.store.storeId
@@ -106,10 +104,6 @@ const Product = () => {
       })
     }
   }, [fetchQuestions, product]);
-
-  useEffect(() => {
-    console.log(products)
-  }, [products])
 
   const handleQuestionChange = (e) => {
     setQuestionFormData(prevData => ({
@@ -184,21 +178,10 @@ const Product = () => {
     <Container>
       <div className="flex space-x-6">
         {/* Images */}
-        <div className="w-1/2 flex flex-col space-x-3">
-          <img
-            src={generateBackendUrl(product.productImages[0].path)}
-            alt="Hamburguesa"
-            className="rounded-xl w-full"
+        <div className="w-1/2 flex flex-col">
+          <ProductImagesCarousel
+            images={product.productImages}
           />
-
-          <div className="flex justify-center mt-6 space-x-3">
-            {product.productImages.map(image => <img
-              key={image.id}
-              src={generateBackendUrl(image.path)}
-              alt={product.name}
-              className="h-20 w-20 rounded-xl border border-gray-100 rounded"
-            />)}
-          </div>
         </div>
 
         {/* Information */}
@@ -312,7 +295,7 @@ const Product = () => {
               <div className="flex items-center justify-end space-x-2">
                 <div className="w-20">
                   <Select>
-                    {[...Array(product.quantity + 1).keys()].slice(1).map(n => <option value={n}>{n}</option>)}
+                    {[...Array(product.quantity + 1).keys()].slice(1).map(n => <option key={n} value={n}>{n}</option>)}
                   </Select>
                 </div>
                 <button
