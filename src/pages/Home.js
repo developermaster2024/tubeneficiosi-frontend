@@ -1,22 +1,14 @@
-import { Link } from "react-router-dom";
 import events from '../assets/images/espectaculos.jpg';
 import gastronomy from '../assets/images/gastronomia.jpg';
 import supermarkets from '../assets/images/supermercados.jpg';
 import bars from '../assets/images/boliches.jpg';
 import pharmacy from '../assets/images/farmacias.jpg';
-import motorola from '../assets/images/motorola.jpg';
-import aires from '../assets/images/aires.jpg';
-
 import laptop from "../assets/images/laptop.jpg";
 import computadora from "../assets/images/monitos.jpg";
-import Tvs from "../assets/images/tv.jpg";
-
-import burger from '../assets/images/hamburguesa.jpg';
 import shield from '../assets/images/shield.png';
 import callCenterAgent from '../assets/images/call-center-agent.png';
 import rent from '../assets/images/rent.png';
 import appBg from '../assets/images/app-bg.jpg';
-import downloadAndroidApp from '../assets/images/download-android-app.svg';
 import partner from '../assets/images/partner.jpg';
 import clients from '../assets/images/clients.jpg';
 import waveUp from '../assets/images/wave-up.png';
@@ -24,14 +16,12 @@ import waveDown from '../assets/images/wave-down.png';
 import HomeSlider from "../components/HomeSlider";
 import ProductAdCard from "../components/ProductAdCard";
 import SectionHeading from "../components/SectionHeading";
-import banner2 from '../assets/images/banner2.jpg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import StoreDiscountCard from '../components/StoreDiscountCard';
 import BankDiscountCard from '../components/BankDiscountCard';
 import { storeDiscounts, bankDiscounts } from '../util/discounts'
 import { useEffect, useState } from "react";
 import ProductModal from "../components/ProductModal";
-import burguerKing from '../assets/images/burger-king.png'
 import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
 import useBanners from "../hooks/useBanners";
@@ -43,6 +33,8 @@ import ShowsFeaturedProducts from "../components/ShowsFeaturedProducts";
 import SuperMarketsFeaturedProducts from "../components/SuperMarketsFeaturedProducts";
 import BolichesFeaturedProducts from "../components/BolichesFeaturedProducts";
 import PharmacyFeaturedProducts from "../components/PharmacyFeaturedProducts";
+import useAds from "../hooks/useAds";
+import ProductsAdsSlider from '../components/ProductsAdsSlider';
 
 const categories = [
   { name: 'Espectaculos', img: events },
@@ -51,126 +43,6 @@ const categories = [
   { name: 'Boliches', img: bars },
   { name: 'Farmacias', img: pharmacy },
 ];
-
-const product = {
-  name: 'BK STACKER 5.0 POWER',
-  isFavorite: false,
-  shortDescription: 'Carrots from Tomissy Farm are one of the best on the market. Tomisso and his family are giving a full love to his Bio products. Tomisso’s carrots are growing on the fields naturally.',
-  mainImgSrc: burger,
-  ref: '76645',
-  categories: [
-    {
-      id: 1,
-      name: 'Gastronomia'
-    },
-    {
-      id: 2,
-      name: 'Hamburguesas'
-    },
-    {
-      id: 3,
-      name: 'Comida rapida'
-    }
-  ],
-  stock: true,
-  store: {
-    id: 1,
-    name: 'burguerKing',
-    image: burguerKing
-  },
-
-  deliveryMethod: {
-    id: 4,
-    name: 'delivery'
-  },
-
-  price: 48.56,
-
-  discount: 20,
-
-  quantity: 42,
-
-  description: 'Hamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se comeHamburguesa que se come',
-
-  features: [
-    {
-      name: 'Extras',
-      isGroup: true,
-      onlyOne: true,
-      features: [
-        {
-          name: 'BBQ',
-          selectAble: true,
-          price: 100
-        },
-        {
-          name: 'Bacon',
-          selectAble: true,
-          price: 15
-        },
-        {
-          name: 'Cheddar',
-          selectAble: true,
-          price: 19
-        },
-        {
-          name: 'Doble Carne',
-          selectAble: true,
-          price: 120
-        }
-      ]
-    },
-    {
-      name: 'Bebidas',
-      isGroup: true,
-      onlyOne: true,
-      features: [
-        {
-          name: 'Gaseosas',
-          selectAble: true,
-          price: 130
-        },
-        {
-          name: 'Jugos',
-          selectAble: true,
-          price: 180
-        },
-        {
-          name: 'Agua',
-          selectAble: true,
-          price: 140
-        },
-        {
-          name: 'Agua con gas',
-          selectAble: true,
-          price: 109
-        }
-      ]
-    },
-    {
-      name: 'Acompañantes',
-      isGroup: true,
-      onlyOne: false,
-      features: [
-        {
-          name: 'Papas',
-          selectAble: true,
-          price: 1000
-        },
-        {
-          name: 'Mandioca',
-          selectAble: true,
-          price: 1000
-        },
-        {
-          name: 'Aros de cebolla',
-          selectAble: true,
-          price: 3000
-        },
-      ]
-    }
-  ]
-}
 
 const Home = () => {
 
@@ -188,12 +60,18 @@ const Home = () => {
 
   const [{ featuredProducts, error: featuredProductError, loading: featuredProductLoading }, getFeaturedProducts] = useFeaturedProducts({ options: { manual: true, useCache: false } });
 
+  const [{ ads, error: adsError }, getAds] = useAds({ options: { manual: true, useCache: false } });
+
   useEffect(() => {
     setLoading({ show: true, message: "Cargando datos" });
-    Promise.all([getBusinessInfo(), getAppSectionData(), getNecessaryInfoData(), getBanners(), getStoreAds(), getFeaturedProducts()]).then((values) => {
+    Promise.all([getBusinessInfo(), getAppSectionData(), getNecessaryInfoData(), getBanners(), getStoreAds(), getFeaturedProducts(), getAds()]).then((values) => {
       setLoading({ show: false, message: "" });
     })
   }, []);
+
+  useEffect(() => {
+    console.log(ads);
+  }, [ads])
 
   useEffect(() => {
     if (businessSectionError) {
@@ -225,7 +103,12 @@ const Home = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${featuredProductError?.response?.status === 400 ? featuredProductError?.response?.data.message[0] : featuredProductError?.response?.data.message}.`, severity: "error" });
     }
-  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError]);
+
+    if (adsError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${adsError?.response?.status === 400 ? adsError?.response?.data.message[0] : adsError?.response?.data.message}.`, severity: "error" });
+    }
+  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError, adsError]);
 
   const [productOnModal, setProductOnModal] = useState(null);
 
@@ -263,30 +146,7 @@ const Home = () => {
 
     {/* PRODUCT ADS */}
     <div className="container mt-20">
-      <div className="flex space-x-4">
-        <ProductAdCard
-          title={<>
-            <p>Pc de</p>
-            <p>Escritorios</p>
-          </>}
-          subtitle="black friday"
-          btnText="Ver más"
-          href="/#"
-          imgSrc={computadora}
-          imgAlt="Celulares"
-        />
-        <ProductAdCard
-          title={<>
-            <p>Toda una variedad</p>
-            <p>de laptops</p>
-          </>}
-          subtitle="black friday"
-          btnText="Ver más"
-          href="/#"
-          imgSrc={laptop}
-          imgAlt="Aires acondicionados"
-        />
-      </div>
+      <ProductsAdsSlider productAds={ads.filter(ads => ads.adsPosition.id === 1)} />
     </div>
 
     <div
@@ -372,18 +232,14 @@ const Home = () => {
     </div>
 
     {/* Supermercados */}
-    <div className="container mt-20">
+    <div className="container my-20">
       <SuperMarketsFeaturedProducts featuredProducts={featuredProducts} />
     </div>
 
-    <Link to={`/products/slug-del-producto`}>
-      <div className="min-h-[50vh] my-8" style={{ backgroundImage: `url(${Tvs})`, backgroundSize: '100% 100%' }}>
-
-      </div>
-    </Link>
+    <HomeSlider className="my-12 h-84" imgHeight="400px" banners={ads.filter(ads => ads.adsPosition.id === 3)} />
 
     {/* Boliches */}
-    <div className="container mt-20">
+    <div className="container my-20">
       <BolichesFeaturedProducts featuredProducts={featuredProducts} />
     </div>
 
@@ -457,30 +313,7 @@ const Home = () => {
 
     {/* PRODUCT ADS */}
     <div className="container mt-12">
-      <div className="flex space-x-4">
-        <ProductAdCard
-          title={<>
-            <p>Pc de</p>
-            <p>Escritorios</p>
-          </>}
-          subtitle="black friday"
-          btnText="Ver más"
-          href="/#"
-          imgSrc={computadora}
-          imgAlt="Celulares"
-        />
-        <ProductAdCard
-          title={<>
-            <p>Toda una variedad</p>
-            <p>de laptops</p>
-          </>}
-          subtitle="black friday"
-          btnText="Ver más"
-          href="/#"
-          imgSrc={laptop}
-          imgAlt="Aires acondicionados"
-        />
-      </div>
+      <ProductsAdsSlider productAds={ads.filter(ads => ads.adsPosition.id === 2)} />
     </div>
 
     {/* MOBILE APP SECTION */}

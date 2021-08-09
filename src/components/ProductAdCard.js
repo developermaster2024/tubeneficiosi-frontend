@@ -1,9 +1,9 @@
 const ProductAdCard = ({ title, subtitle, btnText, href, imgSrc, imgAlt }) => {
-  return <div className="flex w-full bg-white rounded-sm shadow-sm overflow-hidden p-4">
+  return <div className="flex items-center w-full bg-white rounded-sm shadow-sm overflow-hidden p-4">
     <div className="flex flex-col justify-center items-start w-full p-8 space-y-4">
-      {subtitle && <p className="uppercase tracking-widest">black friday</p>}
+      {subtitle && <p className="uppercase tracking-widest">{subtitle}</p>}
       <div className="uppercase text-3xl font-semibold">
-        {title}
+        {title.length > 20 ? `${title.slice(0, 20)}...` : title}
       </div>
       <a
         href={href}
@@ -16,7 +16,7 @@ const ProductAdCard = ({ title, subtitle, btnText, href, imgSrc, imgAlt }) => {
       <img
         src={imgSrc}
         alt={imgAlt}
-        className="w-full h-full"
+        className="w-56 h-56"
       />
     </div>
   </div>;
