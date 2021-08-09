@@ -402,29 +402,33 @@ const Product = () => {
 
         {/* Features */}
         <TabPanel className="py-4 animate__animated animate__fadeInUp" value={3}>
-          <ProductFeatureGroup name="Características">
-            {product.productFeatures.map((feature) => <ProductFeatureCheckbox
-              key={feature.id}
-              id={feature.id}
-              name={feature.name}
-              value={feature.value}
-              price={feature.price}
-              isSelectable={feature.isSelectable}
-            />)}
-          </ProductFeatureGroup>
-          {product.productFeatureGroups.map((featuresGroup) => <ProductFeatureGroup
-            key={featuresGroup.id}
-            name={featuresGroup.name}
-          >
-            {featuresGroup.productFeatureForGroups.map((feature) => <ProductFeatureCheckbox
-              key={feature.id}
-              id={feature.id}
-              name={feature.name}
-              value={feature.value}
-              price={feature.price}
-              isSelectable={feature.isSelectable}
-            />)}
-          </ProductFeatureGroup>)}
+          {
+            product.productFeatures.length > 0 &&
+            <ProductFeatureGroup name="Características">
+              {product.productFeatures.map((feature) => <ProductFeatureCheckbox
+                key={feature.id}
+                id={feature.id}
+                name={feature.name}
+                value={feature.value}
+                price={feature.price}
+                isSelectable={feature.isSelectable}
+              />)}
+            </ProductFeatureGroup>
+          }
+          {
+            product.productFeatureGroups.length > 0 && product.productFeatureGroups.map((featuresGroup) => <ProductFeatureGroup
+              key={featuresGroup.id}
+              name={featuresGroup.name}
+            >
+              {featuresGroup.productFeatureForGroups.map((feature) => <ProductFeatureCheckbox
+                key={feature.id}
+                id={feature.id}
+                name={feature.name}
+                value={feature.value}
+                price={feature.price}
+                isSelectable={feature.isSelectable}
+              />)}
+            </ProductFeatureGroup>)}
         </TabPanel>
       </TabsProvider>
     </Container>

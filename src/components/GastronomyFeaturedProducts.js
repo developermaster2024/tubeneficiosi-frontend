@@ -12,7 +12,7 @@ const GastronomyFeaturedProducts = ({ featuredProducts }) => {
 
     return (
         <div className="flex space-x-4">
-            <div className="w-full">
+            <div className="w-1/2">
                 <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
 
                 <Swiper
@@ -36,7 +36,7 @@ const GastronomyFeaturedProducts = ({ featuredProducts }) => {
                                     price={featuredProduct?.product?.price}
                                     quantity={featuredProduct?.product?.quantity}
                                     onBuy={() => { setProductOnModal(featuredProduct.product) }}
-                                    slug={featuredProduct?.product?.quantity}
+                                    slug={featuredProduct?.product?.slug}
                                 />
                             </SwiperSlide>
                         )

@@ -36,31 +36,34 @@ const ProductModal = ({ product, closeModal }) => {
 
       <div className="px-6 my-4 overflow-y-auto h-[45%] features-container">
         {
-
+          product?.productFeatures?.length > 0 &&
+          <ProductFeatureGroup name="Características">
+            {product?.productFeatures?.map((feature) => <ProductFeatureCheckbox
+              key={feature.id}
+              id={feature.id}
+              name={feature.name}
+              value={feature.value}
+              price={feature.price}
+              isSelectable={feature.isSelectable}
+            />)}
+          </ProductFeatureGroup>
         }
-        <ProductFeatureGroup name="Características">
-          {product?.productFeatures?.map((feature) => <ProductFeatureCheckbox
-            key={feature.id}
-            id={feature.id}
-            name={feature.name}
-            value={feature.value}
-            price={feature.price}
-            isSelectable={feature.isSelectable}
-          />)}
-        </ProductFeatureGroup>
-        {product?.productFeatureGroups?.map((featuresGroup) => <ProductFeatureGroup
-          key={featuresGroup.id}
-          name={featuresGroup.name}
-        >
-          {featuresGroup.productFeatureForGroups.map((feature) => <ProductFeatureCheckbox
-            key={feature.id}
-            id={feature.id}
-            name={feature.name}
-            value={feature.value}
-            price={feature.price}
-            isSelectable={feature.isSelectable}
-          />)}
-        </ProductFeatureGroup>)}
+
+        {
+          product?.productFeatureGroups?.length > 0 &&
+          product?.productFeatureGroups?.map((featuresGroup) => <ProductFeatureGroup
+            key={featuresGroup.id}
+            name={featuresGroup.name}
+          >
+            {featuresGroup.productFeatureForGroups.map((feature) => <ProductFeatureCheckbox
+              key={feature.id}
+              id={feature.id}
+              name={feature.name}
+              value={feature.value}
+              price={feature.price}
+              isSelectable={feature.isSelectable}
+            />)}
+          </ProductFeatureGroup>)}
       </div>
       <div className="flex justify-end items-center">
         <input

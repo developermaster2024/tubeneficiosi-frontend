@@ -17,7 +17,7 @@ const ShowsFeaturedProducts = ({ featuredProducts }) => {
                 imgSrc={events}
             />
 
-            <div className="w-full">
+            <div className="w-1/2">
                 <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
 
                 <Swiper
