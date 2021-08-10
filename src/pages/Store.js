@@ -258,9 +258,9 @@ const Store = () => {
               getProducts({
                 params: {
                   ...filters,
-                  tagIds: filters.tagIds.join(","),
-                  categoryStoreIds: filters.categoryStoreIds.join(","),
-                  rating: filters.rating.join(","),
+                  tagIds: filters?.tagIds?.join?.(","),
+                  categoryStoreIds: filters?.categoryStoreIds?.join?.(","),
+                  rating: filters?.rating?.join?.(","),
                   ...priceFilter
                 }
               })

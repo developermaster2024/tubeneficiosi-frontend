@@ -26,6 +26,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import StoreDiscountCard from "../components/StoreDiscountCard";
 import RatingsFilter from "../components/RatingsFilter";
+import useAds from "../hooks/useAds";
+import HomeSlider from "../components/HomeSlider";
 
 const Stores = () => {
 
@@ -34,6 +36,10 @@ const Stores = () => {
   const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryId: [], rating: null, withCheapestProduct: true, cardDiscount: null });
   const [viewType, setViewType] = useState('grid');
   const [canShowLoading, setCanShowLoading] = useState(false);
+
+  const [{ ads: adsBanners, error: errorBannersAds }, getBannersAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 7 } } })
+
+  const [{ ads: adsLeftBanners, error: errorLeftBanners }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 8 } } })
 
   const [{ stores, total, size, numberOfPages, error, loading }, getStores] = useStores({
     params: {
@@ -46,7 +52,7 @@ const Stores = () => {
 
   useEffect(() => {
     setLoading({ show: true, message: "Obteniendo Informacion" });
-    Promise.all([getStores(), getCategories()]).then((values) => {
+    Promise.all([getStores(), getCategories(), getBannersAds(), getLeftAds()]).then((values) => {
       setLoading({ show: false, message: "" });
       setCanShowLoading(true);
     })
@@ -71,7 +77,15 @@ const Stores = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
     }
-  }, [error, errorCategories]);
+    if (errorBannersAds) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorBannersAds?.response?.status === 400 ? errorBannersAds?.response?.data.message[0] : errorBannersAds?.response?.data.message}.`, severity: "error" });
+    }
+    if (errorLeftBanners) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorLeftBanners?.response?.status === 400 ? errorLeftBanners?.response?.data.message[0] : errorLeftBanners?.response?.data.message}.`, severity: "error" });
+    }
+  }, [error, errorCategories, errorBannersAds, errorLeftBanners]);
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
@@ -106,10 +120,7 @@ const Stores = () => {
   }
 
   return <>
-    <Link to={'/stores/burguerking'}>
-      <div className="h-[35vh] w-full" style={{ backgroundImage: `url(${storesBanner})`, backgroundSize: '100% 100%' }}>
-      </div>
-    </Link>
+    <HomeSlider banners={adsBanners} />
     <div className="bg-white shadow-sm">
       <Container className="py-5">
         <div className="flex justify-between items-center">
@@ -188,13 +199,15 @@ const Stores = () => {
             Beneficios
           </Button>
 
-          <Link to={'/stores/burguerking'}>
-            <img className="w-full h-[120px] my-6 rounded" src={adsBanner} />
-          </Link>
-
-          <Link to={'/stores/burguerking'}>
-            <img className="w-full h-[120px] rounded my-6" src={adsBanner2} />
-          </Link>
+          {
+            adsLeftBanners.map((leftBanner, i) => {
+              return (
+                <a href={leftBanner.url} key={i}>
+                  <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} />
+                </a>
+              )
+            })
+          }
         </div>}
       >
         <div className="mb-10">

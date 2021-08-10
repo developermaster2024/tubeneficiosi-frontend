@@ -20,9 +20,11 @@ import PriceFilter from "../components/PriceFilter";
 import useProducts from "../hooks/useProducts";
 import useCategories from "../hooks/useCategories";
 import useTags from "../hooks/useTags";
+import HomeSlider from "../components/HomeSlider";
+import useAds from "../hooks/useAds";
 
 const Products = () => {
-  const { setLoading } = useAuth();
+  const { setLoading, setCustomAlert } = useAuth();
 
   const [isInGridView, setIsInGridView] = useState(true);
   const [filters, setFilters] = useState({
@@ -40,12 +42,39 @@ const Products = () => {
     }
   });
 
+  const [{ ads: adsBanners, error: errorBannersAds, loading: loadingBannersAds }, getBannersAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5 } } })
+
+  const [{ ads: adsLeftBanners, error: errorLeftBanners, loading: loadingLeftBannersAds }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 4 } } })
+
   const [{ categories, error: errorCategories }, getCategories] = useCategories();
   const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });
 
   useEffect(() => {
+    if (errorBannersAds) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorBannersAds?.response?.status === 400 ? errorBannersAds?.response?.data.message[0] : errorBannersAds?.response?.data.message}.`, severity: "error" });
+    }
+    if (errorLeftBanners) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorLeftBanners?.response?.status === 400 ? errorLeftBanners?.response?.data.message[0] : errorLeftBanners?.response?.data.message}.`, severity: "error" });
+    }
+    if (errorCategories) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
+    }
+  }, [errorBannersAds, errorCategories, errorLeftBanners])
+
+  useEffect(() => {
     setLoading({ show: loading, message: "Cargando" });
   }, [loading]);
+
+  useEffect(() => {
+    setLoading({ show: loadingBannersAds, message: "Obteniendo Banners" });
+  }, [loadingBannersAds]);
+
+  useEffect(() => {
+    setLoading({ show: loadingLeftBannersAds, message: "Cargando publicidades" });
+  }, [loadingLeftBannersAds]);
 
   useEffect(() => {
     getProducts({
@@ -98,6 +127,7 @@ const Products = () => {
   }
 
   return <>
+    <HomeSlider banners={adsBanners} />
     <div className="bg-white shadow-sm">
       <Container className="py-5">
         <div className="flex justify-between items-center">
@@ -207,6 +237,15 @@ const Products = () => {
           >
             Beneficios
           </Button>
+          {
+            adsLeftBanners.map((leftBanner, i) => {
+              return (
+                <a href={leftBanner.url} key={i}>
+                  <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} />
+                </a>
+              )
+            })
+          }
         </div>}
       >
         <div className="mb-10">
