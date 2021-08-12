@@ -8,6 +8,7 @@ import MyAccountConversations from './pages/my-account/Conversations';
 import MyAccountCarts from './pages/my-account/Carts';
 import CreateAddress from "./pages/my-account/CreateAddress";
 import ConversationsChat from "./pages/my-account/ConversationsChat";
+import EditAddress from "./pages/my-account/EditAddress";
 
 const MyAccountRoutes = () => {
 
@@ -19,6 +20,7 @@ const MyAccountRoutes = () => {
         <Route path="/my-account/info" exact component={MyAccountInfo} />
 
         <Route path="/my-account/address" exact component={MyAccountAddress} />
+        <Route path="/my-account/address/:id/edit" exact component={EditAddress} />
         <Route path="/my-account/address/new" exact component={CreateAddress} />
 
         <Route path="/my-account/orders" exact component={MyAccountOrders} />

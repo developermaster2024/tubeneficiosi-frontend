@@ -7,7 +7,7 @@ import useAxios from "../../../hooks/useAxios";
 
 const ProfileForm = () => {
   const { setLoading, setCustomAlert } = useAuth();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     phoneNumber: '',
@@ -22,23 +22,28 @@ const ProfileForm = () => {
     img: null,
   });
 
-  const [{data: clientData, loading: clientLoading}] = useAxios('/profile', { useCache: false });
+  const [{ data: clientData, loading: clientLoading }] = useAxios('/profile', { useCache: false });
 
-  const [{error: updateProfileError}, updateProfile] = useAxios({url: '/profile', method: 'PUT'}, {manual: true});
+  const [{ error: updateProfileError }, updateProfile] = useAxios({ url: '/profile', method: 'PUT' }, { manual: true });
 
   useEffect(() => {
     setLoading({ show: clientLoading, message: "Obteniendo datos" });
   }, [clientLoading]);
 
+
+
   useEffect(() => {
     if (clientData) {
+      console.log(clientData);
       setFormData(currentFormData => ({
         ...currentFormData,
         name: clientData.name,
         phoneNumber: clientData.phoneNumber,
       }));
 
-      setPreviewImage(generateBackendUrl(clientData.imgPath));
+      if (clientData?.imgPath) {
+        setPreviewImage(generateBackendUrl(clientData.imgPath));
+      }
     }
   }, [clientData]);
 
@@ -83,21 +88,21 @@ const ProfileForm = () => {
         return;
       }
     }
-    
+
     const localFormData = new FormData();
 
     Object.keys(formData).forEach(key => localFormData.append(key, formData[key]));
 
     setLoading({ show: true, message: "Guardando perfil" });
-    
+
     try {
-      await updateProfile({data: localFormData});
+      await updateProfile({ data: localFormData });
       setCustomAlert({ show: true, message: "Perfil actualizado", severity: "success" });
     } finally {
       setLoading({ show: false, message: "" });
     }
   }
-  
+
   return <form
     className="bg-white rounded p-5 mb-12"
     onSubmit={handleDataSubmit}
