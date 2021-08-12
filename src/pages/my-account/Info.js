@@ -2,6 +2,7 @@ import PasswordForm from "./Info/PasswordForm";
 import ProfileForm from "./Info/ProfileForm";
 
 const MyAccountInfo = () => {
+
   return (
     <div className="px-20 px-12">
       <h1 className="text-2xl text-gray-600 font-bold my-5">
