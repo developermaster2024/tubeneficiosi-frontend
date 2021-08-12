@@ -41,22 +41,24 @@ const QuestionsAnswer = ({
         {error && <span className="block text-red-500 text-xs">{error}</span>}
       </form>
 
-      {questions.map(({id, answeredBy, question, createdAt, answer, answeredAt}) => <div key={id} className="my-8">
-        <div className="flex items-center">
-          <img className="h-[50px] w-[50px] rounded-full" src={generateImageUrl(answeredBy.imgPath)} alt={answeredBy.name} />
-          <p className="ml-4 font-bold">{answeredBy.name}</p>
-        </div>
+      <div style={{ height: 500 }} className="custom-scrollbar mt-4 overflow-y-auto">
+        {questions.map(({ id, askedBy, question, createdAt, answer, answeredAt }) => <div key={id} className="my-8">
+          <div className="flex items-center">
+            <img className="h-[50px] w-[50px] rounded-full" src={generateImageUrl(askedBy?.imgPath)} alt={askedBy?.name} />
+            <p className="ml-4 font-bold">{askedBy?.name}</p>
+          </div>
 
-        <p className="mt-2">{question} - <span className="font-bold">{createdAt}</span></p>
+          <p className="mt-2">{question} - <span className="font-bold">{createdAt}</span></p>
 
-        {answer && <div className="text-gray-500 mt-2 ml-4">
-          - {answer} <span className="font-bold">- {answeredAt}</span>
-        </div>}
-      </div>)}
+          {answer && <div className="text-gray-500 mt-2 ml-4">
+            - {answer} <span className="font-bold">- {answeredAt}</span>
+          </div>}
+        </div>)}
 
-      {canSeeMore && <button type="button" className="text-main mt-2" onClick={onSeeMoreClick}>
-        Ver mas preguntas
-      </button>}
+        {canSeeMore && <button type="button" className="text-main mt-2" onClick={onSeeMoreClick}>
+          Ver mas preguntas
+        </button>}
+      </div>
     </div>
   )
 }
