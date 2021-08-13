@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 
+.swiper-container,
+.swiper-wrapper {
+  z-index: auto !important;
+}
 .open-sans {
   font-family: "Open Sans", sans-serif;
 }

@@ -1,9 +1,9 @@
 import clsx from "clsx";
 
-const DiscountCard = ({title, subtitle, color}) => {
+const DiscountCard = ({ title, subtitle, color }) => {
   return <div
     className={clsx([
-      'relative h-24 w-72 flex flex-col items-center justify-center bg-gradient-to-r text-white',
+      'z-auto relative h-24 w-72 flex flex-col items-center justify-center bg-gradient-to-r text-white',
       {
         'from-blue-600 to-blue-400': color === 'blue',
         'from-red-600 to-red-400': color === 'red',

@@ -187,17 +187,16 @@ const Store = () => {
       <Swiper
         navigation
         onSlideChange={() => console.log('slide change')}
-        spaceBetween={50}
         onSwiper={(swiper) => console.log(swiper)}
-        className="bg-red-500"
+        className="bg-red-500 z-auto"
       >
-        <SwiperSlide className="w-full relative z-[2]">
+        <SwiperSlide className="w-full relative">
           <img
             src={`${process.env.REACT_APP_API_URL}/${store?.storeProfile?.banner}`}
             alt="Tienda"
             className="h-[60vh] w-full"
           />
-          <div className="bg-black justify-between items-center bg-opacity-50 flex absolute z-1 bottom-0 w-full left-0 p-6 text-white">
+          <div className="bg-black justify-between items-center bg-opacity-50 flex absolute z-10 bottom-0 w-full left-0 p-6 text-white">
             <div className="flex items-center">
               <div>
                 <img className="w-[50px] rounded" src={`${process.env.REACT_APP_API_URL}/${store?.storeProfile?.logo}`} alt="" />
