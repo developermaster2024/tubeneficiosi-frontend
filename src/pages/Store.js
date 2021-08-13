@@ -28,6 +28,7 @@ import RatingsFilter from "../components/RatingsFilter";
 import PriceFilter from "../components/PriceFilter";
 import TagsFilter from "../components/TagsFilter";
 import useTags from "../hooks/useTags";
+import { validURL } from "../helpers/formsValidations";
 
 const Store = () => {
 
@@ -100,7 +101,8 @@ const Store = () => {
       const { id, userStatus, storeCategory, storeProfile, ...rest } = store;
       const { banner, logo, frontImage, videoUrl, ...rest2 } = storeProfile;
 
-      if (videoUrl) {
+      if (videoUrl && validURL(videoUrl)) {
+        console.log(videoUrl);
         var url_string = videoUrl; //window.location.href
         var url = new URL(url_string);
         var v = url.searchParams.get("v");
