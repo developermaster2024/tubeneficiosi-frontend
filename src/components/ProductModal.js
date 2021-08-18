@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { IoClose, IoCart } from "react-icons/io5";
-import { useHistory } from "react-router";
 import { generateImageUrl } from "../helpers/url";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Checkbox from "./Checkbox";
 import StarIcon from "./StarIcon";
 import CustomSelect from "./CustomSelect";
 
-const ProductModal = ({ product, closeModal }) => {
+const ProductModal = ({ product, closeModal, isStore }) => {
 
   const [quantity, setQuantity] = useState(1);
+  const [featuresPrice, setfeaturesPrice] = useState(0);
+  const [productFeaturesData, setProductFeaturesData] = useState({ featureIds: [], featureForGroupIds: [] })
 
   const [total, setTotal] = useState(product?.price);
 
@@ -17,16 +18,47 @@ const ProductModal = ({ product, closeModal }) => {
 
   useEffect(() => {
     if (product) {
-      console.log(product);
       setTotal(product?.price);
     }
   }, [product])
 
   useEffect(() => {
     if (product) {
-      setTotal(product?.price * quantity);
+      setTotal((Number(product?.price) + featuresPrice) * quantity);
     }
-  }, [quantity, product])
+  }, [quantity, product, featuresPrice]);
+
+  useEffect(() => {
+    setQuantity(1)
+    setfeaturesPrice(0)
+    setProductFeaturesData({ featureIds: [], featureForGroupIds: [] })
+  }, [closeModal])
+
+  const handleFeatureChange = (event) => {
+    const value = productFeaturesData[event.target.name].includes(Number(event.target.value));
+    if (value) {
+      const newfeatureIds = productFeaturesData[event.target.name].filter(n => n !== Number(event.target.value))
+      setProductFeaturesData((oldProductFeaturesData) => {
+        return {
+          ...oldProductFeaturesData,
+          [event.target.name]: newfeatureIds
+        }
+      });
+      setfeaturesPrice((oldFeaturesPrice) => {
+        return oldFeaturesPrice - Number(event.target.cost);
+      })
+    } else {
+      setProductFeaturesData((oldProductFeaturesData) => {
+        return {
+          ...oldProductFeaturesData,
+          [event.target.name]: [...oldProductFeaturesData[event.target.name], Number(event.target.value)]
+        }
+      });
+      setfeaturesPrice((oldFeaturesPrice) => {
+        return oldFeaturesPrice + Number(event.target.cost);
+      })
+    }
+  }
 
   const handleCloseModal = (e) => {
     if (modalRef.current === e.target) {
@@ -35,7 +67,13 @@ const ProductModal = ({ product, closeModal }) => {
   }
 
   const handleAccept = () => {
-    closeModal({ product: product, quantity: quantity })
+    closeModal({
+      storeId: product?.store?.storeId,
+      productId: product?.id,
+      productFeaturesData,
+      quantity: quantity,
+      isDirectPurchase: isStore ? false : true
+    });
   }
 
   if (!product) {
@@ -107,7 +145,12 @@ const ProductModal = ({ product, closeModal }) => {
                 <h3 className="text-lg font-bold text-gray-600">Características</h3>
                 {product?.productFeatures?.map((feature, i) => <div key={i} className="flex items-center space-x-4 mb-2 text-gray-500">
                   {feature.isSelectable &&
-                    <Checkbox />
+                    <Checkbox
+                      name="featureIds"
+                      onChange={(e) => { handleFeatureChange({ target: { name: e.target.name, value: e.target.value, type: e.target.type, cost: feature.price } }) }}
+                      value={feature.id}
+                      checked={productFeaturesData.featureIds.includes(feature.id)}
+                    />
                   }
                   <span className="font-bold">{feature.name}:</span>
                   {
@@ -127,7 +170,12 @@ const ProductModal = ({ product, closeModal }) => {
                     <h3 className="text-lg font-bold text-gray-600">{featuresGroup?.name}</h3>
                     {featuresGroup?.productFeatureForGroups?.map((feature, i) => <div key={i} className="flex items-center space-x-4 mb-2 text-gray-500">
                       {feature.isSelectable &&
-                        <Checkbox />
+                        <Checkbox
+                          name="featureForGroupIds"
+                          onChange={(e) => { handleFeatureChange({ target: { name: e.target.name, value: e.target.value, type: e.target.type, cost: feature.price } }) }}
+                          value={feature.id}
+                          checked={productFeaturesData.featureForGroupIds.includes(feature.id)}
+                        />
                       }
                       <span className="font-bold">{feature.name}:</span>
                       {
@@ -168,7 +216,8 @@ const ProductModal = ({ product, closeModal }) => {
               Cancelar
             </button>
             <button onClick={handleAccept} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
-              <p>Comprar</p>
+
+              <p>{isStore ? "añadir al carrito" : "Comprar"}</p>
               <IoCart />
             </button>
           </div>
