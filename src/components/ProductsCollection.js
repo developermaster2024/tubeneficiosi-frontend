@@ -2,12 +2,52 @@ import ProductCard from "./ProductCard";
 import ProductHorizontalCard from "./ProductHorizontalCard";
 import ProductModal from "./ProductModal";
 import ProductsGrid from "./ProductsGrid";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { generateImageUrl } from "../helpers/url";
+import useAxios from "../hooks/useAxios";
+import { useAuth } from "../contexts/AuthContext";
+import { useHistory } from "react-router-dom";
 
-const ProductsCollection = ({ products, isInGridView, isStore }) => {
+const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) => {
+
+  const history = useHistory();
+
+  const { setLoading, setCustomAlert } = useAuth();
+
+  const [{ loading, error, data }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
 
   const [productOnModal, setProductOnModal] = useState(null);
+
+  useEffect(() => {
+    setLoading({ show: loading, message: "Añadiendo al carrito." })
+  }, [loading])
+
+  useEffect(() => {
+    if (error) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${error?.response?.status === 400 ? error?.response?.data.message[0] : error?.response?.data.message}.`, severity: "error" });
+    }
+  }, [error])
+
+  useEffect(() => {
+    if (data) {
+      if (!isStore) {
+        console.log(data)
+        history.push(`/checkout?cartId=${data?.id}`);
+        return;
+      } else {
+        onAddToCard?.(data);
+        setCustomAlert?.({ show: true, message: `El producto ha sido añadido al carrito exitosamente.`, severity: "success" })
+      }
+    }
+  }, [data])
+
+  const handleCloseModal = async (e) => {
+    setProductOnModal(null);
+    if (e) {
+      await addToCart({ data: e });
+    }
+  }
 
   return (
     <div>
@@ -51,7 +91,7 @@ const ProductsCollection = ({ products, isInGridView, isStore }) => {
           />)}
         </div>
       }
-      <ProductModal product={productOnModal} closeModal={() => { setProductOnModal(null) }} />
+      <ProductModal isStore={isStore} product={productOnModal} closeModal={handleCloseModal} />
     </div>
   )
 };

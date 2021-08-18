@@ -58,19 +58,33 @@ const Store = () => {
 
   const [{ tags, error: errorTags, loading: loadingTags }, getTags] = useTags({ params: { storeCategoryId: store?.storeCategory?.id }, options: { useCache: false, manual: true } });
 
+  const [{ data: cartData, error: cartError, loading: cartLoading }, getCart] = useAxios({ url: `/carts/stores/${store?.storeId}` }, { manual: true, useCache: false });
+
   const [isInGridView, setIsInGridView] = useState(true);
 
   const [favorite, setFavorite] = useState(false);
 
   const [showCart, setShowCart] = useState(false);
 
-  useEffect(() => {
-    console.log(store);
-  }, [store])
+  const [cart, setCart] = useState(null);
+
+  const [cartQuantity, setCartQuantity] = useState(0);
 
   useEffect(() => {
     setLoading({ show: loadingStore, message: "Cargando Informacion de la tienda." })
-  }, [loadingStore])
+  }, [loadingStore]);
+
+  useEffect(() => {
+    if (cartData) {
+      setCart(cartData);
+    }
+  }, [cartData])
+
+  useEffect(() => {
+    if (cart) {
+      setCartQuantity(cart?.cartItems?.reduce?.((acum, item) => acum + Number(item.quantity), 0))
+    }
+  }, [cart])
 
   useEffect(() => {
     if (error) {
@@ -91,7 +105,15 @@ const Store = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorTags?.response?.status === 400 ? errorTags?.response?.data.message[0] : errorTags?.response?.data.message}.`, severity: "error" });
     }
-  }, [error, errorCategoriesStores, storeError, errorTags]);
+
+    if (cartError) {
+      console.log(cartError)
+      setLoading?.({ show: false, message: "" });
+      if (cartError?.response?.data.message !== "Carrito no encontrado") {
+        setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
+      }
+    }
+  }, [error, errorCategoriesStores, storeError, errorTags, cartError]);
 
   useEffect(() => {
     if (store) {
@@ -126,6 +148,7 @@ const Store = () => {
 
       getCategoriesStores();
       getTags();
+      getCart();
     }
   }, [store]);
 
@@ -180,6 +203,10 @@ const Store = () => {
         [e.target.name]: e.target.value
       }
     })
+  }
+
+  const handleCart = (cart) => {
+    setCart(cart);
   }
 
   return <>
@@ -301,12 +328,12 @@ const Store = () => {
         </div>
         <div className="w-9/12">
           <div className="mb-10 flex items-center justify-between">
-            <div className="w-10/12">
+            <div className="w-9/12">
               <DiscountsSlider discounts={discounts} />
             </div>
 
             {/* Cart and Favorite Button */}
-            <div className="w-2/12 p-4 flex items-center justify-between">
+            <div className="w-3/12 p-4 flex items-center space-x-8">
               {
                 favorite ?
                   <IoHeart onClick={() => {
@@ -322,7 +349,23 @@ const Store = () => {
                   }} className="text-[50px] bg-white p-2 rounded-full shadow-lg text-main hover:text-main cursor-pointer" />
               }
 
-              <IoCartOutline onClick={() => { setShowCart(true) }} className="text-[50px] bg-white p-2 rounded-full text-gray-500 shadow-lg transition duration-500 hover:text-main cursor-pointer"></IoCartOutline>
+              {
+                cartLoading ?
+                  "Obteniendo carrito..."
+                  :
+                  cart ?
+                    <div className="relative">
+                      <IoCartOutline onClick={() => { setShowCart(true) }} className="animate__animated animate__zoomIn text-[50px] bg-white p-2 rounded-full text-gray-500 shadow-lg transition duration-500 hover:text-main cursor-pointer"></IoCartOutline>
+                      {
+                        cart?.cartItems?.length > 0 && cartQuantity > 0 &&
+                        <span style={{ right: cartQuantity.toString().length === 1 ? -5 : cartQuantity.toString().length === 2 ? -7 : -10, top: -7 }} className="bg-main text-white absolute top-0 rounded-full px-1">
+                          {cartQuantity}
+                        </span>
+                      }
+                    </div>
+                    :
+                    "Sin carrito con esta tienda"
+              }
             </div>
           </div>
           {
@@ -337,6 +380,7 @@ const Store = () => {
                     isStore
                     products={products}
                     isInGridView={isInGridView}
+                    onAddToCard={handleCart}
                   />
                 </div>
                 :
@@ -355,7 +399,7 @@ const Store = () => {
         </div>
       </div>
     </Container>
-    <StoreCart show={showCart} closeCart={() => { setShowCart(false) }} />
+    <StoreCart show={showCart} cart={cart} onChangeCart={handleCart} closeCart={() => { setShowCart(false) }} />
   </>;
 };
 
