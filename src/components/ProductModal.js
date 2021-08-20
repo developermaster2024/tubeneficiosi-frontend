@@ -8,6 +8,7 @@ import CustomSelect from "./CustomSelect";
 
 const ProductModal = ({ product, closeModal, isStore }) => {
 
+
   const [quantity, setQuantity] = useState(1);
   const [featuresPrice, setfeaturesPrice] = useState(0);
   const [productFeaturesData, setProductFeaturesData] = useState({ featureIds: [], featureForGroupIds: [] })
@@ -17,6 +18,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
   const modalRef = useRef();
 
   useEffect(() => {
+    console.log(product);
     if (product) {
       setTotal(product?.price);
     }

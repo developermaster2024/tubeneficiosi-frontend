@@ -35,6 +35,7 @@ const Navbar = () => {
               <option value="">Todos</option>
             </select>
             <input
+              placeholder="Nombre de tienda, producto..."
               className="w-full rounded border-gray-300 focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 bg-transparent text-sm leading-4"
               type="text"
             />

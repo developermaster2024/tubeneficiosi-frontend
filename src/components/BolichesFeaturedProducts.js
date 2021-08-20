@@ -5,10 +5,45 @@ import bars from '../assets/images/boliches.jpg';
 import { generateImageUrl } from "../helpers/url";
 import ProductModal from "./ProductModal";
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useHistory } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import useAxios from "../hooks/useAxios";
 
 const BolichesFeaturedProducts = ({ featuredProducts }) => {
 
+    const history = useHistory();
+
+    const { setLoading, setCustomAlert } = useAuth();
+
+    const [{ loading, error, data }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
+
     const [productOnModal, setProductOnModal] = useState(null);
+
+    useEffect(() => {
+        setLoading({ show: loading, message: "Añadiendo al carrito." })
+    }, [loading])
+
+    useEffect(() => {
+        if (error) {
+            setLoading?.({ show: false, message: "" });
+            setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${error?.response?.status === 400 ? error?.response?.data.message[0] : error?.response?.data.message}.`, severity: "error" });
+        }
+    }, [error])
+
+    useEffect(() => {
+        if (data) {
+            console.log(data)
+            history.push(`/checkout?cartId=${data?.id}`);
+            return;
+        }
+    }, [data])
+
+    const handleCloseModal = async (e) => {
+        setProductOnModal(null);
+        if (e) {
+            await addToCart({ data: e });
+        }
+    }
 
     return (
         <div className="flex space-x-4">
@@ -49,7 +84,7 @@ const BolichesFeaturedProducts = ({ featuredProducts }) => {
 
                 </Swiper>
             </div>
-            <ProductModal product={productOnModal} closeModal={() => { setProductOnModal(null) }} />
+            <ProductModal product={productOnModal} closeModal={handleCloseModal} />
         </div>
     )
 }

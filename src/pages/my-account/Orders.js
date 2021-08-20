@@ -2,12 +2,91 @@ import { UserOrders } from '../../util/user-orders';
 import OrdersTable from '../../components/OrdersTable';
 import { IoDocumentTextSharp } from "react-icons/io5";
 import Pagination from '../../components/Pagination';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useOrders from '../../hooks/useOrders';
+import { useAuth } from '../../contexts/AuthContext';
+import usePayMethods from '../../hooks/usePayMethods';
+import useOrdersStatuses from '../../hooks/useOrdersStatuses';
+
 const MyAccountOrders = () => {
 
-  const [activePage, setActivePage] = useState(1);
+  const { setLoading, setCustomAlert } = useAuth();
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    orderNumber: "",
+    address: "",
+    storeName: "",
+    minTotal: "",
+    maxTotal: "",
+    minDate: "",
+    maxDate: "",
+    orderStatusCode: "",
+    paymentMethodCode: ""
+  });
 
 
+  const [{ orders, error: ordersError, loading: ordersLoading, numberOfPages }, getOrders] = useOrders({ axiosConfig: { params: { ...filters } } });
+
+  const [{ payMethods, error: payMethodsError, loading: payMethodsLoading }, getPayMethods] = usePayMethods();
+
+  const [{ ordersStatuses, error: ordersStatusesError, loading: ordersStatusesLoading }, getOrdersStatuses] = useOrdersStatuses();
+
+  useEffect(() => {
+    setLoading({ show: ordersLoading, message: "Obteniendo tus pedidos" });
+  }, [ordersLoading]);
+
+  useEffect(() => {
+    console.log(orders);
+  }, [orders])
+
+
+  useEffect(() => {
+
+    if (ordersError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${ordersError?.response?.status === 400 ? ordersError?.response?.data.message[0] : ordersError?.response?.data.message}.`, severity: "error" });
+    }
+
+    if (payMethodsError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${payMethodsError?.response?.status === 400 ? payMethodsError?.response?.data.message[0] : payMethodsError?.response?.data.message}.`, severity: "error" });
+    }
+
+    if (ordersStatusesError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${ordersStatusesError?.response?.status === 400 ? ordersStatusesError?.response?.data.message[0] : ordersStatusesError?.response?.data.message}.`, severity: "error" });
+    }
+  }, [ordersError, payMethodsError, ordersStatusesError]);
+
+
+  useEffect(() => {
+    getOrders();
+  }, [filters])
+
+  const handleChange = (e) => {
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        [e.target.name]: e.target.value
+      }
+    })
+  }
+
+  const handleClearFilters = () => {
+    setFilters({
+      page: 1,
+      orderNumber: "",
+      address: "",
+      storeName: "",
+      minTotal: "",
+      maxTotal: "",
+      minDate: "",
+      maxDate: "",
+      orderStatusCode: "",
+      paymentMethodCode: ""
+    })
+  }
 
   return (
     <div className="px-8">
@@ -16,9 +95,24 @@ const MyAccountOrders = () => {
         <span className="ml-4">Mis Pedidos</span>
       </h1>
 
-      <OrdersTable orders={UserOrders} className="w-full my-12 text-gray-500 text-center" />
+      <OrdersTable
+        onClearFilters={handleClearFilters}
+        options={{ payMethods: payMethods, orderStatuses: ordersStatuses }}
+        values={{ ...filters }}
+        onFiltersChange={handleChange}
+        orders={orders}
+        className="w-full my-12 text-gray-500 text-center" />
 
-      <Pagination pages={10} activePage={activePage} onChange={setActivePage}></Pagination>
+      {
+        numberOfPages > 0 ?
+          <Pagination
+            pages={numberOfPages}
+            activePage={filters.page}
+            onChange={e => { handleChange({ target: { name: "page", value: e } }) }}
+          />
+          :
+          null
+      }
 
     </div>
   )
