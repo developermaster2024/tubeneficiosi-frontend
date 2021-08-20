@@ -3,8 +3,6 @@ import gastronomy from '../assets/images/gastronomia.jpg';
 import supermarkets from '../assets/images/supermercados.jpg';
 import bars from '../assets/images/boliches.jpg';
 import pharmacy from '../assets/images/farmacias.jpg';
-import laptop from "../assets/images/laptop.jpg";
-import computadora from "../assets/images/monitos.jpg";
 import shield from '../assets/images/shield.png';
 import callCenterAgent from '../assets/images/call-center-agent.png';
 import rent from '../assets/images/rent.png';
@@ -14,7 +12,6 @@ import clients from '../assets/images/clients.jpg';
 import waveUp from '../assets/images/wave-up.png';
 import waveDown from '../assets/images/wave-down.png';
 import HomeSlider from "../components/HomeSlider";
-import ProductAdCard from "../components/ProductAdCard";
 import SectionHeading from "../components/SectionHeading";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import StoreDiscountCard from '../components/StoreDiscountCard';
@@ -35,6 +32,7 @@ import BolichesFeaturedProducts from "../components/BolichesFeaturedProducts";
 import PharmacyFeaturedProducts from "../components/PharmacyFeaturedProducts";
 import useAds from "../hooks/useAds";
 import ProductsAdsSlider from '../components/ProductsAdsSlider';
+import { useHistory } from 'react-router-dom';
 
 const categories = [
   { name: 'Espectaculos', img: events },
@@ -70,10 +68,7 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    console.log(ads);
-  }, [ads])
 
-  useEffect(() => {
     if (businessSectionError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${businessSectionError?.response?.status === 400 ? businessSectionError?.response?.data.message[0] : businessSectionError?.response?.data.message}.`, severity: "error" });
@@ -109,8 +104,6 @@ const Home = () => {
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${adsError?.response?.status === 400 ? adsError?.response?.data.message[0] : adsError?.response?.data.message}.`, severity: "error" });
     }
   }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError, adsError]);
-
-  const [productOnModal, setProductOnModal] = useState(null);
 
   return <>
     <HomeSlider banners={banners} />
@@ -390,7 +383,6 @@ const Home = () => {
           <p className="text-center">{item.content}</p>
         </div>)}
       </div>
-      <ProductModal product={productOnModal} closeModal={() => { setProductOnModal(null) }} />
     </div>
   </>;
 };

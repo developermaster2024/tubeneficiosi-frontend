@@ -89,7 +89,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
         }
 
         setBankTransfers((oldBankTransfers) => {
-            return [...oldBankTransfers, { ...paymentInfoForm }]
+            return [...oldBankTransfers, { ...paymentInfoForm, bankAccountId: selectedBankAccountId }]
         })
     }
 

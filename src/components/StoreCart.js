@@ -105,13 +105,13 @@ const StoreCart = (props) => {
           </div>
           <div className="flex justify-between text-gray-400 my-4">
             <span>Sub total</span>
-            <span>$ 21,03</span>
+            <span>$ {cart?.subTotal}</span>
           </div>
         </div>
 
         <div className="text-center my-6">
           <button className="px-6 py-2 bg-main rounded w-8/12 text-white font-bold text-xl transition duration-300 hover:text-main hover:bg-gray-100">
-            <Link to={'/checkout'}>
+            <Link to={`/checkout?cartId=${cart?.id}`}>
               Pagar
             </Link>
           </button>

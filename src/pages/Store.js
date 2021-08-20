@@ -210,6 +210,7 @@ const Store = () => {
   }
 
   return <>
+    <StoreCart show={showCart} cart={cart} onChangeCart={handleCart} closeCart={() => { setShowCart(false) }} />
     <div>
       <Swiper
         navigation
@@ -399,7 +400,6 @@ const Store = () => {
         </div>
       </div>
     </Container>
-    <StoreCart show={showCart} cart={cart} onChangeCart={handleCart} closeCart={() => { setShowCart(false) }} />
   </>;
 };
 

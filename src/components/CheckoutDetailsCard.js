@@ -4,8 +4,9 @@ import useAxios from "../hooks/useAxios";
 import clsx from "clsx";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
+import Button from "./Button";
 
-const CheckoutDetailsCard = ({ cartId, canBuy, emitCart }) => {
+const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, deliveryCost, onBuy }) => {
 
     const { setLoading, setCustomAlert } = useAuth();
 
@@ -67,7 +68,9 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart }) => {
 
     useEffect(() => {
         if (data) {
-            setCart(data);
+            if (!data.isProcessed) {
+                setCart(data);
+            }
         }
     }, [data]);
 
@@ -84,61 +87,81 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart }) => {
                     </div>
                     :
                     <div className="bg-white rounded p-8">
-                        <h1 className="text-2xl my-4 border-b">Detalle de la Orden</h1>
-                        <div style={{ maxHeight: "40vh" }} className="custom-scrollbar overflow-y-auto px-4">
-                            {
-                                cart?.cartItems?.length > 0 ?
-                                    cart?.cartItems?.map((product, n) => {
-                                        return (
-                                            <div key={n} className="my-4">
-                                                <p className="text-right mb-2">$ {product?.total}</p>
-                                                <div className="flex justify-between w-full">
-                                                    <div className="w-1/2 flex items-center">
-                                                        <img src={`${process.env.REACT_APP_API_URL}/${product?.productImage}`} className="rounded-full h-12 w-12" alt="" />
-                                                        <div className="ml-2">
-                                                            <h3>{product?.productName}</h3>
-                                                            <b className="text-main">$ {product?.productPrice}</b>
-                                                        </div>
-                                                    </div>
-                                                    <div className="bg-gray-100 text-main w-12 flex rounded">
-                                                        <p className="m-auto">{product.quantity}</p>
-                                                    </div>
-                                                    <div onClick={() => { handleDelete(product) }} className="rounded border border-main w-12 flex text-main transition duration-500 cursor-pointer hover:bg-main hover:text-white">
-                                                        <IoTrashSharp className="m-auto"></IoTrashSharp>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                    :
-                                    <div className="text-center">
-                                        <p className="text-red-500 text-xl my-8">No hay productos</p>
-                                        <Link to={`/products`} className="bg-main bg-main px-4 py-2 rounded text-white transition duration-500 hover:bg-gray-100 hover:text-main hover:shadow-xl">Ir a comprar</Link>
+                        {
+                            data?.isProcessed ?
+                                <div className="text-red-500">
+                                    <p>
+                                        El carrito obtenido ya ha sido procesado.
+                                        Si desea puede crear otro comprando uno de los productos.
+                                    </p>
+                                    <div className="text-center my-4">
+                                        <Link to={`/products`}>
+                                            <Button className="bg-main transition duration-500 hover:bg-white hover:text-main">
+                                                Ir a comprar
+                                            </Button>
+                                        </Link>
                                     </div>
-                            }
-                        </div>
-                        <div className="border-t mt-2">
-                            <div className="flex justify-between text-gray-400 my-4">
-                                <span>Descuento</span>
-                                <span>$0</span>
-                            </div>
-                            <div className="flex justify-between text-gray-400 my-4">
-                                <span>Envio</span>
-                                <span>$0</span>
-                            </div>
-                            <div className="flex justify-between text-gray-400 my-4">
-                                <span>Sub total</span>
-                                <span>$ {cart?.subTotal}</span>
-                            </div>
-                            <div className="px-8 text-center mt-6">
-                                <button className={clsx(["text-center text-2xl px-14 py-2 rounded text-white"], {
-                                    'bg-red-500': canBuy,
-                                    'bg-red-100': !canBuy
-                                })} disabled>
-                                    Hacer Pedido
-                                </button>
-                            </div>
-                        </div>
+                                </div>
+                                :
+                                <>
+                                    <h1 className="text-2xl my-4 border-b">Detalle de la Orden</h1>
+                                    <div style={{ maxHeight: "40vh" }} className="custom-scrollbar overflow-y-auto px-4">
+                                        {
+                                            cart?.cartItems?.length > 0 ?
+                                                cart?.cartItems?.map((product, n) => {
+                                                    return (
+                                                        <div key={n} className="my-4">
+                                                            <p className="text-right mb-2">$ {product?.total}</p>
+                                                            <div className="flex justify-between items-center w-full">
+                                                                <div className="w-1/2 flex items-center">
+                                                                    <img src={`${process.env.REACT_APP_API_URL}/${product?.productImage}`} className="rounded-full h-12 w-12" alt="" />
+                                                                    <div className="ml-2">
+                                                                        <h3>{product?.productName}</h3>
+                                                                        <b className="text-main">$ {product?.productPrice}</b>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="bg-gray-100 text-main w-12 h-12 flex rounded">
+                                                                    <p className="m-auto">{product.quantity}</p>
+                                                                </div>
+                                                                <div onClick={() => { handleDelete(product) }} className="rounded border border-main w-12 h-12 flex text-main transition duration-500 cursor-pointer hover:bg-main hover:text-white">
+                                                                    <IoTrashSharp className="m-auto"></IoTrashSharp>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                                :
+                                                <div className="text-center">
+                                                    <p className="text-red-500 text-xl my-8">No hay productos</p>
+                                                    <Link to={`/products`} className="bg-main bg-main px-4 py-2 rounded text-white transition duration-500 hover:bg-gray-100 hover:text-main hover:shadow-xl">Ir a comprar</Link>
+                                                </div>
+                                        }
+                                    </div>
+                                    <div className="border-t mt-2">
+                                        <div className="flex justify-between text-gray-400 my-4">
+                                            <span>Descuento</span>
+                                            <span>$0</span>
+                                        </div>
+                                        <div className="flex justify-between text-gray-400 my-4">
+                                            <span>Envio</span>
+                                            <span>{loadingDeliveryCost ? "Calculando costo de envio" : `$${deliveryCost}`}</span>
+                                        </div>
+                                        <div className="flex justify-between text-gray-400 my-4">
+                                            <span>Sub total</span>
+                                            <span>$ {cart?.subTotal}</span>
+                                        </div>
+                                        <div className="px-8 text-center mt-6">
+                                            <button className={clsx(["text-center text-2xl px-14 py-2 rounded text-white"], {
+                                                'bg-red-500': canBuy,
+                                                'bg-red-100': !canBuy
+                                            })} disabled={!canBuy} onClick={onBuy}>
+                                                Hacer Pedido
+                                            </button>
+                                        </div>
+                                    </div>
+                                </>
+                        }
+
                     </div>
             }
         </>

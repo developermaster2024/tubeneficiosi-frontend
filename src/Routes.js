@@ -9,10 +9,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import MyAccountRoutes from './MyAccountRoutes';
 import Checkout from "./pages/Checkout";
-import OrderDetails from "./pages/OrderDetails";
 import PrivateRoute from "./components/PrivateRoute";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 
 const Routes = () => {
 
@@ -37,8 +37,8 @@ const Routes = () => {
 
       <PrivateRoute>
         <Route path="/my-account" component={MyAccountRoutes} />
-        <Route path="/checkout" component={Checkout} />
-        <Route path="/orders/:ref" exact component={OrderDetails} />
+        <Route path="/checkout" component={Checkout} exact />
+        <Route path="/checkout/:id" component={CheckoutSuccess} exact />
       </PrivateRoute>
     </Switch>
   )

@@ -1,23 +1,77 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCart } from "react-icons/io5";
 import MyAccountCartsTable from "../../components/MyAccountCartsTable";
 import Pagination from "../../components/Pagination";
+import { useAuth } from "../../contexts/AuthContext";
+import useCarts from "../../hooks/useCarts";
 import { UserCarts } from '../../util/user-carts';
 
 const MyAccountCarts = () => {
 
-  const [activePage, setActivePage] = useState(1);
+  const { setLoading, setCustomAlert } = useAuth();
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    storeName: "",
+    from: "",
+    until: "",
+    minPrice: "",
+    maxPrice: "",
+    isProcessed: "false",
+    isExpired: "false",
+    isDirectPurchase: "false"
+  });
+
+  const [{ carts, numberOfPages, error, loading }, getCarts] = useCarts({ axiosConfig: { params: { ...filters } } });
+
+  useEffect(() => {
+    setLoading({ show: loading, message: "Obteniendo tus carritos" })
+  }, [loading])
+
+  const handleChange = (e) => {
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        [e.target.name]: e.target.value
+      }
+    });
+  }
+
+  const handleClearFilters = () => {
+    setFilters({
+      page: 1,
+      storeName: "",
+      from: "",
+      until: "",
+      minPrice: "",
+      maxPrice: "",
+    })
+  }
 
   return (
-    <div className="px-8">
+    <div className="px-8 py-4">
       <h1 className="text-2xl flex items-center text-gray-600 font-bold my-5">
         <IoCart className="text-4xl"></IoCart>
         <span className="ml-4">Mis Carritos</span>
       </h1>
 
-      <MyAccountCartsTable className="my-12" carts={UserCarts}></MyAccountCartsTable>
+      <MyAccountCartsTable
+        onClearFilters={handleClearFilters}
+        values={{ ...filters }}
+        onFiltersChange={handleChange}
+        className="my-12"
+        carts={carts} />
 
-      <Pagination pages={10} activePage={activePage} onChange={setActivePage} />
+      {
+        numberOfPages > 0 ?
+          <Pagination
+            pages={numberOfPages}
+            activePage={filters.page}
+            onChange={e => { handleChange({ target: { name: "page", value: e } }) }}
+          />
+          :
+          null
+      }
     </div>
   )
 }
