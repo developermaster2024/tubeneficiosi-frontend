@@ -15,15 +15,13 @@ const LogOutModal = (props) => {
 
   const history = useHistory();
 
-  const auth = useAuth()
+  const { auth, setAuthInfo } = useAuth();
 
   const { show, setShow } = props;
 
 
   const handleContinue = () => {
-    auth.logout(() => {
-      history.push('/');
-    });
+    setAuthInfo({ isAuthenticated: false, user: null, token: null });
     closeModal();
   }
 
