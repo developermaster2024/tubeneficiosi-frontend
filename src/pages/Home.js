@@ -33,14 +33,7 @@ import PharmacyFeaturedProducts from "../components/PharmacyFeaturedProducts";
 import useAds from "../hooks/useAds";
 import ProductsAdsSlider from '../components/ProductsAdsSlider';
 import { useHistory } from 'react-router-dom';
-
-const categories = [
-  { name: 'Espectaculos', img: events },
-  { name: 'Gastronomía', img: gastronomy },
-  { name: 'Supermercados', img: supermarkets },
-  { name: 'Boliches', img: bars },
-  { name: 'Farmacias', img: pharmacy },
-];
+import useCategories from '../hooks/useCategories';
 
 const Home = () => {
 
@@ -60,9 +53,21 @@ const Home = () => {
 
   const [{ ads, error: adsError }, getAds] = useAds({ options: { manual: true, useCache: false } });
 
+  const [{ categories, error: errorCategories }, getCategories] = useCategories({ options: { manual: true, useCache: false } });
+
   useEffect(() => {
     setLoading({ show: true, message: "Cargando datos" });
-    Promise.all([getBusinessInfo(), getAppSectionData(), getNecessaryInfoData(), getBanners(), getStoreAds(), getFeaturedProducts(), getAds()]).then((values) => {
+    Promise.all([
+      getBusinessInfo(),
+      getAppSectionData(),
+      getNecessaryInfoData(),
+      getBanners(),
+      getStoreAds(),
+      getFeaturedProducts(),
+      getAds(),
+      getCategories()
+    ]).then((values) => {
+      console.log(categories);
       setLoading({ show: false, message: "" });
     })
   }, []);
@@ -103,7 +108,12 @@ const Home = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${adsError?.response?.status === 400 ? adsError?.response?.data.message[0] : adsError?.response?.data.message}.`, severity: "error" });
     }
-  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError, adsError]);
+
+    if (errorCategories) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
+    }
+  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError, adsError, errorCategories]);
 
   return <>
     <HomeSlider banners={banners} />
@@ -123,12 +133,12 @@ const Home = () => {
             hover:-translate-y-1 hover:shadow-2xl
           "
           style={{
-            backgroundImage: `url(${category.img})`,
+            backgroundImage: `url(${process.env.REACT_APP_API_URL}${category.imgPath})`,
             backgroundSize: 'cover',
           }}
         >
           <div className="absolute inset-0 bg-black opacity-30"></div>
-          <span className="relative">{category.name}</span>
+          <span className="relative capitalize">{category.name}</span>
         </a>)}
       </div>
     </div>

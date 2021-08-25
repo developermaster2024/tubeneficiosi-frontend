@@ -47,7 +47,7 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
 
     useEffect(() => {
         if (storeId && selectedAddress && deliveryMethod) {
-            getDeliveryMethods();
+            getDeliveryMethods({ params: { perPage: 200, addressId: selectedAddress?.id, storeId: storeId } });
         }
     }, [storeId, selectedAddress, method]);
 
@@ -184,6 +184,10 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
                                 :
                                 <div className="text-center text-red-500">
                                     Esta tienda no tiene metodos de envios disponibles para la dirección seleccionada.
+                                    <p>
+                                        Por favor seleccione otra dirección o seleccione la opcion de <b>Retirar en tienda</b>.
+                                        Ya que quizas la tienda no posee metodos de envio.
+                                    </p>
                                 </div>
                     }
                 </div>

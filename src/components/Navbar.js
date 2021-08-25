@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import logo from '../assets/images/logo.jpg';
 import { useAuth } from '../contexts/AuthContext';
 import SelectUserToLogin from './SelectUserToLogin';
-import { IoLogOut } from "react-icons/io5";;
+import { IoLogOut } from "react-icons/io5"; import useCategories from '../hooks/useCategories';
+;
 
 
 const Navbar = () => {
@@ -11,9 +12,25 @@ const Navbar = () => {
   const [show, setShow] = useState(false);
 
   const { user, setAuthInfo } = useAuth();
+  const [searchData, setSearchData] = useState({ storeCategoryId: "", search: "" })
+
+  const [{ categories, error: errorCategories, loading: categoriesLoading }, getCategories] = useCategories();
 
   const handleClick = () => {
     setAuthInfo({ isAuthenticated: false, user: null, token: null });
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
+
+  const handleChange = (e) => {
+    setSearchData((oldSearchData) => {
+      return {
+        ...oldSearchData,
+        [e.target.name]: e.target.value
+      }
+    })
   }
 
   return <>
@@ -28,18 +45,31 @@ const Navbar = () => {
             />
           </Link>
 
-          <div className="flex items-center px-10 space-x-2 flex-grow">
+
+          <form className="flex items-center px-10 space-x-2 flex-grow" onSubmit={handleSubmit}>
             <select
-              className="w-40 rounded border-gray-300 focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 bg-transparent text-sm leading-4"
+              name="storeCategoryId"
+              value={searchData.storeCategoryId}
+              onChange={handleChange}
+              className="w-40 capitalize rounded border-gray-300 focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 bg-transparent text-sm leading-4"
             >
-              <option value="">Todos</option>
+              <option value="">Seleccione una categoria</option>
+              {categories.map((category, i) => {
+                return (
+                  <option className="text-black capitalize" value={category.id} key={i}>{category.name}</option>
+                )
+              })}
             </select>
             <input
+              name="search"
+              value={searchData.search}
+              onChange={handleChange}
               placeholder="Nombre de tienda, producto..."
               className="w-full rounded border-gray-300 focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 bg-transparent text-sm leading-4"
               type="text"
             />
-          </div>
+          </form>
+
 
           <div className="flex items-center">
             <nav className="space-x-5 mr-5">
