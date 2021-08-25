@@ -13,6 +13,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
+import SearchResults from "./pages/SearchResults";
 
 const Routes = () => {
 
@@ -34,6 +35,7 @@ const Routes = () => {
       <Route path="/benefits" exact component={Benefits} />
       <Route path="/login" exact component={Login} />
       <Route path="/register" exact component={Register} />
+      <Route path="/search" exact component={SearchResults} />
 
       <PrivateRoute>
         <Route path="/my-account" component={MyAccountRoutes} />
