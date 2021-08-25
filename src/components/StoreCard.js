@@ -65,7 +65,7 @@ const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating,
 
       <p className="font-bold text-center text-gray-600 text-xl hover:text-main">{name}</p>
 
-      <div className="flex space-x-1">
+      <div className="flex justify-center space-x-1">
         {[1, 2, 3, 4, 5].map(n => <StarIcon
           key={n}
           className="w-4 h-4 text-yellow-400"

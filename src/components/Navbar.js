@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import logo from '../assets/images/logo.jpg';
 import { useAuth } from '../contexts/AuthContext';
 import SelectUserToLogin from './SelectUserToLogin';
@@ -8,6 +8,8 @@ import { IoLogOut } from "react-icons/io5"; import useCategories from '../hooks/
 
 
 const Navbar = () => {
+
+  const history = useHistory();
 
   const [show, setShow] = useState(false);
 
@@ -22,6 +24,7 @@ const Navbar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    history.push(`/search?storeCategoryId=${searchData.storeCategoryId}&search=${searchData.search}`);
   }
 
   const handleChange = (e) => {
