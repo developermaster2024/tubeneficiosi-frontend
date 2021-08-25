@@ -13,7 +13,7 @@ import TableRow from "../components/TableRow";
 import TableCell from "../components/TableCell";
 import TableBody from "../components/TableBody";
 import ProductCard from "../components/ProductCard";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IoChevronBackOutline, IoChevronForwardOutline, IoHeart, IoHeartOutline } from "react-icons/io5";
 import QuestionsAnswer from '../components/QuestionsAnswer';
@@ -42,19 +42,13 @@ const NavigationButton = ({ icon, color, className, onClick, canNext, hidden }) 
 const Product = () => {
   const { setLoading, setCustomAlert } = useAuth();
 
+  const history = useHistory();
+
   const { slug } = useParams();
 
-  const [swiper, setSwiper] = useState(null);
-
-  const [{ data: product, loading: productLoading }] = useAxios({ url: `/products/${slug}` });
-
-  const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({ options: { manual: true } });
-
-  const [{ data: questionsData, loading: questionsDataLoading }, fetchQuestions] = useAxios({ url: `/questions` }, { manual: true });
-
-  const [_, createQuestion] = useAxios({ url: '/questions', method: 'POST' }, { manual: true });
-
   const [favorite, setFavorite] = useState(false);
+
+  const [swiper, setSwiper] = useState(null);
 
   const [productOnModal, setProductOnModal] = useState(null);
 
@@ -66,6 +60,30 @@ const Product = () => {
   const [questionsFormErrors, setQuestionsFormErrors] = useState({
     question: null,
   });
+
+  const [{ data: product, loading: productLoading }] = useAxios({ url: `/products/${slug}` });
+
+  const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({ options: { manual: true } });
+
+  const [{ data: questionsData, loading: questionsDataLoading }, fetchQuestions] = useAxios({ url: `/questions` }, { manual: true });
+
+  const [_, createQuestion] = useAxios({ url: '/questions', method: 'POST' }, { manual: true });
+
+  const [{ loading: cartLoading, error: cartError, data: cart }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
+
+  useEffect(() => {
+    if (cart) {
+      setLoading?.({ show: false, message: "" });
+      history.push(`/checkout?cartId=${cart?.id}`);
+    }
+  }, [cart]);
+
+  useEffect(() => {
+    if (cartError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
+    }
+  }, [cartError])
 
   useEffect(() => {
     setQuestionsFormErrors({
@@ -164,6 +182,15 @@ const Product = () => {
 
   const handleBack = () => {
     swiper?.slidePrev();
+  }
+
+  const handleCloseModal = async (e) => {
+    setProductOnModal(null);
+    if (e) {
+      setLoading?.({ show: true, message: "Realizando compra" });
+      await addToCart({ data: e });
+      setLoading?.({ show: false, message: "" });
+    }
   }
 
   /**
@@ -454,10 +481,7 @@ const Product = () => {
     </div>
 
 
-    <ProductModal
-      product={productOnModal}
-      closeModal={() => { setProductOnModal(null) }}
-    />
+    <ProductModal product={productOnModal} closeModal={handleCloseModal} />
   </div>
 };
 
