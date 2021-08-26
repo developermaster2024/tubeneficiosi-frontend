@@ -2,13 +2,8 @@ import partner from '../assets/images/partner.jpg';
 import waveUp from '../assets/images/wave-up.png';
 import waveDown from '../assets/images/wave-down.png';
 import clients from '../assets/images/clients.jpg';
-import { useEffect } from 'react';
 
 const BussinessSection = ({ businessSectionData }) => {
-
-    useEffect(() => {
-        console.log(businessSectionData);
-    }, [businessSectionData])
 
     return (
         <div
