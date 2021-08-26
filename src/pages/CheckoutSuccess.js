@@ -73,8 +73,11 @@ const CheckoutSuccess = () => {
                             <div className="flex items-center space-x-4 my-4">
                                 <b>Metodo de envio:</b>
                                 <div className="text-center">
-                                    <img className="h-12 w-14" src={`${process.env.REACT_APP_API_URL}/${checkout?.deliveryMethod?.imgPath}`} alt="" />
-                                    <p className="capitalize">{checkout?.deliveryMethod?.name}</p>
+                                    {
+                                        checkout?.deliveryMethod?.imgPath &&
+                                        <img className="h-12 w-14" src={`${process.env.REACT_APP_API_URL}/${checkout?.deliveryMethod?.imgPath}`} alt="" />
+                                    }
+                                    <p className="capitalize">{checkout?.deliveryMethod?.name ? checkout?.deliveryMethod?.name : "Retirar en tienda"}</p>
                                 </div>
                             </div>
                         </div>
