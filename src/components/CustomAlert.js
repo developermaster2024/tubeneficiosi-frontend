@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useEffect } from "react";
+import reactDom from "react-dom";
 import { IoCloseOutline } from "react-icons/io5";
 
 const CustomAlert = ({ severity, message, show, duration, onClose }) => {
@@ -12,7 +13,7 @@ const CustomAlert = ({ severity, message, show, duration, onClose }) => {
     }
   }, [show])
 
-  return (
+  return reactDom.createPortal(
     <div className={clsx(["fixed zIndex-50 w-1/4 p-4 left-4 bottom-4 rounded justify-between items-center text-white shadow-2xl animate__animated animate__fadeInUp flex"], {
       'bg-main': !severity,
       'bg-red-500': severity == "error",
@@ -29,7 +30,8 @@ const CustomAlert = ({ severity, message, show, duration, onClose }) => {
           <IoCloseOutline />
         </button>
       </div>
-    </div>
+    </div>,
+    document.getElementById("portal")
   )
 }
 
