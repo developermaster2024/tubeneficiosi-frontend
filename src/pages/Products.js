@@ -42,9 +42,9 @@ const Products = () => {
     }
   });
 
-  const [{ ads: adsBanners, error: errorBannersAds, loading: loadingBannersAds }, getBannersAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5 } } })
+  const [{ ads: adsBanners, error: errorBannersAds, loading: loadingBannersAds }, getBannersAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5, isActive: "true" } } })
 
-  const [{ ads: adsLeftBanners, error: errorLeftBanners, loading: loadingLeftBannersAds }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 4 } } })
+  const [{ ads: adsLeftBanners, error: errorLeftBanners, loading: loadingLeftBannersAds }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5, isActive: "true" } } })
 
   const [{ categories, error: errorCategories }, getCategories] = useCategories();
   const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });

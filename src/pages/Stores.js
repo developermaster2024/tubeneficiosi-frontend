@@ -37,9 +37,9 @@ const Stores = () => {
   const [viewType, setViewType] = useState('grid');
   const [canShowLoading, setCanShowLoading] = useState(false);
 
-  const [{ ads: adsBanners, error: errorBannersAds }, getBannersAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 7 } } })
+  const [{ ads: adsBanners, error: errorBannersAds }, getBannersAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 7, isActive: "true" } } })
 
-  const [{ ads: adsLeftBanners, error: errorLeftBanners }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 8 } } })
+  const [{ ads: adsLeftBanners, error: errorLeftBanners }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 8, isActive: "true" } } })
 
   const [{ stores, total, size, numberOfPages, error, loading }, getStores] = useStores({
     params: {
@@ -52,7 +52,7 @@ const Stores = () => {
 
   useEffect(() => {
     setLoading({ show: true, message: "Obteniendo Informacion" });
-    Promise.all([getStores(), getCategories(), getBannersAds(), getLeftAds()]).then((values) => {
+    Promise.all([getStores(), getCategories(), getBannersAds({ params: { adsPositionId: 7, isActive: "true" } }), getLeftAds({ params: { adsPositionId: 8, isActive: "true" } })]).then((values) => {
       setLoading({ show: false, message: "" });
       setCanShowLoading(true);
     })
