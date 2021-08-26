@@ -57,10 +57,13 @@ const Home = () => {
       getAds({ params: { isActive: "true" } }),
       getCategories()
     ]).then((values) => {
-      console.log(categories);
       setLoading({ show: false, message: "" });
     })
   }, []);
+
+  useEffect(() => {
+    console.log(categories);
+  }, [categories])
 
   useEffect(() => {
 
@@ -152,29 +155,29 @@ const Home = () => {
 
     {/* GASTRONOMIA */}
     <div className="container mt-20">
-      <GastronomyFeaturedProducts featuredProducts={featuredProducts.filter(product => product?.storeCategory?.id === 1)} />
+      <GastronomyFeaturedProducts categoryInfo={categories.filter(category => category.id === 1)[0]} featuredProducts={featuredProducts.filter(product => product?.storeCategory?.id === 1)} />
     </div>
 
     {/* ESPECTACULOS */}
     <div className="container mt-20">
-      <ShowsFeaturedProducts featuredProducts={featuredProducts} />
+      <ShowsFeaturedProducts categoryInfo={categories.filter(category => category.id === 2)[0]} featuredProducts={featuredProducts} />
     </div>
 
     {/* Supermercados */}
     <div className="container my-20">
-      <SuperMarketsFeaturedProducts featuredProducts={featuredProducts} />
+      <SuperMarketsFeaturedProducts categoryInfo={categories.filter(category => category.id === 3)[0]} featuredProducts={featuredProducts} />
     </div>
 
     <HomeSlider className="my-12 h-84" imgHeight="400px" banners={ads.filter(ads => ads.adsPosition.id === 3)} />
 
     {/* Boliches */}
     <div className="container my-20">
-      <BolichesFeaturedProducts featuredProducts={featuredProducts} />
+      <BolichesFeaturedProducts categoryInfo={categories.filter(category => category.id === 4)[0]} featuredProducts={featuredProducts} />
     </div>
 
     {/* Farmcias */}
     <div className="container mt-20">
-      <PharmacyFeaturedProducts featuredProducts={featuredProducts} />
+      <PharmacyFeaturedProducts categoryInfo={categories.filter(category => category.id === 5)[0]} featuredProducts={featuredProducts} />
     </div>
 
     <div className="container mt-20">

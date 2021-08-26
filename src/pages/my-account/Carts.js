@@ -3,8 +3,7 @@ import { IoCart } from "react-icons/io5";
 import MyAccountCartsTable from "../../components/MyAccountCartsTable";
 import Pagination from "../../components/Pagination";
 import { useAuth } from "../../contexts/AuthContext";
-import useCarts from "../../hooks/useCarts";
-import { UserCarts } from '../../util/user-carts';
+import useCarts from "../../hooks/useCarts"
 
 const MyAccountCarts = () => {
 

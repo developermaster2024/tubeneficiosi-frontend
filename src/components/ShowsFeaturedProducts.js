@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import CategorySectionCard from "./CategorySectionCard";
 import ProductCard from "./ProductCard";
-import events from '../assets/images/espectaculos.jpg';
 import { generateImageUrl } from "../helpers/url";
 import ProductModal from "./ProductModal";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -9,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import useAxios from "../hooks/useAxios";
 
-const ShowsFeaturedProducts = ({ featuredProducts }) => {
+const ShowsFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
 
     const history = useHistory();
 
@@ -49,8 +48,8 @@ const ShowsFeaturedProducts = ({ featuredProducts }) => {
     return (
         <div className="flex space-x-4">
             <CategorySectionCard
-                text="Espectaculos"
-                imgSrc={events}
+                text={categoryInfo?.name}
+                imgSrc={`${process.env.REACT_APP_API_URL}${categoryInfo?.imgPath}`}
             />
 
             <div className="w-1/2">

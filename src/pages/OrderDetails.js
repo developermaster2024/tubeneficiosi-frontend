@@ -1,77 +1,9 @@
-import santander from '../assets/images/santander.png';
-import efectivo from '../assets/images/efectivo.png';
-import { Link, useParams } from 'react-router-dom';
-import whatsapp from '../assets/images/whatsapp.png';
-import gmail from '../assets/images/gmail.png';
+import { useParams } from 'react-router-dom';
 
-import pepsi from '../assets/images/pepsicola.jpg';
-import cocacola from '../assets/images/cocacola.jpg';
-import dorito from '../assets/images/doritos.jpg';
-
-import { IoCloudUploadSharp, IoCartOutline, IoDocumentTextOutline, IoCloudDownloadSharp } from "react-icons/io5";
-import UserAddressCard from '../components/UserAddressCard';
+import { IoCartOutline, IoDocumentTextOutline, IoCloudDownloadSharp } from "react-icons/io5";
 import useAxios from '../hooks/useAxios';
 import { useAuth } from '../contexts/AuthContext';
 import { useEffect } from 'react';
-
-const Order = {
-
-  ref: 'AASSDS25456',
-
-  paidMethod: {
-    name: 'Efectivo',
-    image: efectivo,
-  },
-
-  bank: {
-    image: santander,
-    name: 'Santander',
-    accountDetails: {
-      accountType: 'Cuenta Unica',
-      sucursal: '0175',
-      cuenta: '12345-452',
-      cbu: '12345678912345678912',
-      alias: 'semidios.olimpo'
-    }
-  },
-
-  statutes: [
-    {
-      id: 1,
-      createdAt: new Date().toLocaleString(),
-      name: 'En espera de pago.',
-      color: 'orange'
-    }
-  ],
-
-  createdAt: new Date().toLocaleString(),
-
-  deliveryMethod: {
-    id: 1,
-    name: 'delivery'
-  },
-
-  products: [
-    {
-      image: pepsi,
-      name: 'Pepsicola',
-      price: 7.88,
-      quantity: 5
-    },
-    {
-      image: cocacola,
-      name: 'CocaCola',
-      price: 4.36,
-      quantity: 5
-    },
-    {
-      image: dorito,
-      name: 'Doritos',
-      price: 3.99,
-      quantity: 5
-    }
-  ]
-}
 
 const OrderDetails = () => {
 
@@ -158,7 +90,7 @@ const OrderDetails = () => {
       {/*Productos */}
       <div className="bg-white rounded text-lg p-4 my-4 text-gray-500">
         <h1 className="flex items-center text-2xl my-4">
-          <IoCartOutline className="mr-2" />  Productos <span className=" ml-4 border rounded-full h-[38px] w-[40px] text-center">{Order.products.length}</span>
+          <IoCartOutline className="mr-2" />  Productos <span className=" ml-4 border rounded-full h-[38px] w-[40px] text-center">{order?.cart?.cartItems?.length}</span>
         </h1>
 
         <table className="w-2/3 text-center">

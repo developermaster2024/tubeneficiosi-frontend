@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import CategorySectionCard from "./CategorySectionCard";
 import ProductCard from "./ProductCard";
-import pharmacy from '../assets/images/farmacias.jpg';
 import { generateImageUrl } from "../helpers/url";
 import ProductModal from "./ProductModal";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -9,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import useAxios from "../hooks/useAxios";
 
-const PharmacyFeaturedProducts = ({ featuredProducts }) => {
+const PharmacyFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
 
     const history = useHistory();
 
@@ -81,8 +80,8 @@ const PharmacyFeaturedProducts = ({ featuredProducts }) => {
             </div>
 
             <CategorySectionCard
-                text="Farmacias"
-                imgSrc={pharmacy}
+                text={categoryInfo?.name}
+                imgSrc={`${process.env.REACT_APP_API_URL}${categoryInfo?.imgPath}`}
             />
             <ProductModal product={productOnModal} closeModal={handleCloseModal} />
         </div>

@@ -1,5 +1,4 @@
 import UserAddressCard from '../../components/UserAddressCard';
-import { userAddress } from '../../util/user-address';
 import { IoAdd } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 import { Link } from 'react-router-dom';

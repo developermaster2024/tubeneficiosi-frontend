@@ -1,4 +1,3 @@
-import { UserOrders } from '../../util/user-orders';
 import OrdersTable from '../../components/OrdersTable';
 import { IoDocumentTextSharp } from "react-icons/io5";
 import Pagination from '../../components/Pagination';
