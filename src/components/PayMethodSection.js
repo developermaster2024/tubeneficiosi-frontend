@@ -55,7 +55,6 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
             ]),
             amount: validate(paymentInfoForm.amount, [
                 { validator: isRequired, errorMessage: "El monto es obligatorio." },
-                { validator: isNumber, errorMessage: "El monto solo pueden ser numeros." }
             ])
         });
     }, [paymentInfoForm])
@@ -239,6 +238,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                             <label htmlFor="amount">Monto</label>
                                             <CustomInput
                                                 id="amount"
+                                                step="0.01"
                                                 type="number"
                                                 onChange={handlePaymentChange}
                                                 value={paymentInfoForm.amount}

@@ -1,6 +1,7 @@
 const CustomInput = ({ name, onChange, value, type, placeholder, className, ...rest }) => {
     return (
         <input
+            {...rest}
             name={name}
             onChange={onChange}
             value={value}

@@ -117,7 +117,7 @@ const Checkout = (props) => {
         ])
         :
         null,
-      totalTransfer: checkoutData?.bankTransfers.length > 0 && cartSubTotal === checkoutData?.bankTransfers?.reduce((acum, transfer) => acum + Number(transfer.amount), 0) ? null : "El monto de las transferencias no puede estar por encima ni por debajo del total de la orden. Por favor verifique."
+      totalTransfer: checkoutData?.bankTransfers.length > 0 && (cartSubTotal + Number(deliveryCost)) === checkoutData?.bankTransfers?.reduce((acum, transfer) => acum + Number(transfer.amount), 0) ? null : "El monto de las transferencias no puede estar por encima ni por debajo del total de la orden. Por favor verifique."
     });
   }, [checkoutData]);
 
