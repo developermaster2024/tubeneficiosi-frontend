@@ -1,4 +1,4 @@
-const CategorySectionCard = ({text, imgSrc}) => {
+const CategorySectionCard = ({ text, imgSrc }) => {
   return <a href="/#" className="group w-full relative rounded-md overflow-hidden bg-full shadow-md">
     <div className="absolute inset-0">
       <img

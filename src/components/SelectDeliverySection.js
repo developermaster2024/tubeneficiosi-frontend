@@ -106,7 +106,7 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
                                 :
                                 <div className="text-center">
                                     <p>No hay direcciones disponibles.</p>
-                                    <a className="text-main hover:text-gray-500" href="hola">¿Deseas registrar una?</a>
+                                    <a className="text-main hover:text-gray-500" href="/my-account/address/new">¿Deseas registrar una?</a>
                                 </div>
                     }
                 </div>

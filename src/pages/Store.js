@@ -58,7 +58,7 @@ const Store = () => {
 
   const [{ tags, error: errorTags, loading: loadingTags }, getTags] = useTags({ params: { storeCategoryId: store?.storeCategory?.id }, options: { useCache: false, manual: true } });
 
-  const [{ data: cartData, error: cartError, loading: cartLoading }, getCart] = useAxios({ url: `/carts/stores/${store?.storeId}` }, { manual: true, useCache: false });
+  const [{ data: cartData, error: cartError, loading: cartLoading }, getCart] = useAxios({ url: `/carts/stores/${store?.storeId}`, params: { isProcessed: "false" } }, { manual: true, useCache: false });
 
   const [isInGridView, setIsInGridView] = useState(true);
 

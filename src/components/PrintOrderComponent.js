@@ -2,19 +2,28 @@ import { useRef } from "react";
 import Button from "./Button";
 import { useReactToPrint } from 'react-to-print';
 import { useAuth } from "../contexts/AuthContext";
+import { useEffect } from "react";
 
 
 
-const PrintOrderComponent = ({ order, togglePrintMode }) => {
+const PrintOrderComponent = ({ order, togglePrintMode, print, onFinalizePrint }) => {
 
     const { setLoading, setCustomAlert } = useAuth();
 
     const componentRef = useRef();
 
+    useEffect(() => {
+        console.log(print)
+        console.log("hi");
+        if (print) {
+            handlePrint();
+        }
+    }, [print])
+
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
         onBeforeGetContent: () => setLoading?.({ show: true, message: "Generando documento" }),
-        onAfterPrint: () => setLoading?.({ show: false, message: "" }),
+        onAfterPrint: () => { setLoading?.({ show: false, message: "" }); onFinalizePrint() },
         documentTitle: `Order - ${order?.orderNumber}`,
         pageStyle: `
         
@@ -43,7 +52,7 @@ const PrintOrderComponent = ({ order, togglePrintMode }) => {
     });
 
     return (
-        <div className="animate__animated animate__fadeIn text-gray-500">
+        <div className="animate__animated animate__fadeInUp text-gray-500 hidden">
             <div ref={componentRef}>
                 <div className="bg-white p-8 text-gray-500">
                     <h1 className="text-center text-3xl my-1">
@@ -56,6 +65,7 @@ const PrintOrderComponent = ({ order, togglePrintMode }) => {
                         </div>
                         <div>
                             <p>Fecha: {order?.createdAt}</p>
+                            <p className="font-bold text-right capitalize" style={{ color: order?.orderStatus?.color }}>{order?.orderStatus?.name}</p>
                         </div>
                     </div>
 
@@ -154,46 +164,19 @@ const PrintOrderComponent = ({ order, togglePrintMode }) => {
                                 <tr>
                                     <th className="p-4" colSpan={5}>
                                         <div className="text-right">
-                                            <b>Total:</b> <span className="text-green-500">${order?.cart?.subTotal}</span>
+                                            <span>SubTotal:</span> <span className="text-gray-500">${order?.cart?.subTotal}</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span>Envio:</span> <span className="text-gray-500">{order?.delivery?.total > 0 ? `$${order?.delivery?.total}` : "Gratis"}</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span>Total:</span> <span className="text-green-500">${order?.delivery?.total + order?.cart?.subTotal}</span>
                                         </div>
                                     </th>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-
-                    {/* <table style={{ tableLayout: "fixed" }} className="mt-8 w-full">
-                        <tbody>
-                            <tr>
-                                <td colSpan={1} className="text-center">
-                                    <div className="text-center">
-                                        <p>Telefono:</p>
-                                        {order?.store?.phoneNumber}
-                                    </div>
-                                </td>
-                                <td colSpan={1}>
-                                    <div className="text-center">
-                                        <p>Dirección:</p>
-                                        {order?.store?.address}
-                                    </div>
-                                </td>
-                                <td colSpan={1}>
-                                    <div className="text-center" style={{ overflow: "hidden" }}>
-                                        <p>Redes Sociales:</p>
-                                        <div>
-                                            <p><b>Instagram</b></p>
-                                            {order?.store?.storeProfile?.instagram}
-                                        </div>
-                                        <div>
-                                            <p><b>Facebook</b></p>
-
-                                            {order?.store?.storeProfile?.facebook}
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table> */}
                 </div>
             </div>
 

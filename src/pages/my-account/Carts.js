@@ -29,9 +29,16 @@ const MyAccountCarts = () => {
 
   const handleChange = (e) => {
     setFilters((oldFilters) => {
+      if (e.target.name !== "page") {
+        return {
+          ...oldFilters,
+          [e.target.name]: e.target.value,
+          page: 1
+        }
+      }
       return {
         ...oldFilters,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       }
     });
   }
@@ -44,6 +51,9 @@ const MyAccountCarts = () => {
       until: "",
       minPrice: "",
       maxPrice: "",
+      isProcessed: "false",
+      isExpired: "false",
+      isDirectPurchase: "false"
     })
   }
 
