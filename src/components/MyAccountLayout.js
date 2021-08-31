@@ -13,22 +13,18 @@ import LogOutModal from './logOutModal.js';
 
 const MyAccountLayout = ({ children }) => {
 
-  const history = useHistory();
-
-  const [currentPath, setCurrentPath] = useState(null);
+  const [currentPath, setCurrentPath] = useState("");
 
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    history.listen((location, action) => {
-      setCurrentPath(location.pathname);
-      console.log(location.pathname)
-    });
-  });
+    setCurrentPath(window?.location?.pathname);
+  }, [window.location.pathname]);
 
 
   return (
     <div>
+
       <div className="flex">
         <div className="w-[5vw] bg-white h-screen text-gray-500 text-[2vw]">
           <div>

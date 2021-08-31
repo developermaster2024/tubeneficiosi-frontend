@@ -41,7 +41,7 @@ const QuestionsAnswer = ({
         {error && <span className="block text-red-500 text-xs">{error}</span>}
       </form>
 
-      <div style={{ height: 500 }} className="custom-scrollbar mt-4 overflow-y-auto">
+      <div style={{ maxHeight: 500 }} className="custom-scrollbar mt-4 overflow-y-auto">
         {questions.map(({ id, askedBy, question, createdAt, answer, answeredAt }) => <div key={id} className="my-8">
           <div className="flex items-center">
             <img className="h-[50px] w-[50px] rounded-full" src={generateImageUrl(askedBy?.imgPath)} alt={askedBy?.name} />

@@ -1,3 +1,5 @@
+import clsx from "clsx";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "./Button"
 
@@ -14,14 +16,26 @@ const ProductCard = ({
   buttonText
 }) => {
 
+  const [imgLoad, setImageLoad] = useState(false);
+
   return <div
     className="p-5 mt-12 max-w-[250px] space-y-4 relative pt-28 w-full rounded-md transform hover:shadow-2xl hover:-translate-y-3 transition duration-500"
   >
     <img
+      onLoad={() => { setImageLoad(true) }}
       src={imgSrc}
       alt={imgAlt}
-      className="w-9/12 -top-12 left-1/2 transform -translate-x-1/2  absolute h-36 rounded-md"
+      className={clsx(["w-9/12 -top-12 left-1/2 transform -translate-x-1/2  absolute h-36 rounded-md"], {
+        "hidden": !imgLoad
+      })}
     />
+
+    <div
+      className={clsx(["w-9/12 custom-skeleton -top-12 left-1/2 transform -translate-x-1/2  absolute h-36 rounded-md bg-white"], {
+        "hidden": imgLoad
+      })}
+    >
+    </div>
 
     <div className="space-y-2">
 
@@ -45,7 +59,7 @@ const ProductCard = ({
         </svg>)}
       </div>
 
-      <p className="opacity-75 text-xs text-center text-gray-800 truncate">{description}</p>
+      <p className="opacity-75 text-xs text-center text-gray-800 truncate" title={description}>{description}</p>
 
       <div className="text-center">
         <p className="font-bold text-gray-600 text-xl">{price > 0 ? `$${price}` : "Gratis"}</p>
@@ -54,12 +68,7 @@ const ProductCard = ({
 
     {
       quantity > 0 ?
-        <div className="flex items-center w-full justify-between space-x-1">
-          <div className="flex justify-around w-1/3 items-center text-lg">
-            <p className="text-bold text-gray-800 text-lg cursor-pointer hover:text-main">-</p>
-            <p>1</p>
-            <p className="text-bold text-gray-800 text-lg cursor-pointer hover:text-main">+</p>
-          </div>
+        <div className="flex items-center w-full justify-center space-x-1">
           <Button className="w-2/3 rounded-lg" color="main" onClick={onBuy}>{buttonText ? buttonText : "Comprar"}</Button>
         </div>
         :

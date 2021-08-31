@@ -6,8 +6,12 @@ import Checkbox from "./Checkbox";
 import StarIcon from "./StarIcon";
 import CustomSelect from "./CustomSelect";
 import reactDom from "react-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 const ProductModal = ({ product, closeModal, isStore }) => {
+
+  const { user } = useAuth();
 
   const [quantity, setQuantity] = useState(1);
   const [featuresPrice, setfeaturesPrice] = useState(0);
@@ -18,7 +22,6 @@ const ProductModal = ({ product, closeModal, isStore }) => {
   const modalRef = useRef();
 
   useEffect(() => {
-    console.log(product);
     if (product) {
       setTotal(product?.price);
     }
@@ -124,11 +127,13 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                   className="w-4 h-4 text-yellow-400"
                 />)}
               </div>
-              <h1 className="text-2xl text-center mb-2 text-gray-600 font-bold">
-                {product.name}
-              </h1>
+              <Link to={`/products/${product.slug}`}>
+                <h1 className="text-2xl text-center mb-2 text-gray-600 font-bold hover:text-main">
+                  {product.name?.length > 100 ? `${product.name?.slice(0, 100)}...` : product?.name}
+                </h1>
+              </Link>
               <p className="text-center text-gray-500">
-                {product?.shortDescription}
+                {product?.shortDescription?.length > 100 ? `${product?.shortDescription?.slice(0, 100)}...` : product?.shortDescription}
               </p>
             </div>
             <div style={{ maxHeight: "250px" }} className="overflow-y-auto h-[50%] custom-scrollbar">
@@ -218,11 +223,18 @@ const ProductModal = ({ product, closeModal, isStore }) => {
               <button onClick={() => { closeModal() }} className="rounded px-4 py-2 text-main transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
                 Cancelar
               </button>
-              <button onClick={handleAccept} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+              {
+                user ?
+                  <button onClick={handleAccept} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+                    <p>{isStore ? "añadir al carrito" : "Comprar"}</p>
+                    <IoCart />
+                  </button>
+                  :
+                  <Link to={"/login"} className="rounded capitalize px-4 py-2 cursor-pointer text-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
+                    iniciar sesión
+                  </Link>
+              }
 
-                <p>{isStore ? "añadir al carrito" : "Comprar"}</p>
-                <IoCart />
-              </button>
             </div>
           </div>
         </div>

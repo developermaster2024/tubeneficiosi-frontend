@@ -1,5 +1,5 @@
 const CategorySectionCard = ({ text, imgSrc }) => {
-  return <a href="/#" className="group w-full relative rounded-md overflow-hidden bg-full shadow-md">
+  return <a href="/#" className="group w-1/2 relative rounded-md overflow-hidden bg-full shadow-md">
     <div className="absolute inset-0">
       <img
         src={imgSrc}
@@ -8,7 +8,7 @@ const CategorySectionCard = ({ text, imgSrc }) => {
       />
     </div>
     <div className="absolute inset-0 bg-black opacity-30" />
-    <div className="flex justify-center items-center absolute inset-0 text-white text-5xl font-semibold">
+    <div className="flex justify-center capitalize items-center absolute inset-0 text-white text-5xl font-semibold">
       {text}
     </div>
   </a>;

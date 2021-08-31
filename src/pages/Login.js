@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import useAxios from "../hooks/useAxios";
 import { isEmail, isRequired, validate } from '../helpers/formsValidations';
+import SystemInfo from '../util/SystemInfo';
 
 const Login = () => {
 
@@ -67,21 +68,21 @@ const Login = () => {
   }
 
   return (
-    <div className="py-24">
+    <div>
       <div className="flex justify-between">
-        <div className="w-1/2 bg-gray-50 text-center">
-          <img className="m-auto w-1/3 text-gray-700" src={BeneficioSiLogo} alt="" />
+        <div className="w-1/2 bg-gray-50 text-center py-8">
+          <img className="m-auto w-1/3 text-gray-700" src={SystemInfo.logo} alt="" />
           <h1 className="my-8 font-bold text-[70px]">
-            Beneficio si
+            {SystemInfo.name}
           </h1>
-          <p className="text-lg text-gray-500">La mejor plataforma para hacer crecer tus ventas.</p>
+          <p className="text-lg text-gray-500">{SystemInfo.description}</p>
           <img src={DeliveryMotion} alt="" />
         </div>
         <div className="w-1/2 bg-white p-6 relative">
           <div className="flex justify-right items-center">
-            <img className="ml-auto w-1/12 text-gray-700" src={BeneficioSiLogo} alt="" />
+            <img className="ml-auto w-1/12 text-gray-700" src={SystemInfo.logo} alt="" />
             <h1 className="ml-2 font-bold text-[40px]">
-              Beneficio si
+              {SystemInfo.name}
             </h1>
           </div>
           <div className="border-b border-main mt-24">
@@ -134,9 +135,6 @@ const Login = () => {
               ¿No tienes una cuenta? <Link to="/register" className="text-main hover:text-gray-800 transition duration-500"> Registrate </Link>
             </p>
           </form>
-          <div className="text-sm mt-auto absolute bottom-2 right-2">
-            © 2019 <span className="text-main">Beneficio Si.</span> Todos los derechos reservados. Diseñado por Jeyver Vegas
-          </div>
         </div>
       </div>
     </div>

@@ -40,8 +40,8 @@ const RenderItem = ({ category, onChange, value, name, ...rest }) => {
                     className="focus:ring-main rounded-full mx-2 text-main w-4"
                     type="checkbox"
                     name={name}
-                    value={value}
-                    checked={value.includes(category.id)}
+                    value={category?.id}
+                    checked={value?.includes(category.id)}
                     onChange={e => { onChange({ target: { name: name, value: category.id, type: "checkbox" } }) }} />
                 <label htmlFor={`category-${category.id}`}>
                     {category.name}

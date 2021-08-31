@@ -19,7 +19,6 @@ const App = () => {
     if (customLoading.show) {
       id = setInterval(() => {
         setDots((oldDots) => oldDots.length < 3 ? oldDots + "." : "");
-        console.log("me ejecute");
       }, 500);
     }
 

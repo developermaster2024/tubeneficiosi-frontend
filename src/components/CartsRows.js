@@ -95,25 +95,30 @@ const CartsRows = ({ cartValue, ...rest }) => {
                 'hidden': !showDetails
             }])}>
                 {
-                    cart?.cartItems?.map((product, i2) =>
-                        <div key={i2} className="flex items-center my-4 text-gray-400 text-md">
-                            <div className="w-2/12">
-                                <IoCloseSharp onClick={() => { deleteCartItem(product) }} className="cursor-pointer hover:text-main m-auto text-4xl text-main" />
+                    cart?.cartItems?.length > 0 ?
+                        cart?.cartItems?.map((product, i2) =>
+                            <div key={i2} className="flex items-center my-4 text-gray-400 text-md">
+                                <div className="w-2/12">
+                                    <IoCloseSharp onClick={() => { deleteCartItem(product) }} className="cursor-pointer hover:text-main m-auto text-4xl text-main" />
+                                </div>
+                                <div className="w-3/12">
+                                    <p>{product.productName}</p>
+                                </div>
+                                <div className="w-3/12">
+                                    <img className="h-20 w-20 m-auto rounded" src={`${process.env.REACT_APP_API_URL}/${product.productImage}`} alt="" />
+                                </div>
+                                <div className="w-2/12 text-lg">
+                                    {product.quantity}
+                                </div>
+                                <div className="w-2/12 text-lg">
+                                    ${product.productPrice}
+                                </div>
                             </div>
-                            <div className="w-3/12">
-                                <p>{product.productName}</p>
-                            </div>
-                            <div className="w-3/12">
-                                <img className="h-20 w-20 m-auto rounded" src={`${process.env.REACT_APP_API_URL}/${product.productImage}`} alt="" />
-                            </div>
-                            <div className="w-2/12 text-lg">
-                                {product.quantity}
-                            </div>
-                            <div className="w-2/12 text-lg">
-                                ${product.productPrice}
-                            </div>
+                        )
+                        :
+                        <div className="text-center text-red-500 text-xl mt-8">
+                            El carrito esta vacio.
                         </div>
-                    )
                 }
             </div>
         </div>

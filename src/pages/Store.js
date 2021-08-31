@@ -34,7 +34,7 @@ const Store = () => {
 
   const params = useParams();
 
-  const { setLoading, setCustomAlert } = useAuth();
+  const { setLoading, setCustomAlert, user } = useAuth();
 
   const [storeInfo, setStoreInfo] = useState({ phoneNumber: "", shortDescription: "", instagram: "", facebook: "", whatsapp: "" });
 
@@ -58,7 +58,14 @@ const Store = () => {
 
   const [{ tags, error: errorTags, loading: loadingTags }, getTags] = useTags({ params: { storeCategoryId: store?.storeCategory?.id }, options: { useCache: false, manual: true } });
 
-  const [{ data: cartData, error: cartError, loading: cartLoading }, getCart] = useAxios({ url: `/carts/stores/${store?.storeId}`, params: { isProcessed: "false" } }, { manual: true, useCache: false });
+  const [{ data: cartData, error: cartError, loading: cartLoading }, getCart] = useAxios({
+    url: `/carts/stores/${store?.storeId}`,
+    params: {
+      isProcessed: "false",
+      isExpired: "false",
+      isDirectPurchase: "false"
+    }
+  }, { manual: true, useCache: false });
 
   const [isInGridView, setIsInGridView] = useState(true);
 
@@ -107,7 +114,6 @@ const Store = () => {
     }
 
     if (cartError) {
-      console.log(cartError)
       setLoading?.({ show: false, message: "" });
       if (cartError?.response?.data.message !== "Carrito no encontrado") {
         setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
@@ -118,19 +124,15 @@ const Store = () => {
   useEffect(() => {
     if (store) {
 
-      console.log(store);
-
       const { id, userStatus, storeCategory, storeProfile, ...rest } = store;
       const { banner, logo, frontImage, videoUrl, ...rest2 } = storeProfile;
 
       if (videoUrl && validURL(videoUrl)) {
-        console.log(videoUrl);
         var url_string = videoUrl; //window.location.href
         var url = new URL(url_string);
         var v = url.searchParams.get("v");
         setVideoPreview(`https://www.youtube.com/embed/${v}`);
       }
-
       setStoreInfo({
         phoneNumber: store.phoneNumber,
         shortDescription: store.storeProfile.shortDescription,
@@ -148,11 +150,15 @@ const Store = () => {
 
       getCategoriesStores();
       getTags();
-      getCart();
+
+      if (user) {
+        getCart();
+      }
     }
-  }, [store]);
+  }, [store, user]);
 
   useEffect(() => {
+
     getProducts({
       params: {
         ...filters,
@@ -165,7 +171,6 @@ const Store = () => {
   }, [filters]);
 
   const handleChange = (e) => {
-
     if (e.target.type === "checkbox") {
       const value = filters[e.target.name].includes(Number(e.target.value));
       if (value) {
@@ -173,14 +178,16 @@ const Store = () => {
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
-            [e.target.name]: newValues
+            [e.target.name]: newValues,
+            page: 1
           }
         });
       } else {
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
-            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]]
+            [e.target.name]: [...filters[e.target.name], Number(e.target.value)],
+            page: 1
           }
         });
       }
@@ -214,8 +221,8 @@ const Store = () => {
     <div>
       <Swiper
         navigation
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
+        onSlideChange={() => null}
+        onSwiper={(swiper) => null}
         className="bg-red-500 z-auto"
       >
         <SwiperSlide className="w-full relative">

@@ -92,27 +92,35 @@ const Products = () => {
       const value = filters[e.target.name].includes(Number(e.target.value));
       if (value) {
         const newValues = filters[e.target.name].filter(n => n !== Number(e.target.value));
-
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
-            [e.target.name]: newValues
+            [e.target.name]: newValues,
+            page: 1
           }
         });
       } else {
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
-            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]]
+            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]],
+            page: 1
           }
         });
       }
       return;
     }
     setFilters((oldFilters) => {
+      if (e.target.name !== "page") {
+        return {
+          ...oldFilters,
+          [e.target.name]: e.target.value,
+          page: 1
+        }
+      }
       return {
         ...oldFilters,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       }
     })
   }
@@ -201,16 +209,14 @@ const Products = () => {
 
             <ul className="max-h-40 overflow-y-auto text-gray-800 space-y-2">
               {tags?.map((tag) => <li key={tag.id}>
-                <li>
-                  <Checkbox
-                    onChange={handleChange}
-                    name="tagIds"
-                    value={tag.id}
-                    checked={filters.tagIds.includes(tag.id)}
-                    id={`${tag.name}-${tag.id}`}
-                    label={tag.name}
-                  />
-                </li>
+                <Checkbox
+                  onChange={handleChange}
+                  name="tagIds"
+                  value={tag.id}
+                  checked={filters.tagIds.includes(tag.id)}
+                  id={`${tag.name}-${tag.id}`}
+                  label={tag.name}
+                />
               </li>)}
             </ul>
           </div>}

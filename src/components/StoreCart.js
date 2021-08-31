@@ -15,8 +15,6 @@ const StoreCart = (props) => {
 
   const { show, closeCart, cart, onChangeCart } = props;
 
-  console.log(cart);
-
   const [productToDelete, setProductToDelete] = useState(null);
 
   const [{ data: deleteData, error: deleteError, loading: deleteLoading }, deleteProductCart] = useAxios({ url: `/carts/${cart?.id}/cart-items/${productToDelete?.id}`, method: "DELETE" }, { useCache: false, manual: true });

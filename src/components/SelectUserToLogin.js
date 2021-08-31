@@ -7,11 +7,9 @@ import { IoStorefrontSharp } from "react-icons/io5";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoCheckmarkCircleSharp } from "react-icons/io5";
 
-//Imagenes
-import BeneficioSiLogo from '../assets/images/logo.jpg';
-
 //
 import { useHistory } from 'react-router-dom';
+import SystemInfo from "../util/SystemInfo";
 
 const SelectUserToLogin = (props) => {
 
@@ -50,10 +48,10 @@ const SelectUserToLogin = (props) => {
         className={clsx('m-auto w-1/2 bg-white rounded relative p-4 animate__animated animate__fadeInUp', {
           'hidden': !show
         })}>
-        <IoIosCloseCircleOutline onClick={closeModal} className="absolute -top-4 -right-4 text-4xl cursor-pointer text-main"></IoIosCloseCircleOutline>
+        <IoIosCloseCircleOutline onClick={closeModal} className="absolute -top-4 -right-4 text-4xl cursor-pointer text-main" />
         <div className="flex items-center">
-          <img src={BeneficioSiLogo} className="w-1/12" alt="" />
-          <p className="text-gray-800 text-lg ml-4 font-bold">BeneficioSi</p>
+          <img src={SystemInfo.logo} className="w-1/12" alt="" />
+          <p className="text-gray-800 text-lg ml-4 font-bold">{SystemInfo.name}</p>
         </div>
 
         <h1 className="text-center text-gray-700 text-bold text-2xl my-5">Por favor selecciona el tipo de usuario:</h1>

@@ -93,25 +93,33 @@ const Stores = () => {
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
-            [e.target.name]: newValues
+            [e.target.name]: newValues,
+            page: 1
           }
         });
       } else {
         setFilters((oldFilters) => {
           return {
             ...oldFilters,
-            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]]
+            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]],
+            page: 1
           }
         });
       }
       return;
     }
 
-
     setFilters((oldFilters) => {
+      if (e.target.name !== "page") {
+        return {
+          ...oldFilters,
+          [e.target.name]: e.target.value,
+          page: 1
+        }
+      }
       return {
         ...oldFilters,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       }
     })
   }

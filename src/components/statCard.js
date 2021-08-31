@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Link } from "react-router-dom";
 
-const StatCard = ({ icon, iconColor = 'primary', value, title, link }) => {
+const StatCard = ({ icon, iconColor = 'primary', value, title, link, loading }) => {
   const Icon = icon;
 
   return <Link to={link}>
@@ -18,7 +18,12 @@ const StatCard = ({ icon, iconColor = 'primary', value, title, link }) => {
         </div>
 
         <div className="text-right break-words w-1/2 text-gray-500">
-          <p className="text-4xl font-bold">{value}</p>
+          {
+            loading ?
+              <p className="ml-auto h-10 w-10 custom-skeleton"></p>
+              :
+              <p className="text-4xl font-bold">{value}</p>
+          }
           <p className="text-md">{title}</p>
         </div>
       </div>

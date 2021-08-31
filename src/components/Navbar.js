@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import logo from '../assets/images/logo.jpg';
 import { useAuth } from '../contexts/AuthContext';
 import SelectUserToLogin from './SelectUserToLogin';
 import { IoLogOut } from "react-icons/io5"; import useCategories from '../hooks/useCategories';
-;
+import SystemInfo from "../util/SystemInfo";
+
 
 
 const Navbar = () => {
@@ -42,8 +42,8 @@ const Navbar = () => {
         <div className="flex items-center h-full">
           <Link to="/">
             <img
-              src={logo}
-              alt="BeneficioSi"
+              src={SystemInfo.logo}
+              alt={SystemInfo.name}
               className="inline-block h-9 rounded-lg"
             />
           </Link>

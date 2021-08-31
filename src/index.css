@@ -76,4 +76,17 @@
   }
 }
 
+.custom-skeleton {
+  animation: custom-skelenton 1s linear infinite alternate;
+}
+
+@keyframes custom-skelenton {
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
 @tailwind utilities;
