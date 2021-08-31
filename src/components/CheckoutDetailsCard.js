@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IoTrashSharp } from "react-icons/io5";
+import { IoTrashSharp, IoLocationSharp } from "react-icons/io5";
 import useAxios from "../hooks/useAxios";
 import clsx from "clsx";
 import { useAuth } from "../contexts/AuthContext";
@@ -87,14 +87,20 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                     </div>
                     :
                     <>
-                        <div className="bg-white justify-between p-4 rounded mb-4 flex items-center text-gray-500">
-                            <Link className="text-center" to={`/stores/${cart?.store?.slug}`}>
-                                <img className="w-12 h-12 rounded m-auto" src={`${process.env.REACT_APP_API_URL}/${cart?.store?.storeProfile?.logo}`} alt={cart?.store?.name} />
-                                <h3 className="text-xl">{cart?.store?.name}</h3>
-                            </Link>
-                            <Button className="bg-green-500">
-                                Abierta
-                            </Button>
+                        <div className="bg-white  p-4 rounded mb-4  text-gray-500">
+                            <div className="justify-between flex items-center">
+                                <Link className="text-center hover:text-main" to={`/stores/${cart?.store?.slug}`}>
+                                    <img className="w-12 h-12 rounded m-auto" src={`${process.env.REACT_APP_API_URL}/${cart?.store?.storeProfile?.logo}`} alt={cart?.store?.name} />
+                                    <h3 className="text-xl">{cart?.store?.name}</h3>
+                                </Link>
+                                <Button className="bg-green-500">
+                                    Abierta
+                                </Button>
+                            </div>
+                            <div className="flex items-center space-x-2 mt-2">
+                                <IoLocationSharp className="text-4xl" />
+                                <p>{cart?.store?.address}</p>
+                            </div>
                         </div>
                         <div className="bg-white rounded p-8">
                             {

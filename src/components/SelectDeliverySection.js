@@ -4,6 +4,7 @@ import {
     IoRocketSharp,
     IoStorefrontSharp
 } from "react-icons/io5";
+import { Link } from "react-router-dom";
 import useDeliveryMethods from "../hooks/useDeliveryMethods";
 import useProfileAddress from "../hooks/useProfileAddress";
 import Button from "./Button";
@@ -84,9 +85,11 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
                                 <div>
                                     <h2 className="text-lg text-gray-500 font-bold">¿En cual dirección quieres recibir el envio?</h2>
                                     <div className="text-right my-4">
-                                        <Button className="bg-main transition duration-500 hover:bg-white hover:text-main">
-                                            Agregar una nueva direccion
-                                        </Button>
+                                        <Link to={"/my-account/address/new"}>
+                                            <Button className="bg-main transition duration-500 hover:bg-white hover:text-main">
+                                                Agregar una nueva direccion
+                                            </Button>
+                                        </Link>
                                     </div>
                                     <div className="flex items-center justify-around flex-wrap">
                                         {profileAddress.map((address, i) =>
