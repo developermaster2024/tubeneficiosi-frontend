@@ -6,8 +6,6 @@ const OrdersTable = (props) => {
 
   const { orders, className, values, onFiltersChange, options, onClearFilters } = props;
 
-  console.log(orders);
-
   return (
     <div className={className}>
       <div className="flex w-full items-center font-bold">
@@ -68,7 +66,7 @@ const OrdersTable = (props) => {
           orders?.length > 0 ?
             orders.map((order, i) => {
               return (
-                <OrdersRows key={order} orderValue={order} />
+                <OrdersRows key={i} orderValue={order} />
               )
             }
             )

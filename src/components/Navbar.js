@@ -1,22 +1,76 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import SelectUserToLogin from './SelectUserToLogin';
-import { IoLogOut } from "react-icons/io5"; import useCategories from '../hooks/useCategories';
+import { IoLogOut, IoPersonCircleSharp, IoNotificationsSharp } from "react-icons/io5";
+import useCategories from '../hooks/useCategories';
 import SystemInfo from "../util/SystemInfo";
-
+import io from 'socket.io-client';
+import useNotifications from "../hooks/useNotifications";
+import NotificationsList from './NotificationsList';
+import clsx from 'clsx';
 
 
 const Navbar = () => {
 
+  const modalRef = useRef();
+
   const history = useHistory();
+
+  const { user, setAuthInfo, setLoading, setCustomAlert } = useAuth();
 
   const [show, setShow] = useState(false);
 
-  const { user, setAuthInfo } = useAuth();
+  const [open, setOpen] = useState(false);
+
   const [searchData, setSearchData] = useState({ storeCategoryId: "", search: "" })
 
   const [{ categories, error: errorCategories, loading: categoriesLoading }, getCategories] = useCategories();
+
+  const [{ notifications: newNotifications, error: notificationsError, loading: notificationsLoading }, getNotifications] = useNotifications({ options: { manual: true, useCache: false } });
+  const [notificationInterface, setNotificationInterface] = useState(io(`${process.env.REACT_APP_API_URL}`, { transports: ['websocket'] }));
+
+  const [notifications, setNotification] = useState([]);
+
+  useEffect(() => {
+    console.log(newNotifications);
+    setNotification((oldNotifications) => {
+      return [...oldNotifications, ...newNotifications]
+    });
+  }, [newNotifications]);
+
+  useEffect(() => {
+    if (user && notificationInterface) {
+      notificationInterface.on(`user.${user?.id}`, handleNotification);
+      getNotifications();
+    }
+  }, [user, notificationInterface]);
+
+  useEffect(() => {
+    if (notificationsError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${notificationsError?.response?.status === 400 ? notificationsError?.response?.data.message[0] : notificationsError?.response?.data.message}.`, severity: "error" });
+    }
+  }, [notificationsError]);
+
+
+  useEffect(() => {
+    const listener = (e) => {
+      if (e.target !== modalRef?.current && !modalRef?.current?.contains(e.target) && open) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener("click", listener);
+
+    return () => window.removeEventListener('click', listener);
+  }, [open])
+
+  const handleNotification = (notification) => {
+    setNotification((oldNotifications) => {
+      return [notification, ...oldNotifications];
+    })
+  }
 
   const handleClick = () => {
     setAuthInfo({ isAuthenticated: false, user: null, token: null });
@@ -36,6 +90,10 @@ const Navbar = () => {
     })
   }
 
+  const toggleOpen = () => {
+    setOpen((oldOpen) => !oldOpen);
+  }
+
   return <>
     <div className="h-14 bg-gray-800 text-white">
       <div className="container h-full">
@@ -49,7 +107,7 @@ const Navbar = () => {
           </Link>
 
 
-          <form className="flex items-center px-10 space-x-2 flex-grow" onSubmit={handleSubmit}>
+          <form className="flex items-center px-10 space-x-4 flex-grow" onSubmit={handleSubmit}>
             <select
               name="storeCategoryId"
               value={searchData.storeCategoryId}
@@ -76,29 +134,35 @@ const Navbar = () => {
 
           <div className="flex items-center">
             <nav className="space-x-5 mr-5">
-              <Link to="/products">Comprar</Link>
-              <a href="/#">Ayuda</a>
+              <Link className="hover:text-main" to="/products">Comprar</Link>
+              <a className="hover:text-main" href="/#">Ayuda</a>
             </nav>
             {
               user ?
-                <div className="flex">
-                  <Link className="flex items-center uppercase" to={"/my-account"}>
-                    {user.name}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </Link>
-                  <button onClick={handleClick} className="ml-4 flex hover:text-main transition duration-500 focus:outline-none">
+                <div className="flex space-x-6 items-center">
+                  <div className="flex items-center space-x-4 relative">
+                    <Link className="flex items-center uppercase space-x-1 hover:text-main" to={"/my-account"}>
+                      <p>{user.name}</p>
+                      <IoPersonCircleSharp className="text-xl" />
+                    </Link>
+                    <button onClick={toggleOpen} className={clsx(["text-xl p-3 rounded-full relative transition duration-300 hover:bg-main hover:text-main hover:bg-opacity-50"], {
+                      'text-main bg-main bg-opacity-50': open
+                    })}>
+                      <IoNotificationsSharp />
+                    </button>
+                    <NotificationsList open={open} ref={modalRef} onClose={() => { setOpen(false) }} />
+                  </div>
+
+                  <button onClick={handleClick} className="flex hover:text-main transition duration-500 focus:outline-none">
                     Cerrar Sesión
                     <IoLogOut className="text-xl ml-2" />
                   </button>
+
                 </div>
 
                 :
                 <button onClick={() => { setShow(true) }} className="inline-flex items-center justify-center px-3 py-2 space-x-2 leading-4 border border-white rounded">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                  <IoPersonCircleSharp className="text-xl" />
                   <span>Ingresar</span>
                 </button>
             }

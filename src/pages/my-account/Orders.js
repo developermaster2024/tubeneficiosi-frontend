@@ -36,11 +36,6 @@ const MyAccountOrders = () => {
   }, [ordersLoading]);
 
   useEffect(() => {
-    console.log(orders);
-  }, [orders])
-
-
-  useEffect(() => {
 
     if (ordersError) {
       setLoading?.({ show: false, message: "" });
