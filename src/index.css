@@ -89,4 +89,14 @@
   }
 }
 
+.notificationRow {
+  transition: all 0.3s;
+}
+
+.notificationRow:hover {
+  /* background: rgba(0, 0, 0, 0.1); */
+  transform: scale(0.98);
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.2);
+}
+
 @tailwind utilities;

@@ -31,6 +31,20 @@ const Navbar = () => {
   const [notificationInterface, setNotificationInterface] = useState(io(`${process.env.REACT_APP_API_URL}`, { transports: ['websocket'] }));
 
   const [notifications, setNotification] = useState([]);
+  const [notificationsNumber, setNotificationsNumber] = useState(0);
+
+  useEffect(() => {
+    setNotificationsNumber(notifications.length);
+    console.log(notifications);
+  }, [notifications]);
+
+  useEffect(() => {
+    if (notificationsNumber > 0) {
+      document.title = `(${notificationsNumber}) ${SystemInfo.name}`
+    } else {
+      document.title = `${SystemInfo.name}`
+    }
+  }, [notificationsNumber])
 
   useEffect(() => {
     console.log(newNotifications);
@@ -53,6 +67,10 @@ const Navbar = () => {
         setOpen(false);
       }
     };
+
+    if (!open) {
+      setNotificationsNumber(0);
+    }
 
     window.addEventListener("click", listener);
 
@@ -141,9 +159,17 @@ const Navbar = () => {
                     <button onClick={toggleOpen} className={clsx(["text-xl p-3 rounded-full relative transition duration-300 hover:bg-main hover:text-main hover:bg-opacity-50"], {
                       'text-main bg-main bg-opacity-50': open
                     })}>
+                      {
+                        notifications?.length > 0 && notificationsNumber > 0 ?
+                          <span style={{ right: notificationsNumber.toString().length === 1 ? -5 : notificationsNumber.toString().length === 2 ? -7 : -10, top: -7 }} className="bg-main text-sm text-white absolute top-0 rounded-full px-1">
+                            {notificationsNumber}
+                          </span>
+                          :
+                          null
+                      }
                       <IoNotificationsSharp />
                     </button>
-                    <NotificationsList open={open} ref={modalRef} onClose={() => { setOpen(false) }} />
+                    <NotificationsList open={open} notifications={notifications} ref={modalRef} onClose={() => { setOpen(false); setNotificationsNumber(0) }} />
                   </div>
 
                   <button onClick={handleClick} className="flex hover:text-main transition duration-500 focus:outline-none">
