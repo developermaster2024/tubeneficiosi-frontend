@@ -237,10 +237,13 @@ const ProductModal = ({ product, closeModal, isStore }) => {
               </button>
               {
                 user ?
-                  <button onClick={handleAccept} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
-                    <p>{isStore ? "añadir al carrito" : "Comprar"}</p>
-                    <IoCart />
-                  </button>
+                  product?.store?.isOpen ?
+                    <button onClick={handleAccept} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+                      <p>{isStore ? "añadir al carrito" : "Comprar"}</p>
+                      <IoCart />
+                    </button>
+                    :
+                    <div className="text-red-500 px-4 py-2">La tienda esta cerrada actualmente.</div>
                   :
                   <Link to={"/login"} className="rounded capitalize px-4 py-2 cursor-pointer text-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
                     iniciar sesión

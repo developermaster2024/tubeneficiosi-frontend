@@ -1,4 +1,5 @@
 import { IoSendSharp } from "react-icons/io5";
+import { Link } from "react-router-dom";
 import { generateImageUrl } from "../helpers/url";
 
 const QuestionsAnswer = ({
@@ -6,6 +7,7 @@ const QuestionsAnswer = ({
   className,
   ownerImage,
   ownerName,
+  ownerSlug,
   value,
   onChange,
   name = 'question',
@@ -17,10 +19,12 @@ const QuestionsAnswer = ({
   return (
     <div className={className}>
       <h1 className="text-2xl text-gray-800 mb-4">Preguntale a: </h1>
-      <div className="text-2xl text-gray-500 flex items-center mb-4">
-        <img className="h-20 w-20 mr-2 rounded-xl" src={ownerImage} alt={ownerName} />
-        {ownerName}
-      </div>
+      <Link to={`/stores/${ownerSlug}`}>
+        <div className="text-2xl text-gray-500 flex items-center mb-4">
+          <img className="h-20 w-20 mr-2 rounded-xl" src={ownerImage} alt={ownerName} />
+          {ownerName}
+        </div>
+      </Link>
 
       <form onSubmit={onSubmit} className="space-y-1">
         <div className="flex items-center">

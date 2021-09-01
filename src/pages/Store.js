@@ -123,7 +123,7 @@ const Store = () => {
 
   useEffect(() => {
     if (store) {
-
+      console.log(store)
       const { id, userStatus, storeCategory, storeProfile, ...rest } = store;
       const { banner, logo, frontImage, videoUrl, ...rest2 } = storeProfile;
 
@@ -260,7 +260,17 @@ const Store = () => {
         }
       </Swiper>
     </div>
-
+    <div className="mt-4">
+      {store?.isOpen ?
+        <div className="bg-green-500 text-center text-xl py-4 text-white">
+          Abierta
+        </div>
+        :
+        <div className="bg-red-500 text-center text-xl py-4 text-white">
+          Cerrada
+        </div>
+      }
+    </div>
     <Container withMargin className="mb-20">
       <div className="flex justify-between items-start space-x-12">
         <div className="w-3/12">
