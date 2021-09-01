@@ -116,7 +116,7 @@ const Home = () => {
       <div className="flex space-x-4">
         {categories.map((category, index) => <a
           key={index}
-          href="/#"
+          href={`/products?storeCategoryId=${category?.id}`}
           className="
             flex items-center justify-center
             relative w-full py-8

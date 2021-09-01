@@ -46,13 +46,6 @@ const Navbar = () => {
     }
   }, [user, notificationInterface]);
 
-  useEffect(() => {
-    if (notificationsError) {
-      setLoading?.({ show: false, message: "" });
-      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${notificationsError?.response?.status === 400 ? notificationsError?.response?.data.message[0] : notificationsError?.response?.data.message}.`, severity: "error" });
-    }
-  }, [notificationsError]);
-
 
   useEffect(() => {
     const listener = (e) => {

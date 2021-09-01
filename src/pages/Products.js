@@ -22,8 +22,12 @@ import useCategories from "../hooks/useCategories";
 import useTags from "../hooks/useTags";
 import HomeSlider from "../components/HomeSlider";
 import useAds from "../hooks/useAds";
+import { useLocation } from "react-router-dom";
 
 const Products = () => {
+
+  const location = useLocation();
+
   const { setLoading, setCustomAlert } = useAuth();
 
   const [isInGridView, setIsInGridView] = useState(true);
@@ -48,6 +52,15 @@ const Products = () => {
 
   const [{ categories, error: errorCategories }, getCategories] = useCategories();
   const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const storeCategoryId = params.get('storeCategoryId');
+
+    if (storeCategoryId) {
+      handleChange({ target: { name: "storeCategoryIds", value: Number(storeCategoryId), type: "checkbox" } })
+    }
+  }, [location]);
 
   useEffect(() => {
     if (errorBannersAds) {

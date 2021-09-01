@@ -8,7 +8,7 @@ import { IoStorefrontOutline } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 
 
-const StoreHorizontalCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, shortDescription, isFavorite, slug }) => {
+const StoreHorizontalCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, shortDescription, isFavorite, slug, open }) => {
 
   const [favorite, setFavorite] = useState(isFavorite);
 
@@ -42,20 +42,33 @@ const StoreHorizontalCard = ({ cheapestProduct, imgSrc, imgAlt, name, descriptio
           </div>
         </div>
         <div>
-          {
-            favorite ?
-              <IoHeart onClick={() => {
-                setFavorite((actualValue) => {
-                  return !actualValue;
-                })
-              }} className="text-[30px] ml-auto text-main cursor-pointer" />
-              :
-              <IoHeartOutline onClick={() => {
-                setFavorite((actualValue) => {
-                  return !actualValue;
-                })
-              }} className="text-[30px] ml-auto text-gray-600 hover:text-main cursor-pointer" />
-          }
+          <div className="flex items-center">
+            {
+              open ?
+                <Button className="bg-green-500">
+                  Abierta
+                </Button>
+                :
+                <Button className="bg-red-500">
+                  Cerrada
+                </Button>
+            }
+
+            {
+              favorite ?
+                <IoHeart onClick={() => {
+                  setFavorite((actualValue) => {
+                    return !actualValue;
+                  })
+                }} className="text-[30px] ml-auto text-main cursor-pointer" />
+                :
+                <IoHeartOutline onClick={() => {
+                  setFavorite((actualValue) => {
+                    return !actualValue;
+                  })
+                }} className="text-[30px] ml-auto text-gray-600 hover:text-main cursor-pointer" />
+            }
+          </div>
           {
             cheapestProduct?.price ?
               <p className="text-xl font-bold p-4">Desde: ${cheapestProduct.price}</p>

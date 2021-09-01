@@ -2,15 +2,11 @@ import { Link } from "react-router-dom";
 import StarIcon from "./StarIcon";
 import { useState } from 'react';
 import { IoStorefrontOutline, IoLocationSharp, IoHeartOutline, IoHeart, } from "react-icons/io5";
+import Button from "./Button";
 
 
 
-
-
-
-
-
-const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, i, isFavorite, slug }) => {
+const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, i, isFavorite, slug, open }) => {
   const finalImgAlt = imgAlt ?? name;
 
   const [storeSelected, setStoreSelected] = useState(null);
@@ -49,6 +45,19 @@ const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating,
         :
         null
     }
+
+    <div className="text-right">
+      {
+        open ?
+          <Button className="bg-green-500">
+            Abierta
+          </Button>
+          :
+          <Button className="bg-red-500">
+            Cerrada
+          </Button>
+      }
+    </div>
 
     {
       imgSrc ?

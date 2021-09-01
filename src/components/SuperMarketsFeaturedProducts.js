@@ -90,6 +90,7 @@ const SuperMarketsFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
             </div>
 
             <CategorySectionCard
+                categoryId={categoryInfo?.id}
                 text={categoryInfo?.name}
                 imgSrc={`${process.env.REACT_APP_API_URL}${categoryInfo?.imgPath}`}
             />

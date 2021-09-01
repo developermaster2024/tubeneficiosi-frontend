@@ -23,6 +23,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
 
   useEffect(() => {
     if (product) {
+      console.log(product);
       setTotal(product?.price);
     }
   }, [product])
@@ -137,6 +138,17 @@ const ProductModal = ({ product, closeModal, isStore }) => {
               </p>
             </div>
             <div style={{ maxHeight: "250px" }} className="overflow-y-auto h-[50%] custom-scrollbar">
+              <div className="mb-2 flex items-center space-x-2">
+                <p className="text-lg font-bold text-gray-600">Tienda:</p>
+                <Link to={`/stores/${product?.store?.slug}`}>
+                  <div className="flex items-center space-x-2">
+                    {product?.store?.storeProfile?.logo &&
+                      <img className="h-10 w-10 rounded" src={`${process.env.REACT_APP_API_URL}/${product?.store?.storeProfile?.logo}`} alt="" />
+                    }
+                    <p className="text-gray-500">{product?.store?.name}</p>
+                  </div>
+                </Link>
+              </div>
               <div className="mb-2 flex items-center space-x-4">
                 <h3 className="text-lg font-bold text-gray-600">Disponibles:</h3>
                 {
