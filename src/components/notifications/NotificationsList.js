@@ -37,21 +37,24 @@ const NotificationsList = ({ notifications, open, onClose, onScrollEnd, numberOf
         <div {...rest} ref={modalRef} style={{ top: "110%" }} className={clsx(["absolute right-0 z-50 animate__animated animate__fadeInUp"])}>
             <div style={{ height: "70vh", width: 350, overflowY: "auto" }} className="relative text-gray-500 p-2 rounded bg-white shadow-xl custom-scrollbar">
                 <h3 className="text-2xl font-bold">
-                    Notificaciones {numberOfPages}
+                    Notificaciones
                 </h3>
-                <h5 className="ml-4 my-2 text-xl">
-                    Nuevas
-                </h5>
                 {
-                    notifications?.map((notification, i) => {
-                        return (
-                            <NotificationRow
-                                key={i}
-                                ref={i + 1 === notifications.length ? lastNotificationRef : null}
-                                onClick={onClose}
-                                notification={notification} />
-                        )
-                    })
+                    notifications?.length > 0 ?
+
+                        notifications?.map((notification, i) => {
+                            return (
+                                <NotificationRow
+                                    key={i}
+                                    ref={i + 1 === notifications.length ? lastNotificationRef : null}
+                                    onClick={onClose}
+                                    notification={notification} />
+                            )
+                        })
+                        :
+                        <div style={{ margin: "50% 0" }} className="text-center">
+                            No tienes notificaciones actualmente.
+                        </div>
                 }
                 {
                     loading &&
