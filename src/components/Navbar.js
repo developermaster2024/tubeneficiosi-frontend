@@ -1,87 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import SelectUserToLogin from './SelectUserToLogin';
 import { IoLogOut, IoPersonCircleSharp, IoNotificationsSharp } from "react-icons/io5";
 import useCategories from '../hooks/useCategories';
 import SystemInfo from "../util/SystemInfo";
-import io from 'socket.io-client';
-import useNotifications from "../hooks/useNotifications";
-import NotificationsList from './NotificationsList';
-import clsx from 'clsx';
+import NotificationsComponent from './notifications/NotificationsComponent';
 
 
 const Navbar = () => {
 
-  const modalRef = useRef();
-
   const history = useHistory();
 
-  const { user, setAuthInfo, setLoading, setCustomAlert } = useAuth();
+  const { user, setAuthInfo } = useAuth();
 
   const [show, setShow] = useState(false);
-
-  const [open, setOpen] = useState(false);
 
   const [searchData, setSearchData] = useState({ storeCategoryId: "", search: "" })
 
   const [{ categories, error: errorCategories, loading: categoriesLoading }, getCategories] = useCategories();
-
-  const [{ notifications: newNotifications, error: notificationsError, loading: notificationsLoading }, getNotifications] = useNotifications({ options: { manual: true, useCache: false } });
-  const [notificationInterface, setNotificationInterface] = useState(io(`${process.env.REACT_APP_API_URL}`, { transports: ['websocket'] }));
-
-  const [notifications, setNotification] = useState([]);
-  const [notificationsNumber, setNotificationsNumber] = useState(0);
-
-  useEffect(() => {
-    setNotificationsNumber(notifications.length);
-    console.log(notifications);
-  }, [notifications]);
-
-  useEffect(() => {
-    if (notificationsNumber > 0) {
-      document.title = `(${notificationsNumber}) ${SystemInfo.name}`
-    } else {
-      document.title = `${SystemInfo.name}`
-    }
-  }, [notificationsNumber])
-
-  useEffect(() => {
-    console.log(newNotifications);
-    setNotification((oldNotifications) => {
-      return [...oldNotifications, ...newNotifications]
-    });
-  }, [newNotifications]);
-
-  useEffect(() => {
-    if (user && notificationInterface) {
-      notificationInterface.on(`user.${user?.id}`, handleNotification);
-      getNotifications();
-    }
-  }, [user, notificationInterface]);
-
-
-  useEffect(() => {
-    const listener = (e) => {
-      if (e.target !== modalRef?.current && !modalRef?.current?.contains(e.target) && open) {
-        setOpen(false);
-      }
-    };
-
-    if (!open) {
-      setNotificationsNumber(0);
-    }
-
-    window.addEventListener("click", listener);
-
-    return () => window.removeEventListener('click', listener);
-  }, [open])
-
-  const handleNotification = (notification) => {
-    setNotification((oldNotifications) => {
-      return [notification, ...oldNotifications];
-    })
-  }
 
   const handleClick = () => {
     setAuthInfo({ isAuthenticated: false, user: null, token: null });
@@ -99,10 +36,6 @@ const Navbar = () => {
         [e.target.name]: e.target.value
       }
     })
-  }
-
-  const toggleOpen = () => {
-    setOpen((oldOpen) => !oldOpen);
   }
 
   return <>
@@ -156,20 +89,8 @@ const Navbar = () => {
                       <p>{user.name}</p>
                       <IoPersonCircleSharp className="text-xl" />
                     </Link>
-                    <button onClick={toggleOpen} className={clsx(["text-xl p-3 rounded-full relative transition duration-300 hover:bg-main hover:text-main hover:bg-opacity-50"], {
-                      'text-main bg-main bg-opacity-50': open
-                    })}>
-                      {
-                        notifications?.length > 0 && notificationsNumber > 0 ?
-                          <span style={{ right: notificationsNumber.toString().length === 1 ? -5 : notificationsNumber.toString().length === 2 ? -7 : -10, top: -7 }} className="bg-main text-sm text-white absolute top-0 rounded-full px-1">
-                            {notificationsNumber}
-                          </span>
-                          :
-                          null
-                      }
-                      <IoNotificationsSharp />
-                    </button>
-                    <NotificationsList open={open} notifications={notifications} ref={modalRef} onClose={() => { setOpen(false); setNotificationsNumber(0) }} />
+
+                    <NotificationsComponent />
                   </div>
 
                   <button onClick={handleClick} className="flex hover:text-main transition duration-500 focus:outline-none">

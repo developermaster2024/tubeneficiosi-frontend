@@ -10,7 +10,7 @@ const useNotifications = ({ options, axiosConfig } = {}) => {
 
   const [size, setSize] = useState(0);
 
-  const [numberOfPages, setNumberOfPages] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(1);
 
   useEffect(() => {
     if (data) {
