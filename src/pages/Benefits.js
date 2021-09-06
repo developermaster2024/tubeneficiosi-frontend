@@ -9,6 +9,8 @@ import ErrorMsg from "../components/ErrorMsg";
 import useDiscounts from "../hooks/useDiscounts";
 import DiscountStoreCard from "../components/dicounts/DiscountStoreCard";
 import DiscountModal from "../components/dicounts/DiscountModal";
+import useCategories from "../hooks/useCategories";
+import clsx from "clsx";
 
 const Benefits = () => {
 
@@ -17,8 +19,10 @@ const Benefits = () => {
     isActive: true,
     cardIssuerIds: [],
     cardIds: [],
-    perPage: 9
+    perPage: 9,
+    storeCategoryIds: []
   });
+
 
 
   const [cardIssuer, setCardIssuer] = useState(null);
@@ -29,15 +33,18 @@ const Benefits = () => {
 
   const [{ discounts, error: discountsError, loading: discountsLoading, numberOfPages }, getDiscounts] = useDiscounts({ options: { useCache: false, manual: true } });
 
+  const [{ categories, error: categoriesError, loading: categoriesLoading }, getCategories] = useCategories();
+
   useEffect(() => {
     getDiscounts({
       params: {
         ...filters,
         cardIssuerIds: filters.cardIssuerIds.join(","),
-        cardIds: filters.cardIds.join(",")
+        cardIds: filters.cardIds.join(","),
+        storeCategoryIds: filters.storeCategoryIds.join(",")
       }
     })
-  }, [filters, getDiscounts]);
+  }, [filters]);
 
   useEffect(() => {
     handleCard(null);
@@ -45,17 +52,19 @@ const Benefits = () => {
       return {
         ...oldFilters,
         cardIssuerIds: cardIssuer?.id ? [cardIssuer?.id] : [],
-        cardIds: []
+        cardIds: [],
+        page: 1
       }
     })
-  }, [cardIssuer])
+  }, [cardIssuer]);
 
   useEffect(() => {
     setFilters((oldFilters) => {
       return {
         ...oldFilters,
         cardIssuerIds: card ? [] : oldFilters.cardIssuerIds,
-        cardIds: card?.id ? [card?.id] : []
+        cardIds: card?.id ? [card?.id] : [],
+        page: 1
       }
     })
   }, [card]);
@@ -78,6 +87,29 @@ const Benefits = () => {
   }
 
   const handleChange = (e) => {
+    if (e.target.type === "checkbox") {
+      const value = filters[e.target.name].includes(Number(e.target.value));
+      if (value) {
+        const newValues = filters[e.target.name].filter(n => n !== Number(e.target.value));
+        setFilters((oldFilters) => {
+          return {
+            ...oldFilters,
+            [e.target.name]: newValues,
+            page: 1
+          }
+        });
+      } else {
+        setFilters((oldFilters) => {
+          return {
+            ...oldFilters,
+            [e.target.name]: [Number(e.target.value), ...oldFilters[e.target.name]],
+            page: 1
+          }
+        });
+      }
+      return;
+    }
+
     setFilters((oldFilters) => {
       if (e.target.name !== "page") {
         return {
@@ -103,29 +135,23 @@ const Benefits = () => {
       </Container>
 
       <Container className="mt-auto flex space-x-2">
-        {[
-          'Gastronomía',
-          'Farmacias',
-          'Supermercados',
-          'Boliches',
-          'Espectaculos',
-        ].map(categoria => <div
-          key={categoria}
-          className="
-            flex items-center justify-center
-            w-1/5 py-3
-            bg-white hover:bg-main hover:text-white
-            border border-main
-            text-lg font-semibold
-            rounded-md
-            transition
-            cursor-pointer
-          "
-        >
-          {categoria}
-        </div>)}
+
+        {
+          categories.map((category, i) => <div
+            key={i}
+            onClick={() => { handleChange({ target: { name: "storeCategoryIds", value: Number(category?.id), type: "checkbox" } }) }}
+
+            className={
+              clsx(["flex items-center cursor-pointer justify-center w-1/5 py-3 capitalize hover:bg-main hover:text-white border border-main text-lg font-semibold rounded-md transitioncursor-pointer"], {
+                "bg-white": !filters.storeCategoryIds?.includes(category?.id),
+                "bg-main text-white": filters.storeCategoryIds?.includes(category?.id),
+              })
+            }
+          >
+            {category?.name}
+          </div>)}
       </Container>
-    </div>
+    </div >
 
     <Container className="my-10">
       <LeftSidebarLayout
@@ -167,9 +193,12 @@ const Benefits = () => {
                   No hay descuentos
                 </div>
         }
-        <div className="flex w-full justify-center items-center mt-10">
-          <Pagination pages={numberOfPages} activePage={filters.page} onChange={(e) => { handleChange({ target: { name: "page", value: e, type: "number" } }) }}></Pagination>
-        </div>
+        {
+          numberOfPages > 0 &&
+          <div className="flex w-full justify-center items-center mt-10">
+            <Pagination pages={numberOfPages} activePage={filters.page} onChange={(e) => { handleChange({ target: { name: "page", value: e, type: "number" } }) }}></Pagination>
+          </div>
+        }
       </LeftSidebarLayout>
       <DiscountModal discount={discount} onClose={() => { setDiscount(null) }} />
     </Container>
