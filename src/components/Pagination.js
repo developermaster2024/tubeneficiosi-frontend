@@ -62,7 +62,7 @@ const Pagination = (props) => {
     } else {
       setCanBack(false);
     }
-  }, [activePage])
+  }, [activePage, setCanNext, setCanBack, pages])
 
   if (pages === 1) {
     return null;

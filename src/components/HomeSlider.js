@@ -15,7 +15,7 @@ const HomeSlider = ({ banners }) => {
       banners.map((banner, i) => {
         return (
           <SwiperSlide key={banner.id}>
-            <a href={banner.url} target="_blank">
+            <a href={banner.url} target="_blank" rel="noreferrer">
               <img
                 src={`${process.env.REACT_APP_API_URL}/${banner.imgPath}`}
                 alt={`banner-${banner?.store?.name}-${i}`}

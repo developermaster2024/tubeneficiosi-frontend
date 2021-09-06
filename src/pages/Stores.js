@@ -38,7 +38,7 @@ const Stores = () => {
 
   const [{ ads: adsLeftBanners, error: errorLeftBanners }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 8, isActive: "true" } } })
 
-  const [{ stores, total, size, numberOfPages, error, loading }, getStores] = useStores({
+  const [{ stores, total, numberOfPages, error, loading }, getStores] = useStores({
     params: {
       ...filters
     }
@@ -53,7 +53,7 @@ const Stores = () => {
       setLoading({ show: false, message: "" });
       setCanShowLoading(true);
     })
-  }, []);
+  }, [getStores, getCategories, getBannersAds, getLeftAds, setLoading, setCanShowLoading]);
 
   useEffect(() => {
     console.log(stores);
@@ -63,7 +63,7 @@ const Stores = () => {
     if (canShowLoading) {
       setLoading({ show: loading, message: "Cargando tiendas" });
     }
-  }, [loading]);
+  }, [loading, setLoading, canShowLoading]);
 
   useEffect(() => {
     if (error) {
@@ -82,7 +82,7 @@ const Stores = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorLeftBanners?.response?.status === 400 ? errorLeftBanners?.response?.data.message[0] : errorLeftBanners?.response?.data.message}.`, severity: "error" });
     }
-  }, [error, errorCategories, errorBannersAds, errorLeftBanners]);
+  }, [error, errorCategories, errorBannersAds, errorLeftBanners, setLoading, setCustomAlert]);
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
@@ -208,7 +208,7 @@ const Stores = () => {
             adsLeftBanners.map((leftBanner, i) => {
               return (
                 <a href={leftBanner.url} key={i}>
-                  <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} />
+                  <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} alt={`leftBanner-${i}`} />
                 </a>
               )
             })

@@ -20,19 +20,18 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
 
   useEffect(() => {
     setLoading({ show: loading, message: "Añadiendo al carrito." })
-  }, [loading])
+  }, [loading, setLoading])
 
   useEffect(() => {
     if (error) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${error?.response?.status === 400 ? error?.response?.data.message[0] : error?.response?.data.message}.`, severity: "error" });
     }
-  }, [error])
+  }, [error, setLoading, setCustomAlert])
 
   useEffect(() => {
     if (data) {
       if (!isStore) {
-        console.log(data)
         history.push(`/checkout?cartId=${data?.id}`);
         return;
       } else {
@@ -40,7 +39,7 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
         setCustomAlert?.({ show: true, message: `El producto ha sido añadido al carrito exitosamente.`, severity: "success" })
       }
     }
-  }, [data])
+  }, [data, isStore, history, onAddToCard, setCustomAlert])
 
   const handleCloseModal = async (e) => {
     setProductOnModal(null);

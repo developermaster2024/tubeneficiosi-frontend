@@ -1,5 +1,5 @@
 import * as axios from "axios";
-import { deleteAuth, getAuth } from "./auth";
+import { getAuth } from "./auth";
 
 
 const host = process.env.REACT_APP_API_URL;

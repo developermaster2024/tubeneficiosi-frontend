@@ -39,7 +39,7 @@ const Home = () => {
 
   const [{ storeAds, error: errorStoresAds }, getStoreAds] = useStoreAds({ axiosConfig: { params: { isActive: "true" } }, options: { manual: true, useCache: false } });
 
-  const [{ featuredProducts, error: featuredProductError, loading: featuredProductLoading }, getFeaturedProducts] = useFeaturedProducts({ axiosConfig: { params: { isActive: "true" } }, options: { manual: true, useCache: false } });
+  const [{ featuredProducts, error: featuredProductError }, getFeaturedProducts] = useFeaturedProducts({ axiosConfig: { params: { isActive: "true" } }, options: { manual: true, useCache: false } });
 
   const [{ ads, error: adsError }, getAds] = useAds({ axiosConfig: { params: { isActive: "true" } }, options: { manual: true, useCache: false } });
 
@@ -59,7 +59,7 @@ const Home = () => {
     ]).then((values) => {
       setLoading({ show: false, message: "" });
     })
-  }, []);
+  }, [getBusinessInfo, getAppSectionData, getNecessaryInfoData, getBanners, getStoreAds, getFeaturedProducts, getAds, getCategories, setLoading]);
 
   useEffect(() => {
     console.log(categories);
@@ -106,7 +106,7 @@ const Home = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
     }
-  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError, adsError, errorCategories]);
+  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError, adsError, errorCategories, setCustomAlert, setLoading]);
 
   return <>
     <HomeSlider banners={banners} />

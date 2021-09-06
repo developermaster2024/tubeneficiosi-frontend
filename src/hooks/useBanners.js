@@ -1,5 +1,3 @@
-import { AxiosError, AxiosPromise, AxiosRequestConfig } from 'axios';
-import { Options, RefetchOptions } from 'axios-hooks';
 import { useEffect, useState } from 'react';
 import useAxios from './useAxios';
 

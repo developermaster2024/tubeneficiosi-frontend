@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const NotificationRow = forwardRef(({ notification, ...rest }, ref) => {
 
-    const { type, message, id, additionalData, createdAt } = notification;
+    const { type, message, additionalData, createdAt } = notification;
 
     if (type === "ORDER_STATUS_CHANGE" || type === "ORDER_CREATED") {
         return (

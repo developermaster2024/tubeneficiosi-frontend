@@ -17,7 +17,7 @@ const OrderDetails = () => {
 
   const [order, setOrder] = useState(null);
 
-  const [{ data: orderData, error: orderError, loading: orderLoading }, getOrder] = useAxios({ url: `/orders/${params?.id}` }, { useCache: false });
+  const [{ data: orderData, error: orderError, loading: orderLoading }] = useAxios({ url: `/orders/${params?.id}` }, { useCache: false });
 
   const [{ data: updateData, error: updateError }, updateOrder] = useAxios({ url: `/orders/${params?.id}/status`, method: "PUT" }, { manual: true, useCache: false });
 
@@ -27,7 +27,7 @@ const OrderDetails = () => {
       setOrder(updateData);
       setCustomAlert?.({ show: true, message: "La orden ha sido finalizada exitosamente.", severity: "success" });
     }
-  }, [updateData])
+  }, [updateData, setLoading, setOrder, setCustomAlert])
 
   useEffect(() => {
     if (orderError) {
@@ -39,17 +39,17 @@ const OrderDetails = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${updateError?.response?.status === 400 ? updateError?.response?.data.message[0] : updateError?.response?.data.message}.`, severity: "error" });
     }
-  }, [orderError, updateError]);
+  }, [orderError, updateError, setLoading, setCustomAlert]);
 
   useEffect(() => {
     setLoading?.({ show: orderLoading, message: "Obteniendo informacion del pedido" });
-  }, [orderLoading])
+  }, [orderLoading, setLoading])
 
   useEffect(() => {
     if (orderData) {
       setOrder(orderData)
     }
-  }, [orderData]);
+  }, [orderData, setOrder]);
 
   const handlePrint = () => {
     setPrint((oldPrint) => !oldPrint);
@@ -83,15 +83,15 @@ const OrderDetails = () => {
             <p className="my-2">Metodo de Envio: <b>{order?.deliveryMethod?.name ? order?.deliveryMethod?.name : "Retira en tienda."}</b></p>
             {
               order?.deliveryMethod?.imgPath &&
-              <img className="w-12 h-12 rounded" src={`${process.env.REACT_APP_API_URL}/${order?.deliveryMethod?.imgPath}`} />
+              <img className="w-12 h-12 rounded" src={`${process.env.REACT_APP_API_URL}/${order?.deliveryMethod?.imgPath}`} alt={`${order?.deliveryMethod?.name}`} />
             }
           </div>
 
           <div className="flex items-center space-x-2">
             <p className="my-2">Metodo de Pago: <b className="capitalize">{order?.paymentMethod?.name}</b></p>
             {
-              order?.deliveryMethod?.imgPath &&
-              <img className="w-12 h-12 rounded" src={`${process.env.REACT_APP_API_URL}${order?.paymentMethod?.imgPath}`} />
+              order?.paymentMethod?.imgPath &&
+              <img className="w-12 h-12 rounded" src={`${process.env.REACT_APP_API_URL}${order?.paymentMethod?.imgPath}`} alt={order?.paymentMethod?.name} />
             }
           </div>
         </div>

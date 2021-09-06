@@ -18,7 +18,7 @@ const RenderItem = ({ category, onChange, value, name, ...rest }) => {
         if (drop) {
             getChildrenCategories();
         }
-    }, [drop])
+    }, [drop, getChildrenCategories])
 
     const handleClick = async (e) => {
         setDrop((oldDrop) => !oldDrop);
@@ -47,21 +47,28 @@ const RenderItem = ({ category, onChange, value, name, ...rest }) => {
                     {category.name}
                 </label>
             </div>
+
             {
-                loadingChildren ?
-                    <div className="text-center">
-                        Cargando Hijos...
+                error ?
+                    <div className="text-center text-red-500">
+                        Ha ocurrido un error.
+                        <p className="border-b border-red-500 cursor-pointer" onClick={() => { getChildrenCategories({ params: { parentId: category.id } }) }}>Reintentar</p>
                     </div>
                     :
-                    drop ?
-                        childrens.length > 0 ?
-                            <RenderListStoresCategories name={name} value={value} onChange={onChange} categories={childrens} className="pl-4" />
-                            :
-                            <div className="pl-4 text-main">
-                                No tiene Hijos
-                            </div>
+                    loadingChildren ?
+                        <div className="text-center">
+                            Cargando Hijos...
+                        </div>
                         :
-                        null
+                        drop ?
+                            childrens.length > 0 ?
+                                <RenderListStoresCategories name={name} value={value} onChange={onChange} categories={childrens} className="pl-4" />
+                                :
+                                <div className="pl-4 text-main">
+                                    No tiene Hijos
+                                </div>
+                            :
+                            null
             }
         </li>
     )

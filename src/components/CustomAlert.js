@@ -11,14 +11,14 @@ const CustomAlert = ({ severity, message, show, duration, onClose }) => {
         onClose();
       }, duration);
     }
-  }, [show])
+  }, [show, onClose, duration])
 
   return reactDom.createPortal(
     <div className={clsx(["fixed zIndex-50 w-1/4 p-4 left-4 bottom-4 rounded justify-between items-center text-white shadow-2xl animate__animated animate__fadeInUp flex"], {
       'bg-main': !severity,
-      'bg-red-500': severity == "error",
-      'bg-green-500': severity == "success",
-      'bg-orange-500': severity == "info",
+      'bg-red-500': severity === "error",
+      'bg-green-500': severity === "success",
+      'bg-orange-500': severity === "info",
       "hidden": !show
     })}
     >

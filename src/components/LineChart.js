@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
 const LineChart = (props) => {
 
   const { title, values } = props;
 
-  const [series, setSeries] = useState(
+  const [series] = useState(
     [{
       name: "ARS",
       data: values
     }]
   );
 
-  const [options, setOptions] = useState(
+  const [options] = useState(
     {
       chart: {
         height: 350,
@@ -51,7 +51,7 @@ const LineChart = (props) => {
   );
 
   return (
-    <div id="chart" className>
+    <div id="chart">
       <ReactApexChart options={options} series={series} type="line" height={350} />
     </div>
   );

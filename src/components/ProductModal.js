@@ -110,7 +110,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                     <SwiperSlide key={image.id} className="px-10">
                       <img
                         src={generateImageUrl(image?.path)}
-                        alt={`product-image-${product?.store?.name}-${i}`}
+                        alt={`product-${product?.store?.name}-${i}`}
                         className="w-full rounded"
                       />
                     </SwiperSlide>

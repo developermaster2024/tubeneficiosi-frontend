@@ -18,7 +18,7 @@ const MyAccountDashboard = () => {
 
   const { user } = useAuth();
 
-  const [{ total: cartsTotal, error: cartsError, loading: cartsLoading }, getCarts] = useCarts({
+  const [{ total: cartsTotal, loading: cartsLoading }] = useCarts({
     axiosConfig: {
       params: {
         isProcessed: "false",
@@ -28,11 +28,11 @@ const MyAccountDashboard = () => {
     }
   });
 
-  const [{ error: ordersError, loading: ordersLoading, total: ordersTotal }, getOrders] = useOrders();
+  const [{ loading: ordersLoading, total: ordersTotal }] = useOrders();
 
-  const [{ total: addressTotal, error: addressError, loading: addressLoading }, getProfileAddress] = useProfileAddress();
+  const [{ total: addressTotal, loading: addressLoading }] = useProfileAddress();
 
-  const [{ error: questionsError, loading: questionsLoading, total: questionsTotal }, getQuestions] = useQuestions({
+  const [{ loading: questionsLoading, total: questionsTotal }] = useQuestions({
     axiosConfig: {
       params: {
         askedById: user?.id

@@ -11,7 +11,7 @@ const INITIAL_FORM_STATE = {
 
 const PasswordForm = () => {
   const { setLoading, setCustomAlert } = useAuth();
-  
+
   const [formData, setFormData] = useState(INITIAL_FORM_STATE);
 
   const [formErros, setFormErros] = useState({
@@ -20,7 +20,7 @@ const PasswordForm = () => {
     passwordConfirmation: null,
   });
 
-  const [{error: updatePasswordError}, updatePassword] = useAxios({url: '/profile/password', method: 'PUT'}, {manual: true});
+  const [{ error: updatePasswordError }, updatePassword] = useAxios({ url: '/profile/password', method: 'PUT' }, { manual: true });
 
   useEffect(() => {
     if (updatePasswordError) {
@@ -30,8 +30,8 @@ const PasswordForm = () => {
         severity: "error"
       });
     }
-  }, [updatePasswordError]);
-  
+  }, [updatePasswordError, setCustomAlert]);
+
   useEffect(() => {
     setFormErros({
       currentPassword: validate(formData.currentPassword, [
@@ -54,7 +54,7 @@ const PasswordForm = () => {
       [e.target.name]: e.target.value,
     }));
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -68,14 +68,14 @@ const PasswordForm = () => {
     setLoading({ show: true, message: 'Guardando datos' });
 
     try {
-      await updatePassword({data: formData});
+      await updatePassword({ data: formData });
       setCustomAlert({ show: true, message: 'Contraseña actualizada', severity: "success" });
       setFormData(INITIAL_FORM_STATE);
     } finally {
       setLoading({ show: false, message: '' });
     }
   }
-  
+
   return <form onSubmit={handleSubmit} className="bg-white rounded p-5 mb-3">
     <div className="flex">
       <div className="w-4/12 px-2">

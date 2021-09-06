@@ -1,20 +1,96 @@
 import Container from "../components/Container"
 import savings from "../assets/images/alcancia.jpg";
-import tresCepas from '../assets/images/3-cepas.png';
-import fiveAsec from '../assets/images/5asec.png';
-import theKickBack from '../assets/images/thekickback.png';
-import tucson from '../assets/images/tucson.png';
-import vaqueria from '../assets/images/vaqueria.png';
-import zapateriatendencias from '../assets/images/zapateriatendencias.png';
-import zensushi from '../assets/images/zensushi.png';
-import r301 from '../assets/images/r301.png';
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
-import BankExpandableButton from "../components/BankExpandableButton";
 import Pagination from "../components/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import CardIssuersList from "../components/CardIssuersList";
+import useDiscounts from "../hooks/useDiscounts";
+import DiscountStoreCard from "../components/DiscountStoreCard";
+import CardsList from "../components/CardsList";
+import DiscountModal from "../components/DiscountModal";
+import ErrorMsg from "../components/ErrorMsg";
 
 const Benefits = () => {
-  const [activePage, setActivePage] = useState(1);
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    isActive: true,
+    cardIssuerIds: [],
+    cardIds: []
+  });
+
+
+  const [cardIssuer, setCardIssuer] = useState(null);
+
+  const [card, setCard] = useState(null);
+
+  const [discount, setDiscount] = useState(null);
+
+  const [{ discounts, error: discountsError, loading: discountsLoading, numberOfPages }, getDiscounts] = useDiscounts({ options: { useCache: false, manual: true } });
+
+  useEffect(() => {
+    getDiscounts({
+      params: {
+        ...filters,
+        cardIssuerIds: filters.cardIssuerIds.join(","),
+        cardIds: filters.cardIds.join(",")
+      }
+    })
+  }, [filters, getDiscounts]);
+
+  useEffect(() => {
+    handleCard(null);
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        cardIssuerIds: cardIssuer?.id ? [cardIssuer?.id] : [],
+        cardIds: []
+      }
+    })
+  }, [cardIssuer])
+
+  useEffect(() => {
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        cardIssuerIds: card ? [] : oldFilters.cardIssuerIds,
+        cardIds: card?.id ? [card?.id] : []
+      }
+    })
+  }, [card]);
+
+  useEffect(() => {
+    console.log(discounts);
+  }, [discounts]);
+
+  const handleCardIssuer = (cardIssuer) => {
+    setCardIssuer(cardIssuer)
+  }
+
+  const handleCard = (card) => {
+    console.log(card);
+    setCard(card);
+  }
+
+  const handleDiscount = (discount) => {
+    setDiscount(discount);
+  }
+
+  const handleChange = (e) => {
+    setFilters((oldFilters) => {
+      if (e.target.name !== "page") {
+        return {
+          ...oldFilters,
+          [e.target.name]: e.target.value,
+          page: 1
+        }
+      }
+      return {
+        ...oldFilters,
+        [e.target.name]: e.target.value,
+      }
+    })
+  }
 
   return <>
     <div className="h-80 flex flex-col" style={{
@@ -53,45 +129,48 @@ const Benefits = () => {
     <Container className="my-10">
       <LeftSidebarLayout
         leftSide={<div>
-          <h4 className="mb-6 text-center text-xl font-bold">Bancos</h4>
+          <h4 className="mb-2 text-center text-xl font-bold">Bancos</h4>
+          <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
 
-          <div className="space-y-2">
-            {[
-              'Galicia', 'Santander', 'Patagonia', 'Frances', 'HSBC', 'ICBC', 'Comafi', 'Credicoop', 'La pampa', 'Itaú', 'Superville', 'Hipotecario', 'Tarjeta naranja'
-            ].map((banco, i) => <BankExpandableButton key={i} text={banco} />)}
+
+          <div className="mt-8">
+            <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
           </div>
+
         </div>}
       >
-        <div className="grid grid-cols-3 gap-8">
-          {[
-            { imgSrc: tresCepas, imgAlt: '3 cepas', promo: '15%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
-            { imgSrc: fiveAsec, imgAlt: '5 asec', promo: 'Hasta 40%', title: 'De ahorro', subtitle: 'Todos los dias' },
-            { imgSrc: fiveAsec, imgAlt: '5 asec', promo: '15%', title: 'De ahorro', subtitle: 'Todos los jueves' },
-            { imgSrc: theKickBack, imgAlt: 'The kickback', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
-            { imgSrc: tucson, imgAlt: 'Tucson', promo: '25%', title: 'De ahorro', subtitle: 'Todos los dias' },
-            { imgSrc: vaqueria, imgAlt: 'Vaquería', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
-            { imgSrc: zapateriatendencias, imgAlt: 'Zapaterpia tendencias', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jueves' },
-            { imgSrc: zensushi, imgAlt: 'Zen Sushi', promo: '25%', title: 'De ahorro', subtitle: 'Todos los dias' },
-            { imgSrc: r301, imgAlt: 'R301 Jeanswear', promo: '20%', title: 'De ahorro y cuotas', subtitle: 'Todos los jeuves' },
-          ].map((promo, i) => <div
-            className="flex flex-col justify-center items-center p-8 max-w-[300px] bg-white rounded-md shadow hover:shadow-lg transition"
-            key={i}
-          >
-            <img
-              src={promo.imgSrc}
-              alt={promo.imgAlt}
-              className="h-20"
-            />
-
-            <p className="text-orange-500 text-4xl font-semibold my-3">{promo.promo}</p>
-
-            <p className="text-xl leading-none text-gray-600 tracking-tight uppercase">{promo.title}</p>
-
-            <p className="text-xl leading-none text-gray-600 tracking-tight mt-8">{promo.subtitle}</p>
-          </div>)}
+        <div className="my-4 text-3xl text-gray-500 font-bold">
+          Tiendas con descuentos {cardIssuer ? `- Con ${cardIssuer?.name}` : null} {card ? ` - ${card?.name}` : null}
         </div>
-        <Pagination className="mt-6" pages={10} activePage={activePage} onChange={setActivePage} />
+        {
+          discountsError ?
+            <ErrorMsg message="Error al cargar los descuentos. Nuestro equipo ha sido notificado, intente más tarde." />
+            :
+            discountsLoading ?
+              <div style={{ marginTop: 200 }} className="text-center text-gray-500 text-3xl">
+                Cargando descuentos...
+              </div>
+              :
+              discounts.length > 0 ?
+                <div className="grid grid-cols-3 gap-8">
+                  {
+                    discounts.map((promo, i) => {
+                      return (
+                        <DiscountStoreCard key={i} emitDiscount={handleDiscount} discount={promo} />
+                      )
+                    })
+                  }
+                </div>
+                :
+                <div className="text-center text-red-500 text-2xl">
+                  No hay descuentos
+                </div>
+        }
+        <div className="flex w-full justify-center items-center mt-10">
+          <Pagination pages={numberOfPages} activePage={filters.page} onChange={(e) => { handleChange({ target: { name: "page", value: e, type: "number" } }) }}></Pagination>
+        </div>
       </LeftSidebarLayout>
+      <DiscountModal discount={discount} onClose={() => { setDiscount(null) }} />
     </Container>
   </>;
 };

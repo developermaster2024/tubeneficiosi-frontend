@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import SelectUserToLogin from './SelectUserToLogin';
-import { IoLogOut, IoPersonCircleSharp, IoNotificationsSharp } from "react-icons/io5";
+import { IoLogOut, IoPersonCircleSharp } from "react-icons/io5";
 import useCategories from '../hooks/useCategories';
 import SystemInfo from "../util/SystemInfo";
 import NotificationsComponent from './notifications/NotificationsComponent';
@@ -18,7 +18,7 @@ const Navbar = () => {
 
   const [searchData, setSearchData] = useState({ storeCategoryId: "", search: "" })
 
-  const [{ categories, error: errorCategories, loading: categoriesLoading }, getCategories] = useCategories();
+  const [{ categories, error: errorCategories, loading: categoriesLoading }] = useCategories();
 
   const handleClick = () => {
     setAuthInfo({ isAuthenticated: false, user: null, token: null });
@@ -56,6 +56,7 @@ const Navbar = () => {
               name="storeCategoryId"
               value={searchData.storeCategoryId}
               onChange={handleChange}
+              disabled={errorCategories || categoriesLoading ? true : false}
               className="w-40 capitalize rounded border-gray-300 focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 bg-transparent text-sm leading-4"
             >
               <option value="">Seleccione una categoria</option>

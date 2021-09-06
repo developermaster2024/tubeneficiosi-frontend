@@ -26,14 +26,14 @@ const OrdersRows = ({ orderValue, ...rest }) => {
             setOrder(updateData);
             setCustomAlert?.({ show: true, message: "La orden ha sido finalizada exitosamente.", severity: "success" });
         }
-    }, [updateData]);
+    }, [updateData, setLoading, setOrder, setCustomAlert]);
 
     useEffect(() => {
         if (updateError) {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${updateError?.response?.status === 400 ? updateError?.response?.data.message[0] : updateError?.response?.data.message}.`, severity: "error" });
         }
-    }, [updateError]);
+    }, [updateError, setLoading, setCustomAlert]);
 
     const handleAccept = async () => {
         setLoading?.({ show: true, message: "Marcando como recibido." });

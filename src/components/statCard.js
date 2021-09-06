@@ -8,11 +8,11 @@ const StatCard = ({ icon, iconColor = 'primary', value, title, link, loading }) 
     <div className="inline-block">
       <div className="min-w-[250px] m-h-[120px] items-center flex justify-between bg-white p-5 hover:shadow-2xl transition duration-500">
         <div className={clsx('h-full text-2xl w-1/2 flex', {
-          ['text-main']: iconColor === 'primary',
-          ['text-yellow-500']: iconColor === 'info',
-          ['text-green-500']: iconColor === 'success',
-          ['text-red-500']: iconColor === 'warning',
-          ['text-purple-700']: iconColor === 'purple',
+          'text-main': iconColor === 'primary',
+          'text-yellow-500': iconColor === 'info',
+          'text-green-500': iconColor === 'success',
+          'text-red-500': iconColor === 'warning',
+          'text-purple-700': iconColor === 'purple',
         })}>
           <Icon fontSize="inherit" color="inherit" className="m-auto text-[50px]" />
         </div>

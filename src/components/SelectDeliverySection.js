@@ -20,7 +20,7 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
 
     const [{ deliveryMethods, error: deliveryMethodsError, loading: deliveryMethodsLoading }, getDeliveryMethods] = useDeliveryMethods({ axiosConfig: { params: { perPage: 200, addressId: selectedAddress?.id, storeId: storeId } }, options: { manual: true, useCache: false } });
 
-    const [method, setMethod] = useState(false);
+    const [method] = useState(false);
 
     useEffect(() => {
         if (selectedAddress) {
@@ -28,14 +28,14 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
         }
         onChange({ target: { name: "profileAddressId", value: "", type: "text" } });
         setSelectedDeliveryMethod(null);
-    }, [selectedAddress]);
+    }, [selectedAddress, onChange, setSelectedDeliveryMethod]);
 
     useEffect(() => {
         if (selectedDeliveryMethod) {
             return onChange({ target: { name: "deliveryMethodId", value: selectedDeliveryMethod?.id, type: "text" } });
         }
         onChange({ target: { name: "deliveryMethodId", value: "", type: "text" } });
-    }, [selectedDeliveryMethod])
+    }, [selectedDeliveryMethod, onChange])
 
     useEffect(() => {
         if (deliveryMethod) {
@@ -44,13 +44,13 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
         }
         setSelectedAddress(null);
         setSelectedDeliveryMethod(null);
-    }, [deliveryMethod]);
+    }, [deliveryMethod, getProfileAddress, setSelectedAddress, setSelectedDeliveryMethod]);
 
     useEffect(() => {
         if (storeId && selectedAddress && deliveryMethod) {
             getDeliveryMethods({ params: { perPage: 200, addressId: selectedAddress?.id, storeId: storeId } });
         }
-    }, [storeId, selectedAddress, method]);
+    }, [storeId, selectedAddress, method, getDeliveryMethods, deliveryMethod]);
 
     return (
         <div className={className}>
@@ -92,18 +92,25 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
                                         </Link>
                                     </div>
                                     <div className="flex items-center justify-around flex-wrap">
-                                        {profileAddress.map((address, i) =>
-                                            <UserAddressCard
-                                                id={address.id}
-                                                key={i}
-                                                className="m-4 min-h-64 cursor-pointer border hover:shadow-xl relative w-64 bg-white rounded text-gray-500 p-8"
-                                                name={address.name}
-                                                address={address.address}
-                                                latLng={{ latitude: address.latitude, longitude: address.longitude }}
-                                                zipCode={address.zipCode}
-                                                onClick={() => { setSelectedAddress(address) }}
-                                            />
-                                        )}
+                                        {
+                                            error ?
+                                                <div className="text-center w-full text-red-500">
+                                                    Ha ocurrido un error.
+                                                    <p className="border-b border-red-500 cursor-pointer" onClick={() => { getProfileAddress({ params: { perPage: 200 } }) }}>Reintentar</p>
+                                                </div>
+                                                :
+                                                profileAddress.map((address, i) =>
+                                                    <UserAddressCard
+                                                        id={address.id}
+                                                        key={i}
+                                                        className="m-4 min-h-64 cursor-pointer border hover:shadow-xl relative w-64 bg-white rounded text-gray-500 p-8"
+                                                        name={address.name}
+                                                        address={address.address}
+                                                        latLng={{ latitude: address.latitude, longitude: address.longitude }}
+                                                        zipCode={address.zipCode}
+                                                        onClick={() => { setSelectedAddress(address) }}
+                                                    />
+                                                )}
                                     </div>
                                 </div>
                                 :
@@ -146,6 +153,14 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
             {
                 deliveryMethod && selectedAddress && storeId && !values.deliveryMethodId &&
                 <div className="animate__animated animate__fadeInUp mt-6">
+                    {
+                        deliveryMethodsError &&
+                        <div className="text-center w-full text-red-500">
+                            Ha ocurrido un error.
+                            <p className="border-b border-red-500 cursor-pointer" onClick={() => { getDeliveryMethods({ params: { perPage: 200, addressId: selectedAddress?.id, storeId: storeId } }) }}>Reintentar</p>
+                        </div>
+
+                    }
                     {
                         deliveryMethodsLoading ?
                             <div className="text-main">

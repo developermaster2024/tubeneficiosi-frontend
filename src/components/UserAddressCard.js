@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const UserAddressCard = (props) => {
 
-  const { id, name, address, latLng, className, onClick, onDelete } = props;
+  const { id, name, address, className, onClick, onDelete } = props;
 
   return (
     <div className={className} onClick={onClick}>

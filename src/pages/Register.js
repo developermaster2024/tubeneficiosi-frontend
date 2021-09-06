@@ -1,5 +1,4 @@
 //Imagenes
-import BeneficioSiLogo from '../assets/images/logo.jpg';
 import DeliveryMotion from '../assets/images/delivery-motion.gif';
 import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
@@ -35,21 +34,20 @@ const Register = () => {
 
   useEffect(() => {
     setLoading({ show: loading, message: "Creando usuario" })
-  }, [loading]);
+  }, [loading, setLoading]);
 
   useEffect(() => {
     if (error) {
-      console.log(error);
       setCustomAlert({ show: true, message: `${error.response?.status === 400 ? error.response?.data.message[0] : error.response?.data.message}.`, severity: "error" });
     }
-  }, [error]);
+  }, [error, setCustomAlert]);
 
   useEffect(() => {
     if (data) {
       setAuthInfo({ isAuthenticated: true, user: data.user, token: data.accessToken });
       history.push('/my-account');
     }
-  }, [data]);
+  }, [data, setAuthInfo, history]);
 
   useEffect(() => {
     setErrorsForm({

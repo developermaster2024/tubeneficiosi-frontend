@@ -46,7 +46,7 @@ const Checkout = (props) => {
 
   const [{ data: deliveryCostData, error: deliveryCostError, loading: deliveryCostLoading }, getDeliveryCost] = useAxios({ url: "/delivery-methods/calculate-cost", method: "POST" }, { manual: true, useCache: false });
 
-  const [{ data: createCheckoutData, error: createCheckoutError, loading: createCheckoutLoading }, createCheckout] = useAxios({ url: "/orders", method: "POST" }, { manual: true, useCache: false });
+  const [{ data: createCheckoutData, error: createCheckoutError }, createCheckout] = useAxios({ url: "/orders", method: "POST" }, { manual: true, useCache: false });
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -71,13 +71,13 @@ const Checkout = (props) => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${createCheckoutError?.response?.status === 400 ? createCheckoutError?.response?.data.message[0] : createCheckoutError?.response?.data.message}.`, severity: "error" });
     }
-  }, [deliveryCostError, createCheckoutError]);
+  }, [deliveryCostError, createCheckoutError, setLoading, setCustomAlert]);
 
   useEffect(() => {
     if (deliveryCostData) {
       setDeliveryCost(deliveryMethod ? deliveryCostData.cost : 0);
     }
-  }, [deliveryCostData]);
+  }, [deliveryCostData, setDeliveryCost, deliveryMethod]);
 
 
 
@@ -96,7 +96,7 @@ const Checkout = (props) => {
         getDeliveryCost({ data: { ...rest } });
       }
     }
-  }, [errorsForm]);
+  }, [errorsForm, checkoutData, getDeliveryCost]);
 
   useEffect(() => {
     setErrorsForm({
@@ -121,7 +121,7 @@ const Checkout = (props) => {
         null,
       totalTransfer: checkoutData?.bankTransfers.length > 0 && (cartSubTotal + Number(deliveryCost)) === checkoutData?.bankTransfers?.reduce((acum, transfer) => acum + Number(transfer.amount), 0) ? null : "El monto de las transferencias no puede estar por encima ni por debajo del total de la orden. Por favor verifique."
     });
-  }, [checkoutData, deliveryMethod]);
+  }, [checkoutData, deliveryMethod, cartSubTotal, deliveryCost]);
 
   useEffect(() => {
     if (!errorsForm.deliveryMethodId && !errorsForm.profileAddressId) {
@@ -140,15 +140,14 @@ const Checkout = (props) => {
         return;
       }
     }
-    console.log(errorsForm);
     setCanBuy(true);
-  }, [errorsForm]);
+  }, [errorsForm, checkoutData]);
 
   useEffect(() => {
     if (createCheckoutData) {
       history.push(`/checkout/${createCheckoutData?.id}`);
     }
-  }, [createCheckoutData]);
+  }, [createCheckoutData, history]);
 
   const handleChange = (e) => {
     setCheckoutData((oldChackoutData) => {

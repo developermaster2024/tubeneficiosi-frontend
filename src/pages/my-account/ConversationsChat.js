@@ -54,7 +54,7 @@ const ConversationsChat = () => {
                 'mb-[100px]': i === (messages.length - 1)
               })}>
                 <div className={clsx(['bg-white w-5/12 p-4 rounded-xl'], {
-                  'ml-auto': message.user.id == 2
+                  'ml-auto': message.user.id === 2
                 })}>
                   <p className="text-main">{message.user.name}</p>
                   <p className="my-2">{message.message}</p>

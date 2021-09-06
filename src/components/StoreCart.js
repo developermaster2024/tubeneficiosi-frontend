@@ -24,24 +24,24 @@ const StoreCart = (props) => {
       setCustomAlert({ show: true, message: "Se ha eliminado el producto exitosamente.", severity: "success" });
       onChangeCart({ ...cart, ...deleteData });
     }
-  }, [deleteData]);
+  }, [deleteData, setCustomAlert, onChangeCart, cart]);
 
   useEffect(() => {
     setLoading({ show: deleteLoading, message: "Eliminando el producto" });
-  }, [deleteLoading]);
+  }, [deleteLoading, setLoading]);
 
   useEffect(() => {
     if (productToDelete) {
       deleteProductCart();
     }
-  }, [productToDelete]);
+  }, [productToDelete, deleteProductCart]);
 
   useEffect(() => {
     if (deleteError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${deleteError?.response?.status === 400 ? deleteError?.response?.data.message[0] : deleteError?.response?.data.message}.`, severity: "cartError" });
     }
-  }, [deleteError]);
+  }, [deleteError, setLoading, setCustomAlert]);
 
   const handleDelete = (product) => {
     setProductToDelete(product);

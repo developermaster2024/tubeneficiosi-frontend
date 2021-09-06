@@ -1,8 +1,6 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { generateImageUrl } from "../helpers/url";
-import Button from "./Button";
 
 const FeaturedStores = ({ storesAds }) => {
 

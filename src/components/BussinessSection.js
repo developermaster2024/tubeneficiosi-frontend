@@ -59,6 +59,7 @@ const BussinessSection = ({ businessSectionData }) => {
                         <a
                             href={item.button.url}
                             target="_blank"
+                            rel="noreferrer"
                             className="inline-flex items-center justify-center
                                 mt-auto px-6 py-4 space-x-2
                                 leading-4

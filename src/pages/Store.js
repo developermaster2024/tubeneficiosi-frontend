@@ -43,9 +43,9 @@ const Store = () => {
   const [filters, setFilters] = useState({ page: 1, categoryIds: [], rating: [], tagIds: [], perPage: 12, storeId: "" });
   const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" });
 
-  const [{ data: store, error: storeError, loading: loadingStore }, getStore] = useAxios({ url: `/stores/${params?.slug}` }, { useCache: false });
+  const [{ data: store, error: storeError, loading: loadingStore }] = useAxios({ url: `/stores/${params?.slug}` }, { useCache: false });
 
-  const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({
+  const [{ products, numberOfPages, error, loading }, getProducts] = useProducts({
     params: {
       ...filters
     },
@@ -67,7 +67,7 @@ const Store = () => {
     }
   }, { manual: true, useCache: false });
 
-  const [isInGridView, setIsInGridView] = useState(true);
+  const [isInGridView] = useState(true);
 
   const [favorite, setFavorite] = useState(false);
 
@@ -79,7 +79,7 @@ const Store = () => {
 
   useEffect(() => {
     setLoading({ show: loadingStore, message: "Cargando Informacion de la tienda." })
-  }, [loadingStore]);
+  }, [loadingStore, setLoading]);
 
   useEffect(() => {
     if (cartData) {
@@ -119,13 +119,12 @@ const Store = () => {
         setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
       }
     }
-  }, [error, errorCategoriesStores, storeError, errorTags, cartError]);
+  }, [error, errorCategoriesStores, storeError, errorTags, cartError, setLoading, setCustomAlert]);
 
   useEffect(() => {
     if (store) {
-      console.log(store)
-      const { id, userStatus, storeCategory, storeProfile, ...rest } = store;
-      const { banner, logo, frontImage, videoUrl, ...rest2 } = storeProfile;
+      const { storeProfile } = store;
+      const { videoUrl } = storeProfile;
 
       if (videoUrl && validURL(videoUrl)) {
         var url_string = videoUrl; //window.location.href
@@ -155,7 +154,7 @@ const Store = () => {
         getCart();
       }
     }
-  }, [store, user]);
+  }, [store, user, getCart, getCategoriesStores, getTags]);
 
   useEffect(() => {
 
@@ -168,7 +167,7 @@ const Store = () => {
         ...priceFilter
       }
     });
-  }, [filters]);
+  }, [filters, getProducts]);
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {

@@ -30,7 +30,7 @@ const SearchResults = () => {
 
     const [storesList, setStoresList] = useState([]);
 
-    const [{ loading: cartLoading, error: cartError, data: cart }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
+    const [{ error: cartError, data: cart }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
 
     const [{ products, total: productsTotal, numberOfPages: productsPages, error: productsError }, getProducts] = useProducts({ axiosConfig: { params: { ...filters, page: productPage } }, options: { manual: true, useCache: false } });
 
@@ -41,7 +41,7 @@ const SearchResults = () => {
             setLoading?.({ show: false, message: "" });
             history.push(`/checkout?cartId=${cart?.id}`);
         }
-    }, [cart]);
+    }, [cart, setLoading, history]);
 
     useEffect(() => {
         setProductsList((oldProductsList) => {
@@ -70,7 +70,7 @@ const SearchResults = () => {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
         }
-    }, [productsError, storesError, cartError]);
+    }, [productsError, storesError, cartError, setLoading, setCustomAlert]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -98,21 +98,21 @@ const SearchResults = () => {
         ]).then((values) => {
             setLoading({ show: false, message: "" });
         })
-    }, [filters]);
+    }, [filters, getProducts, getStores, productPage, setLoading, storePage]);
 
     useEffect(() => {
         setLoading({ show: true, message: "Obteniendo productos" });
         getProducts({ params: { storeCategoryIds: filters.storeCategoryId, name: filters.name, page: productPage } }).then(() => {
             setLoading({ show: false, message: "" });
         })
-    }, [productPage]);
+    }, [productPage, setLoading, getProducts, filters.storeCategoryId, filters.name]);
 
     useEffect(() => {
         setLoading({ show: true, message: "Obteniendo Tiendas" });
         getStores({ params: { ...filters, page: storePage, withCheapestProduct: "true" } }).then(() => {
             setLoading({ show: false, message: "" });
         })
-    }, [storePage]);
+    }, [storePage, setLoading, getStores, filters]);
 
     const [productOnModal, setProductOnModal] = useState(null);
 
@@ -171,7 +171,7 @@ const SearchResults = () => {
                                     {
                                         productsList.map((product, i) => {
                                             return (
-                                                <SwiperSlide>
+                                                <SwiperSlide key={i}>
                                                     <ProductCard
                                                         name={product.name}
                                                         slug={product.slug}
@@ -218,7 +218,7 @@ const SearchResults = () => {
 
                                     storesList.map((store, i) => {
                                         return (
-                                            <SwiperSlide>
+                                            <SwiperSlide key={i}>
                                                 <StoreCard
                                                     imgSrc={store?.storeProfile?.logo ? `${store.storeProfile.logo}` : null}
                                                     imgAlt={store.imgAlt}
@@ -227,6 +227,7 @@ const SearchResults = () => {
                                                     rating={store.rating}
                                                     key={i}
                                                     isFavorite={false}
+                                                    open={store?.isOpen}
                                                     slug={store.slug}
                                                     cheapestProduct={store.cheapestProduct}
                                                 />

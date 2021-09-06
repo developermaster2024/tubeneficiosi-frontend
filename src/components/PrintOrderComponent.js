@@ -8,17 +8,9 @@ import { useEffect } from "react";
 
 const PrintOrderComponent = ({ order, togglePrintMode, print, onFinalizePrint }) => {
 
-    const { setLoading, setCustomAlert } = useAuth();
+    const { setLoading } = useAuth();
 
     const componentRef = useRef();
-
-    useEffect(() => {
-        console.log(print)
-        console.log("hi");
-        if (print) {
-            handlePrint();
-        }
-    }, [print])
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
@@ -50,6 +42,12 @@ const PrintOrderComponent = ({ order, togglePrintMode, print, onFinalizePrint })
           }
       `
     });
+
+    useEffect(() => {
+        if (print) {
+            handlePrint();
+        }
+    }, [print, handlePrint])
 
     return (
         <div className="animate__animated animate__fadeInUp text-gray-500 hidden">

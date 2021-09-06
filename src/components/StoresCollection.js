@@ -31,7 +31,6 @@ const StoresCollection = ({ isInGridView, stores }) => {
         shortDescription={store.shortDescription}
         description={store.description}
         rating={store.rating}
-        key={i}
         isFavorite={false}
         slug={store.slug}
         cheapestProduct={store.cheapestProduct}

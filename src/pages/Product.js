@@ -64,27 +64,27 @@ const Product = () => {
 
   const [{ data: product, loading: productLoading }] = useAxios({ url: `/products/${slug}` });
 
-  const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({ options: { manual: true } });
+  const [{ products }, getProducts] = useProducts({ options: { manual: true } });
 
   const [{ data: questionsData, loading: questionsDataLoading }, fetchQuestions] = useAxios({ url: `/questions` }, { manual: true });
 
-  const [_, createQuestion] = useAxios({ url: '/questions', method: 'POST' }, { manual: true });
+  const [, createQuestion] = useAxios({ url: '/questions', method: 'POST' }, { manual: true });
 
-  const [{ loading: cartLoading, error: cartError, data: cart }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
+  const [{ error: cartError, data: cart }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
 
   useEffect(() => {
     if (cart) {
       setLoading?.({ show: false, message: "" });
       history.push(`/checkout?cartId=${cart?.id}`);
     }
-  }, [cart]);
+  }, [cart, setLoading, history]);
 
   useEffect(() => {
     if (cartError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
     }
-  }, [cartError])
+  }, [cartError, setLoading, setCustomAlert])
 
   useEffect(() => {
     setQuestionsFormErrors({
@@ -96,11 +96,11 @@ const Product = () => {
 
   useEffect(() => {
     setLoading({ show: productLoading, message: 'Cargando' });
-  }, [productLoading]);
+  }, [productLoading, setLoading]);
 
   useEffect(() => {
     setLoading({ show: questionsDataLoading, message: 'Cargando preguntas' });
-  }, [questionsDataLoading]);
+  }, [questionsDataLoading, setLoading]);
 
   useEffect(() => {
     if (product) {
@@ -122,7 +122,7 @@ const Product = () => {
         }
       })
     }
-  }, [fetchQuestions, product]);
+  }, [fetchQuestions, product, getProducts]);
 
   const handleQuestionChange = (e) => {
     setQuestionFormData(prevData => ({

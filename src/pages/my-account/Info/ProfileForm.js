@@ -28,7 +28,7 @@ const ProfileForm = () => {
 
   useEffect(() => {
     setLoading({ show: clientLoading, message: "Obteniendo datos" });
-  }, [clientLoading]);
+  }, [clientLoading, setLoading]);
 
 
 
@@ -66,7 +66,7 @@ const ProfileForm = () => {
         severity: "error"
       });
     }
-  }, [updateProfileError]);
+  }, [updateProfileError, setCustomAlert]);
 
   const handleChange = (e) => {
     setFormData(currentFormData => ({

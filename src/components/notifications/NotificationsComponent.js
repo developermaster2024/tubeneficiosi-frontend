@@ -17,17 +17,19 @@ const NotificationsComponent = () => {
 
     const [filters, setFilters] = useState({ page: 1, sort: "createdAt,DESC" });
 
-    const [{ notifications: oldNotifications, numberOfPages, error, loading, total }, getNotifications] = useNotifications({ options: { manual: true, useCache: false }, axiosConfig: { params: { ...filters } } });
+    const [{ notifications: oldNotifications, numberOfPages, error, loading }, getNotifications] = useNotifications({ options: { manual: true, useCache: false }, axiosConfig: { params: { ...filters } } });
     const [{ data: seenNotificationsData }, notificationsMarkAsSeen] = useAxios({ url: "/notifications/mark-all-as-seen", method: "DELETE" }, { manual: true, useCache: false });
-    const [notificationInterface, setNotificationInterface] = useState(io(`${process.env.REACT_APP_API_URL}`, { transports: ['websocket'] }));
+    const [notificationInterface] = useState(io(`${process.env.REACT_APP_API_URL}`, { transports: ['websocket'] }));
 
     const [notifications, setNotification] = useState([]);
     const [notificationsNumber, setNotificationsNumber] = useState(0);
 
     useEffect(() => {
-        console.log(total);
+        if (seenNotificationsData) {
+            console.log(seenNotificationsData);
+        }
         setNotificationsNumber(notifications?.filter((notification) => !notification?.userToNotification?.seen).length);
-    }, [notifications]);
+    }, [notifications, setNotificationsNumber, seenNotificationsData]);
 
     useEffect(() => {
         if (notificationsNumber > 0) {
@@ -49,11 +51,11 @@ const NotificationsComponent = () => {
             notificationInterface.on(`user.${user?.id}`, handleNotification);
             getNotifications({ params: { ...filters } });
         }
-    }, [user, notificationInterface]);
+    }, [user, notificationInterface, getNotifications, filters]);
 
     useEffect(() => {
         getNotifications({ params: { ...filters } });
-    }, [filters])
+    }, [filters, getNotifications])
 
     const handleNotification = (notification) => {
         setNotification((oldNotificationsActual) => {
@@ -84,6 +86,10 @@ const NotificationsComponent = () => {
         }
     }
 
+    const handleRetry = () => {
+        getNotifications();
+    }
+
     return (
         <>
 
@@ -101,6 +107,8 @@ const NotificationsComponent = () => {
                 <IoNotificationsSharp />
             </button>
             <NotificationsList
+                retry={handleRetry}
+                error={error}
                 page={filters.page}
                 numberOfPages={numberOfPages}
                 loading={loading}

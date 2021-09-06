@@ -1,5 +1,4 @@
 //Imagenes
-import BeneficioSiLogo from '../assets/images/logo.jpg';
 import DeliveryMotion from '../assets/images/delivery-motion.gif';
 import { Link, useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -25,22 +24,21 @@ const Login = () => {
 
   useEffect(() => {
     setLoading({ show: loading, message: "Iniciando Sesión" });
-  }, [loading]);
+  }, [loading, setLoading]);
 
 
   useEffect(() => {
     if (error) {
-      console.log(error);
       setCustomAlert({ show: true, message: `${error.response?.status === 400 ? error.response?.data.message[0] : error.response?.data.message}.`, severity: "error" });
     }
-  }, [error]);
+  }, [error, setCustomAlert]);
 
   useEffect(() => {
     if (data) {
       setAuthInfo({ isAuthenticated: true, user: data.user, token: data.accessToken });
       history.push('/my-account');
     }
-  }, [data]);
+  }, [data, setAuthInfo, history]);
 
   useEffect(() => {
     setErrorsForm({
@@ -52,7 +50,7 @@ const Login = () => {
         { validator: isRequired, errorMessage: "la contraseña es Obligatoria." },
       ])
     })
-  }, [loginInfo])
+  }, [loginInfo, setErrorsForm])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -96,7 +94,7 @@ const Login = () => {
               <h2 className="text-gray-600 font-bold">
                 E-Mail Address
               </h2>
-              <input name="email" onChange={handleChange} className="rounded w-full mt-1" type="text" placeholder="Correo Electronico" />
+              <input name="email" autoComplete="email" onChange={handleChange} className="rounded w-full mt-1" type="text" placeholder="Correo Electronico" />
               {
                 errorsForm.email ?
                   <p className="text-sm mt-2 text-red-500">{errorsForm.email}</p>
@@ -109,7 +107,7 @@ const Login = () => {
               <h2 className="text-gray-600 font-bold">
                 Password
               </h2>
-              <input name="password" onChange={handleChange} className="rounded w-full mt-1" type="password" placeholder="Password" />
+              <input name="password" autoComplete="current-password" onChange={handleChange} className="rounded w-full mt-1" type="password" placeholder="Password" />
               {
                 errorsForm.password ?
                   <p className="text-sm mt-2 text-red-500">{errorsForm.password}</p>
@@ -124,7 +122,7 @@ const Login = () => {
               </button>
             </div>
 
-            <Link>
+            <Link to={`/forgot-password`}>
               <p className="text-center mt-4 text-lg text-main hover:text-gray-800 transition duration-500">
                 ¿He olvidado mi contraseña?
               </p>

@@ -37,7 +37,7 @@ const Map = ({ searchBox, onClick, markers, options }) => {
                 zoom: options.zoom,
             }))
         }
-    }, [mapApi, mapRef.current]);
+    }, [mapApi, mapRef, setMap, options.center, options.zoom]);
 
     useEffect(() => {
         if (mapApi && searchRef.current) {
@@ -48,22 +48,17 @@ const Map = ({ searchBox, onClick, markers, options }) => {
             }));
 
         }
-    }, [mapApi, searchRef.current])
+    }, [mapApi, searchRef])
 
     useEffect(() => {
         if (autoCompleteInput) {
             autoCompleteInput.addListener("place_changed", () => {
                 const { geometry, formatted_address } = autoCompleteInput.getPlace();
-                const position = {
-                    lat: geometry.location.lat(),
-                    lng: geometry.location.lng(),
-                };
-
                 searchBox.onChange({ target: { value: formatted_address, name: searchBox.name, type: "text" } });
                 onClick({ lat: geometry.location.lat(), lng: geometry.location.lng() });
             });
         }
-    }, [autoCompleteInput])
+    }, [autoCompleteInput, searchBox, onClick])
 
 
     useEffect(() => {
@@ -79,15 +74,15 @@ const Map = ({ searchBox, onClick, markers, options }) => {
                 onClick({ lat: e.latLng.lat(), lng: e.latLng.lng() });
             })
         }
-    }, [map]);
+    }, [map, onClick]);
 
     useEffect(() => {
         if (markers && mapApi && map) {
-            actualMarkers.map((actualMarker, i) => {
-                actualMarker.setMap(null);
+            actualMarkers?.forEach((actualMarker, i) => {
+                actualMarker?.setMap(null);
             });
             setActualMarkers([]);
-            markers.map((marker, i) => {
+            markers?.forEach((marker, i) => {
                 let newMarker = new mapApi.maps.Marker({
                     animation: mapApi.maps.Animation.DROP,
                     position: new mapApi.maps.LatLng(marker.lat, marker.lng)
@@ -96,7 +91,7 @@ const Map = ({ searchBox, onClick, markers, options }) => {
                 setActualMarkers([...actualMarkers, newMarker]);
             });
         }
-    }, [markers, mapApi, map]);
+    }, [markers, mapApi, map, actualMarkers]);
 
 
     return (

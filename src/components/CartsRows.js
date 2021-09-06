@@ -23,30 +23,30 @@ const CartsRows = ({ cartValue, ...rest }) => {
             setCart(deleteData);
             setCustomAlert({ show: true, message: "Se ha eliminado el item exitosamente.", severity: "success" });
         }
-    }, [deleteData]);
+    }, [deleteData, setLoading, setCart, setCustomAlert]);
 
     useEffect(() => {
         if (deleteError) {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${deleteError?.response?.status === 400 ? deleteError?.response?.data.message[0] : deleteError?.response?.data.message}.`, severity: "error" });
         }
-    }, [deleteError]);
+    }, [deleteError, setLoading, setCustomAlert]);
 
     useEffect(() => {
         setLoading({ show: deleteLoading, message: "Eliminando item del carrito." })
-    }, [deleteLoading])
+    }, [deleteLoading, setLoading])
 
     useEffect(() => {
         if (cartValue) {
             setCart(cartValue);
         }
-    }, [cartValue]);
+    }, [cartValue, setCart]);
 
     useEffect(() => {
         if (itemToDelete) {
             deleteItem();
         }
-    }, [itemToDelete]);
+    }, [itemToDelete, deleteItem]);
 
     const toggleShowDetails = () => {
         setShowDetails((oldShowDetails) => !oldShowDetails);

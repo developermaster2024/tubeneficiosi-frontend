@@ -27,13 +27,13 @@ const MyAccountOrders = () => {
 
   const [{ orders, error: ordersError, loading: ordersLoading, numberOfPages }, getOrders] = useOrders({ axiosConfig: { params: { ...filters } } });
 
-  const [{ payMethods, error: payMethodsError, loading: payMethodsLoading }, getPayMethods] = usePayMethods();
+  const [{ payMethods, error: payMethodsError }] = usePayMethods();
 
-  const [{ ordersStatuses, error: ordersStatusesError, loading: ordersStatusesLoading }, getOrdersStatuses] = useOrdersStatuses();
+  const [{ ordersStatuses, error: ordersStatusesError }] = useOrdersStatuses();
 
   useEffect(() => {
     setLoading({ show: ordersLoading, message: "Obteniendo tus pedidos" });
-  }, [ordersLoading]);
+  }, [ordersLoading, setLoading]);
 
   useEffect(() => {
 
@@ -51,12 +51,12 @@ const MyAccountOrders = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${ordersStatusesError?.response?.status === 400 ? ordersStatusesError?.response?.data.message[0] : ordersStatusesError?.response?.data.message}.`, severity: "error" });
     }
-  }, [ordersError, payMethodsError, ordersStatusesError]);
+  }, [ordersError, payMethodsError, ordersStatusesError, setLoading, setCustomAlert]);
 
 
   useEffect(() => {
     getOrders();
-  }, [filters])
+  }, [filters, getOrders])
 
   const handleChange = (e) => {
     setFilters((oldFilters) => {

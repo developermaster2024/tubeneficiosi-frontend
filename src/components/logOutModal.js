@@ -7,15 +7,11 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 //Imagenes
 import BeneficioSiLogo from '../assets/images/logo.jpg';
 
-//
-import { useHistory } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
 
 const LogOutModal = (props) => {
 
-  const history = useHistory();
-
-  const { auth, setAuthInfo } = useAuth();
+  const { setAuthInfo } = useAuth();
 
   const { show, setShow } = props;
 

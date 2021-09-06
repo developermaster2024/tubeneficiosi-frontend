@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { IoChatboxEllipsesOutline, IoChevronDownSharp, IoChevronUp, IoArrowRedoSharp, IoCheckmarkCircleSharp } from "react-icons/io5";
+import { IoChatboxEllipsesOutline, IoChevronDownSharp, IoChevronUp, IoCheckmarkCircleSharp } from "react-icons/io5";
 import { useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import useQuestions from "../../hooks/useQuestions";
@@ -27,10 +27,6 @@ const MyAccountConversations = () => {
 
   const { setLoading, setCustomAlert, user } = useAuth();
 
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
-
-  const [show, setShow] = useState(false);
-
   const [showAnswer, setShowAnswer] = useState(null);
 
   const [activeTab, setActiveTab] = useState(1);
@@ -40,7 +36,7 @@ const MyAccountConversations = () => {
     askedById: user?.id
   });
 
-  const [{ questions, numberOfPages, error, loading }, getQuestions] = useQuestions({
+  const [{ questions, numberOfPages, error, loading }] = useQuestions({
     axiosConfig: {
       params: {
         ...filters
@@ -53,7 +49,7 @@ const MyAccountConversations = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${error?.response?.status === 400 ? error?.response?.data.message[0] : error?.response?.data.message}.`, severity: "error" });
     }
-  }, [error]);
+  }, [error, setLoading, setCustomAlert]);
 
   useEffect(() => {
     console.log(questions);
@@ -61,7 +57,7 @@ const MyAccountConversations = () => {
 
   useEffect(() => {
     setLoading({ show: loading, message: "Cargando preguntas" })
-  }, [loading])
+  }, [loading, setLoading])
 
 
   const handleShowAnswer = (i) => {
@@ -133,7 +129,7 @@ const MyAccountConversations = () => {
                           </div>
                           <div className="text-right">
                             <img className="ml-auto rounded-full w-16 h-16 shadow-lg" src={`${process.env.REACT_APP_API_URL}/${question?.product?.store?.storeProfile?.logo}`} alt="" />
-                            <a target="_blank" className="text-blue-500" href={`${process.env.REACT_APP_HOST}stores/${question?.product?.store?.slug}`}>{question?.product?.store?.name}</a>
+                            <a target="_blank" rel="noreferrer" className="text-blue-500" href={`${process.env.REACT_APP_HOST}stores/${question?.product?.store?.slug}`}>{question?.product?.store?.name}</a>
                           </div>
                         </div>
                       </div>

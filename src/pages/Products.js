@@ -40,27 +40,18 @@ const Products = () => {
     cardDiscount: null,
   });
   const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" });
-  const [{ products, total, numberOfPages, size, error, loading }, getProducts] = useProducts({
+  const [{ products, total, numberOfPages, error, loading }, getProducts] = useProducts({
     params: {
       ...filters
     }
   });
 
-  const [{ ads: adsBanners, error: errorBannersAds, loading: loadingBannersAds }, getBannersAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5, isActive: "true" } } })
+  const [{ ads: adsBanners, error: errorBannersAds, loading: loadingBannersAds }] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5, isActive: "true" } } })
 
-  const [{ ads: adsLeftBanners, error: errorLeftBanners, loading: loadingLeftBannersAds }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5, isActive: "true" } } })
+  const [{ ads: adsLeftBanners, error: errorLeftBanners, loading: loadingLeftBannersAds }] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5, isActive: "true" } } })
 
-  const [{ categories, error: errorCategories }, getCategories] = useCategories();
+  const [{ categories, error: errorCategories }] = useCategories();
   const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const storeCategoryId = params.get('storeCategoryId');
-
-    if (storeCategoryId) {
-      handleChange({ target: { name: "storeCategoryIds", value: Number(storeCategoryId), type: "checkbox" } })
-    }
-  }, [location]);
 
   useEffect(() => {
     if (errorBannersAds) {
@@ -75,19 +66,28 @@ const Products = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
     }
-  }, [errorBannersAds, errorCategories, errorLeftBanners])
+  }, [errorBannersAds, errorCategories, errorLeftBanners, setLoading, setCustomAlert])
 
   useEffect(() => {
     setLoading({ show: loading, message: "Cargando" });
-  }, [loading]);
+  }, [loading, setLoading]);
 
   useEffect(() => {
     setLoading({ show: loadingBannersAds, message: "Obteniendo Banners" });
-  }, [loadingBannersAds]);
+  }, [loadingBannersAds, setLoading]);
 
   useEffect(() => {
     setLoading({ show: loadingLeftBannersAds, message: "Cargando publicidades" });
-  }, [loadingLeftBannersAds]);
+  }, [loadingLeftBannersAds, setLoading]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const storeCategoryId = params.get('storeCategoryId');
+
+    if (storeCategoryId) {
+      handleChange({ target: { name: "storeCategoryIds", value: Number(storeCategoryId), type: "checkbox" } })
+    }
+  }, [location]);
 
   useEffect(() => {
     getProducts({
@@ -98,7 +98,7 @@ const Products = () => {
         ...priceFilter
       }
     });
-  }, [filters]);
+  }, [filters, getProducts, priceFilter]);
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
@@ -260,7 +260,7 @@ const Products = () => {
             adsLeftBanners.map((leftBanner, i) => {
               return (
                 <a href={leftBanner.url} key={i}>
-                  <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} />
+                  <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} alt={`leftBanner-${i}`} />
                 </a>
               )
             })

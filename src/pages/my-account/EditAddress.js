@@ -30,7 +30,7 @@ const EditAddress = () => {
         longitude: null
     });
 
-    const [{ data: address, error: addressError, loading: addressLoading }, getAddress] = useAxios({ url: `/profile/addresses/${params?.id}` }, { useCache: false });
+    const [{ data: address, error: addressError, loading: addressLoading }] = useAxios({ url: `/profile/addresses/${params?.id}` }, { useCache: false });
 
     const [googleMapsMarkers, setGoogleMapsMarkers] = useState([{ lat: addressData.latitude, lng: addressData.longitude }]);
 
@@ -55,7 +55,7 @@ const EditAddress = () => {
 
     useEffect(() => {
         setLoading({ show: addressLoading, message: "Obteniendo Datos" })
-    }, [addressLoading])
+    }, [addressLoading, setLoading])
 
     useEffect(() => {
         if (updateData) {
@@ -63,7 +63,7 @@ const EditAddress = () => {
             setCustomAlert?.({ show: true, message: `La dirección ha sido creada exitosamente.`, severity: "success" });
             history.push("/my-account/address");
         }
-    }, [updateData]);
+    }, [updateData, setLoading, setCustomAlert, history]);
 
     useEffect(() => {
         if (addressError) {
@@ -74,7 +74,7 @@ const EditAddress = () => {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${updateError?.response?.status === 400 ? updateError?.response?.data.message[0] : updateError?.response?.data.message}.`, severity: "error" });
         }
-    }, [updateError, addressError]);
+    }, [updateError, addressError, setLoading, setCustomAlert]);
 
     useEffect(() => {
         setErrorsForm({

@@ -40,14 +40,14 @@ const CreateAddress = () => {
       setCustomAlert?.({ show: true, message: `La dirección ha sido creada exitosamente.`, severity: "success" });
       history.push("/my-account/address");
     }
-  }, [createData]);
+  }, [createData, setLoading, setCustomAlert, history]);
 
   useEffect(() => {
     if (createError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${createError?.response?.status === 400 ? createError?.response?.data.message[0] : createError?.response?.data.message}.`, severity: "error" });
     }
-  }, [createError]);
+  }, [createError, setLoading, setCustomAlert]);
 
   useEffect(() => {
     setErrorsForm({

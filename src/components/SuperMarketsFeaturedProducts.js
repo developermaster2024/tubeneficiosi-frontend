@@ -20,22 +20,21 @@ const SuperMarketsFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
 
     useEffect(() => {
         setLoading({ show: loading, message: "Añadiendo al carrito." })
-    }, [loading])
+    }, [loading, setLoading])
 
     useEffect(() => {
         if (error) {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${error?.response?.status === 400 ? error?.response?.data.message[0] : error?.response?.data.message}.`, severity: "error" });
         }
-    }, [error])
+    }, [error, setLoading, setCustomAlert])
 
     useEffect(() => {
         if (data) {
-            console.log(data)
             history.push(`/checkout?cartId=${data?.id}`);
             return;
         }
-    }, [data])
+    }, [data, history])
 
     const handleCloseModal = async (e) => {
         setProductOnModal(null);

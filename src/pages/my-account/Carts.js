@@ -7,7 +7,7 @@ import useCarts from "../../hooks/useCarts"
 
 const MyAccountCarts = () => {
 
-  const { setLoading, setCustomAlert } = useAuth();
+  const { setLoading } = useAuth();
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -21,11 +21,11 @@ const MyAccountCarts = () => {
     isDirectPurchase: "false"
   });
 
-  const [{ carts, numberOfPages, error, loading }, getCarts] = useCarts({ axiosConfig: { params: { ...filters } } });
+  const [{ carts, numberOfPages, loading }] = useCarts({ axiosConfig: { params: { ...filters } } });
 
   useEffect(() => {
     setLoading({ show: loading, message: "Obteniendo tus carritos" })
-  }, [loading])
+  }, [loading, setLoading])
 
   const handleChange = (e) => {
     setFilters((oldFilters) => {

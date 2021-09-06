@@ -15,18 +15,18 @@ const CheckoutSuccess = () => {
 
     const [print, setPrint] = useState(false);
 
-    const [{ data: checkout, error: checkoutError, loading: checkoutLoading }, getCheckout] = useAxios({ url: `/orders/${params?.id}` }, { useCache: false });
+    const [{ data: checkout, error: checkoutError, loading: checkoutLoading }] = useAxios({ url: `/orders/${params?.id}` }, { useCache: false });
 
     useEffect(() => {
         if (checkoutError) {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${checkoutError?.response?.status === 400 ? checkoutError?.response?.data.message[0] : checkoutError?.response?.data.message}.`, severity: "error" });
         }
-    }, [checkoutError]);
+    }, [checkoutError, setLoading, setCustomAlert]);
 
     useEffect(() => {
         setLoading?.({ show: checkoutLoading, message: "Obteniendo informacion del pedido" });
-    }, [checkoutLoading])
+    }, [checkoutLoading, setLoading])
 
     useEffect(() => {
         if (checkout) {

@@ -1,5 +1,5 @@
 import AppLayout from './components/AppLayout';
-import { BrowserRouter as Router, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Routes from './Routes';
 import { useAuth } from './contexts/AuthContext';
 import { useEffect, useState } from 'react';

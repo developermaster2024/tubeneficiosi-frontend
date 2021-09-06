@@ -3,7 +3,7 @@ import usePayMethods from "../hooks/usePayMethods";
 import Button from "./Button";
 import CustomInput from "./CustomInput";
 import { IoClose } from "react-icons/io5";
-import { isNumber, isRequired, validate } from "../helpers/formsValidations";
+import { isRequired, validate } from "../helpers/formsValidations";
 
 
 const PayMethodSection = ({ onChange, values, ...rest }) => {
@@ -13,8 +13,6 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
     const [banksAccounts, setBanksAccounts] = useState([]);
 
     const [bankTransfers, setBankTransfers] = useState([]);
-
-    const [bankTransfersTotal, setBankTransfersTotal] = useState(0)
 
     const [selectedBankAccountId, setSelectedBankAccountId] = useState("");
 
@@ -28,7 +26,6 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
     useEffect(() => {
         if (selectedBankAccountId) {
             setBanksAccounts((oldBanksAccounts) => {
-                console.log(oldBanksAccounts.filter((account) => account.id === selectedBankAccountId));
                 return oldBanksAccounts.filter((account) => account.id === selectedBankAccountId);
             })
         }
@@ -37,16 +34,12 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
 
     useEffect(() => {
         onChange({ target: { name: "bankTransfers", value: bankTransfers, type: "custom" } })
-    }, [bankTransfers]);
-
-    useEffect(() => {
-        console.log(bankTransfersTotal);
-    }, [bankTransfersTotal])
+    }, [bankTransfers, onChange]);
 
     useEffect(() => {
         onChange({ target: { value: "", name: "bankAccountId", type: "checkbox" } });
         setSelectedBankAccountId("")
-    }, [values.paymentMethodCode]);
+    }, [values.paymentMethodCode, onChange]);
 
     useEffect(() => {
         setErrorsForm({
@@ -99,7 +92,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
     }
 
     return (
-        <div className="my-6 border-b p-4 animate__animated animate__fadeInUp">
+        <div {...rest} className="my-6 border-b p-4 animate__animated animate__fadeInUp">
             <h2 className="text-2xl mb-4">
                 Seleccione el metodo de pago:
             </h2>
@@ -111,6 +104,14 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                     :
                     <div>
                         <div className="flex items-center justify-between mb-4">
+                            {
+                                error &&
+                                <div className="text-center w-full text-red-500">
+                                    Ha ocurrido un error.
+                                    <p className="border-b border-red-500 cursor-pointer" onClick={() => { getPayMethods() }}>Reintentar</p>
+                                </div>
+                            }
+
                             {
                                 payMethods?.map((payMethod, i) => {
                                     return (

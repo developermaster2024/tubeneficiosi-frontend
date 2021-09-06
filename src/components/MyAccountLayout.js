@@ -7,7 +7,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { IoCartOutline } from "react-icons/io5";
 import { IoLogOutOutline } from "react-icons/io5";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LogOutModal from './logOutModal.js';
 
 
@@ -19,7 +19,7 @@ const MyAccountLayout = ({ children }) => {
 
   useEffect(() => {
     setCurrentPath(window?.location?.pathname);
-  }, [window.location.pathname]);
+  }, [window?.location?.pathname, setCurrentPath]);
 
 
   return (

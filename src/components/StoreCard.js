@@ -19,7 +19,7 @@ const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating,
   >
 
     {
-      storeSelected == `${name} - ${i}` ?
+      storeSelected === `${name} - ${i}` ?
         <div className="absolute p-6 flex h-full w-full bg-white bg-opacity-50 left-0 top-0 z-[9999999999999] animate__animated animate__fadeIn">
           <div className="m-auto flex bg-gray-300 w-full justify-between px-5 py-1 rounded animate__animated animate__fadeInUp animate__faster">
             <Link to={`/stores/${slug}`}>

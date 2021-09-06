@@ -22,11 +22,10 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
         if (cartId) {
             getCart();
         }
-    }, [cartId]);
+    }, [cartId, getCart]);
 
     useEffect(() => {
         if (deleteData !== undefined) {
-            console.log(deleteData);
             setCustomAlert({ show: true, message: "Se ha eliminado el producto exitosamente.", severity: "success" });
             setCart((oldCart) => {
                 return {
@@ -35,17 +34,17 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                 }
             })
         }
-    }, [deleteData])
+    }, [deleteData, setCustomAlert, setCart])
 
     useEffect(() => {
         setLoading({ show: deleteLoading, message: "Eliminando el producto" });
-    }, [deleteLoading]);
+    }, [deleteLoading, setLoading]);
 
     useEffect(() => {
         if (productToDelete) {
             deleteProductCart();
         }
-    }, [productToDelete]);
+    }, [productToDelete, deleteProductCart]);
 
     useEffect(() => {
         if (cartError) {
@@ -57,14 +56,13 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${deleteError?.response?.status === 400 ? deleteError?.response?.data.message[0] : deleteError?.response?.data.message}.`, severity: "cartError" });
         }
-    }, [cartError, deleteError]);
+    }, [cartError, deleteError, setLoading, setCustomAlert]);
 
     useEffect(() => {
         if (cart) {
-            console.log(cart)
             emitCart(cart)
         }
-    }, [cart])
+    }, [cart, emitCart])
 
     useEffect(() => {
         if (data) {
