@@ -12,8 +12,6 @@ import { Link } from "react-router-dom";
 import LocationMarker from "../components/LocationMarker";
 import StoresInMap from "./StoresInMap";
 import CategoryCheckbox from "../components/CategoryCheckbox";
-import { storeDiscounts } from "../util/discounts";
-import { cards } from "../util/cards";
 
 
 import useStores from "../hooks/useStores";
@@ -25,6 +23,7 @@ import StoreDiscountCard from "../components/StoreDiscountCard";
 import RatingsFilter from "../components/RatingsFilter";
 import useAds from "../hooks/useAds";
 import HomeSlider from "../components/HomeSlider";
+import DiscountsSlider from "../components/DiscountsSlider";
 
 const Stores = () => {
 
@@ -182,7 +181,7 @@ const Stores = () => {
           <RatingsFilter />
 
           {/*Cards*/}
-          <div>
+          {/* <div>
             <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
 
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
@@ -194,7 +193,7 @@ const Stores = () => {
                 />
               )}
             </ul>
-          </div>
+          </div> */}
 
           <Button
             color="white"
@@ -216,25 +215,7 @@ const Stores = () => {
         </div>}
       >
         <div className="mb-10">
-          {/*Descuentos*/}
-          <h1 className="text-gray-600 font-semibold text-4xl mb-4">Descuentos</h1>
-          <Swiper
-            navigation
-            style={{ padding: '0 100px' }}
-            onSlideChange={() => { }}
-            autoplay={true}
-            slidesPerView={2}
-            spaceBetween={50}
-            onSwiper={(swiper) => { }}
-          >
-            {
-              storeDiscounts.map((storeDiscount, i) =>
-                <SwiperSlide key={i}>
-                  <StoreDiscountCard storeDiscount={storeDiscount}></StoreDiscountCard>
-                </SwiperSlide>
-              )
-            }
-          </Swiper>
+          <DiscountsSlider slidesPerview={1.5} />
         </div>
 
         {

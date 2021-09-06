@@ -19,7 +19,7 @@ const NotificationsComponent = () => {
 
     const [{ notifications: oldNotifications, numberOfPages, error, loading }, getNotifications] = useNotifications({ options: { manual: true, useCache: false }, axiosConfig: { params: { ...filters } } });
     const [{ data: seenNotificationsData }, notificationsMarkAsSeen] = useAxios({ url: "/notifications/mark-all-as-seen", method: "DELETE" }, { manual: true, useCache: false });
-    const [notificationInterface] = useState(io(`${process.env.REACT_APP_API_URL}`, { transports: ['websocket'] }));
+    //const [notificationInterface] = useState(io(`${process.env.REACT_APP_API_URL}`, { transports: ['websocket'] }));
 
     const [notifications, setNotification] = useState([]);
     const [notificationsNumber, setNotificationsNumber] = useState(0);
@@ -47,11 +47,11 @@ const NotificationsComponent = () => {
     }, [oldNotifications]);
 
     useEffect(() => {
-        if (user && notificationInterface) {
+        /* if (user && notificationInterface) {
             notificationInterface.on(`user.${user?.id}`, handleNotification);
             getNotifications({ params: { ...filters } });
-        }
-    }, [user, notificationInterface, getNotifications, filters]);
+        } */
+    }, [user, getNotifications, filters]);
 
     useEffect(() => {
         getNotifications({ params: { ...filters } });

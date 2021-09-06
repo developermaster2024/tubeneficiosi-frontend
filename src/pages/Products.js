@@ -9,10 +9,8 @@ import LeftSidebarLayout from "../components/LeftSidebarLayout";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
-import { discounts } from "../util/discounts";
 import CategoryCheckbox from "../components/CategoryCheckbox";
 import DiscountsSlider from "../components/DiscountsSlider";
-import { cards } from "../util/cards";
 import { useAuth } from "../contexts/AuthContext";
 import ErrorMsg from "../components/ErrorMsg";
 import RatingsFilter from "../components/RatingsFilter";
@@ -235,7 +233,7 @@ const Products = () => {
           </div>}
 
           {/*Cards*/}
-          <div>
+          {/* <div>
             <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
 
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
@@ -247,7 +245,7 @@ const Products = () => {
                 />
               )}
             </ul>
-          </div>
+          </div> */}
 
           <Button
             color="white"
@@ -268,7 +266,7 @@ const Products = () => {
         </div>}
       >
         <div className="mb-10">
-          <DiscountsSlider discounts={discounts} />
+          <DiscountsSlider />
         </div>
 
         {error

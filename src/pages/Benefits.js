@@ -16,7 +16,8 @@ const Benefits = () => {
     page: 1,
     isActive: true,
     cardIssuerIds: [],
-    cardIds: []
+    cardIds: [],
+    perPage: 9
   });
 
 
@@ -129,7 +130,7 @@ const Benefits = () => {
     <Container className="my-10">
       <LeftSidebarLayout
         leftSide={<div>
-          <h4 className="mb-2 text-center text-xl font-bold">Bancos</h4>
+          <h4 className="mb-2 text-center text-xl font-bold">Bancos y Supermercados</h4>
           <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
 
 

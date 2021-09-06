@@ -5,9 +5,7 @@ import appBg from '../assets/images/app-bg.jpg';
 import HomeSlider from "../components/HomeSlider";
 import SectionHeading from "../components/SectionHeading";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import StoreDiscountCard from '../components/StoreDiscountCard';
 import BankDiscountCard from '../components/BankDiscountCard';
-import { storeDiscounts, bankDiscounts } from '../util/discounts'
 import { useEffect } from "react";
 import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
@@ -24,6 +22,8 @@ import useAds from "../hooks/useAds";
 import ProductsAdsSlider from '../components/ProductsAdsSlider';
 import useCategories from '../hooks/useCategories';
 import BussinessSection from '../components/BussinessSection';
+import HomeBanksDiscountsSlider from '../components/HomeBanksDiscountsSlider';
+import DiscountsSlider from '../components/DiscountsSlider';
 
 const Home = () => {
 
@@ -60,10 +60,6 @@ const Home = () => {
       setLoading({ show: false, message: "" });
     })
   }, [getBusinessInfo, getAppSectionData, getNecessaryInfoData, getBanners, getStoreAds, getFeaturedProducts, getAds, getCategories, setLoading]);
-
-  useEffect(() => {
-    console.log(categories);
-  }, [categories])
 
   useEffect(() => {
 
@@ -190,53 +186,11 @@ const Home = () => {
 
     {/*Descuentos*/}
 
-    <div className="container mt-20">
-      <SectionHeading>Descuentos</SectionHeading>
-    </div>
-
-    <div className="my-20 px-24">
-      <Swiper
-        navigation
-        style={{ padding: '0 100px' }}
-        onSlideChange={() => { }}
-        slidesPerView={3}
-        spaceBetween={50}
-        onSwiper={(swiper) => { }}
-      >
-        {
-          storeDiscounts.map((storeDiscount, i) =>
-            <SwiperSlide key={i}>
-              <StoreDiscountCard storeDiscount={storeDiscount}></StoreDiscountCard>
-            </SwiperSlide>
-          )
-        }
-      </Swiper>
-    </div>
+    <DiscountsSlider showTitle slidesPerview={3} />
 
     {/* BENEFICIOS POR BANCO */}
 
-    <div className="container mt-20">
-      <SectionHeading>Beneficios por banco</SectionHeading>
-    </div>
-
-    <div className="my-20 px-24">
-      <Swiper
-        navigation
-        style={{ padding: '0 100px' }}
-        onSlideChange={() => { }}
-        slidesPerView={2}
-        spaceBetween={50}
-        onSwiper={(swiper) => { }}
-      >
-        {
-          bankDiscounts.map((banckDiscount, i) =>
-            <SwiperSlide key={i}>
-              <BankDiscountCard bankDiscount={banckDiscount} ></BankDiscountCard>
-            </SwiperSlide>
-          )
-        }
-      </Swiper>
-    </div>
+    <HomeBanksDiscountsSlider />
 
 
     <div className="container mt-12">

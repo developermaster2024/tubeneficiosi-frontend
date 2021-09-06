@@ -5,8 +5,6 @@ import Pagination from "../components/Pagination";
 import { useEffect, useState } from "react";
 import ProductsCollection from "../components/ProductsCollection";
 import DiscountsSlider from "../components/DiscountsSlider";
-import { discounts } from "../util/discounts";
-import { cards } from '../util/cards';
 import CategoryCheckbox from "../components/CategoryCheckbox";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
@@ -270,6 +268,8 @@ const Store = () => {
         </div>
       }
     </div>
+
+    <DiscountsSlider storeId={store?.storeId} slidesPerview={3} />
     <Container withMargin className="mb-20">
       <div className="flex justify-between items-start space-x-12">
         <div className="w-3/12">
@@ -320,7 +320,8 @@ const Store = () => {
             name="tagIds"
             className="my-8" />
           {/*Cards*/}
-          <div className="my-8">
+
+          {/* <div className="my-8">
             <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
 
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
@@ -332,7 +333,7 @@ const Store = () => {
                 />
               )}
             </ul>
-          </div>
+          </div> */}
 
           <Button
             color="white"
@@ -346,7 +347,7 @@ const Store = () => {
         <div className="w-9/12">
           <div className="mb-10 flex items-center justify-between">
             <div className="w-9/12">
-              <DiscountsSlider discounts={discounts} />
+
             </div>
 
             {/* Cart and Favorite Button */}
