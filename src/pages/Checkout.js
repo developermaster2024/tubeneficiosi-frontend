@@ -75,9 +75,12 @@ const Checkout = (props) => {
 
   useEffect(() => {
     if (deliveryCostData) {
-      setDeliveryCost(deliveryMethod ? deliveryCostData.cost : 0);
+
+      const { deliveryMethodId, profileAddressId } = checkoutData;
+
+      setDeliveryCost(deliveryMethod && deliveryMethodId && profileAddressId ? deliveryCostData.cost : 0);
     }
-  }, [deliveryCostData]);
+  }, [deliveryCostData, checkoutData]);
 
   useEffect(() => {
     if (
@@ -94,7 +97,7 @@ const Checkout = (props) => {
         getDeliveryCost({ data: { ...rest } });
       }
     }
-  }, [errorsForm, checkoutData, getDeliveryCost, deliveryMethod]);
+  }, [errorsForm.deliveryMethodId, errorsForm.profileAddressId, checkoutData.profileAddressId, checkoutData.deliveryMethodId, deliveryMethod]);
 
   useEffect(() => {
     setErrorsForm((oldErrorsForm) => {
@@ -123,6 +126,18 @@ const Checkout = (props) => {
       }
     });
   }, [checkoutData, deliveryMethod]);
+
+  useEffect(() => {
+    if (!checkoutData.deliveryMethodId || !checkoutData.profileAddressId) {
+      setCheckoutData((oldCheckoutData) => {
+        return {
+          ...oldCheckoutData,
+          paymentMethodCode: "",
+          bankTransfers: [],
+        }
+      })
+    }
+  }, [checkoutData.deliveryMethodId, checkoutData.profileAddressId])
 
   useEffect(() => {
     setCheckoutData((oldCheckoutData) => {
