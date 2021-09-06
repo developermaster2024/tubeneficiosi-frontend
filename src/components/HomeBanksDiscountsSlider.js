@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import useDiscounts from "../hooks/useDiscounts";
-import Button from "./Button";
 import SectionHeading from "./SectionHeading";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import BankDiscountCard from "./BankDiscountCard";
+import useDiscounts from "../hooks/useDiscounts";
+import BankDiscountCard from "./dicounts/BankDiscountCard";
+import Button from "./Button";
 
 const HomeBanksDiscountsSlider = () => {
 
@@ -52,7 +52,7 @@ const HomeBanksDiscountsSlider = () => {
                                     {
                                         discounts.map((banckDiscount, i) =>
                                             <SwiperSlide key={i}>
-                                                <BankDiscountCard bankDiscount={banckDiscount} ></BankDiscountCard>
+                                                <BankDiscountCard bankDiscount={banckDiscount} />
                                             </SwiperSlide>
                                         )
                                     }

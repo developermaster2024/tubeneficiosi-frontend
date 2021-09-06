@@ -11,19 +11,16 @@ import StoresCollection from "../components/StoresCollection";
 import { Link } from "react-router-dom";
 import LocationMarker from "../components/LocationMarker";
 import StoresInMap from "./StoresInMap";
-import CategoryCheckbox from "../components/CategoryCheckbox";
 
 
 import useStores from "../hooks/useStores";
 import useCategories from "../hooks/useCategories";
 import { useAuth } from "../contexts/AuthContext";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import StoreDiscountCard from "../components/StoreDiscountCard";
 import RatingsFilter from "../components/RatingsFilter";
 import useAds from "../hooks/useAds";
 import HomeSlider from "../components/HomeSlider";
-import DiscountsSlider from "../components/DiscountsSlider";
+import DiscountsSlider from "../components/dicounts/DiscountsSlider";
 
 const Stores = () => {
 

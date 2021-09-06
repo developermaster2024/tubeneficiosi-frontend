@@ -1,10 +1,10 @@
-import useDiscounts from "../hooks/useDiscounts";
-import SectionHeading from "./SectionHeading";
+import SectionHeading from "../SectionHeading";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import StoreDiscountCard from "./StoreDiscountCard";
-import Button from "./Button";
+import StoreDiscountCard from "../StoreDiscountCard";
+import Button from "../Button";
 import { useEffect, useState } from "react";
 import DiscountModal from "./DiscountModal";
+import useDiscounts from "../../hooks/useDiscounts";
 
 const DiscountsSlider = ({ showTitle, storeId, slidesPerview }) => {
 

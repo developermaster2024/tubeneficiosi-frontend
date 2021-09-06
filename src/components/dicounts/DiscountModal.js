@@ -3,8 +3,8 @@ import { IoClose } from "react-icons/io5";
 import reactDom from "react-dom";
 import { Link } from "react-router-dom";
 import DiscountCardRow from "./DiscountCardRow";
-import Button from "./Button";
 import DiscountCardIssuerRow from "./DiscountCardIssuerRow";
+import Button from "../Button";
 
 const DiscountModal = ({ discount, onClose }) => {
 

@@ -4,8 +4,6 @@ import ChevronRightIcon from "../components/ChevronRightIcon";
 import Pagination from "../components/Pagination";
 import { useEffect, useState } from "react";
 import ProductsCollection from "../components/ProductsCollection";
-import DiscountsSlider from "../components/DiscountsSlider";
-import CategoryCheckbox from "../components/CategoryCheckbox";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import {
   IoHeartOutline,
@@ -27,6 +25,7 @@ import PriceFilter from "../components/PriceFilter";
 import TagsFilter from "../components/TagsFilter";
 import useTags from "../hooks/useTags";
 import { validURL } from "../helpers/formsValidations";
+import DiscountsSlider from "../components/dicounts/DiscountsSlider";
 
 const Store = () => {
 

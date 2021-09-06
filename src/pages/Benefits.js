@@ -4,11 +4,11 @@ import LeftSidebarLayout from "../components/LeftSidebarLayout";
 import Pagination from "../components/Pagination";
 import { useEffect, useState } from "react";
 import CardIssuersList from "../components/CardIssuersList";
-import useDiscounts from "../hooks/useDiscounts";
-import DiscountStoreCard from "../components/DiscountStoreCard";
 import CardsList from "../components/CardsList";
-import DiscountModal from "../components/DiscountModal";
 import ErrorMsg from "../components/ErrorMsg";
+import useDiscounts from "../hooks/useDiscounts";
+import DiscountStoreCard from "../components/dicounts/DiscountStoreCard";
+import DiscountModal from "../components/dicounts/DiscountModal";
 
 const Benefits = () => {
 

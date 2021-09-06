@@ -4,8 +4,6 @@ import rent from '../assets/images/rent.png';
 import appBg from '../assets/images/app-bg.jpg';
 import HomeSlider from "../components/HomeSlider";
 import SectionHeading from "../components/SectionHeading";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import BankDiscountCard from '../components/BankDiscountCard';
 import { useEffect } from "react";
 import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
@@ -23,7 +21,7 @@ import ProductsAdsSlider from '../components/ProductsAdsSlider';
 import useCategories from '../hooks/useCategories';
 import BussinessSection from '../components/BussinessSection';
 import HomeBanksDiscountsSlider from '../components/HomeBanksDiscountsSlider';
-import DiscountsSlider from '../components/DiscountsSlider';
+import DiscountsSlider from '../components/dicounts/DiscountsSlider';
 
 const Home = () => {
 

@@ -9,8 +9,6 @@ import LeftSidebarLayout from "../components/LeftSidebarLayout";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
-import CategoryCheckbox from "../components/CategoryCheckbox";
-import DiscountsSlider from "../components/DiscountsSlider";
 import { useAuth } from "../contexts/AuthContext";
 import ErrorMsg from "../components/ErrorMsg";
 import RatingsFilter from "../components/RatingsFilter";
@@ -21,6 +19,7 @@ import useTags from "../hooks/useTags";
 import HomeSlider from "../components/HomeSlider";
 import useAds from "../hooks/useAds";
 import { useLocation } from "react-router-dom";
+import DiscountsSlider from "../components/dicounts/DiscountsSlider";
 
 const Products = () => {
 
