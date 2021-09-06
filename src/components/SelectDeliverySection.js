@@ -28,14 +28,14 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
         }
         onChange({ target: { name: "profileAddressId", value: "", type: "text" } });
         setSelectedDeliveryMethod(null);
-    }, [selectedAddress, onChange, setSelectedDeliveryMethod]);
+    }, [selectedAddress]);
 
     useEffect(() => {
         if (selectedDeliveryMethod) {
             return onChange({ target: { name: "deliveryMethodId", value: selectedDeliveryMethod?.id, type: "text" } });
         }
         onChange({ target: { name: "deliveryMethodId", value: "", type: "text" } });
-    }, [selectedDeliveryMethod, onChange])
+    }, [selectedDeliveryMethod])
 
     useEffect(() => {
         if (deliveryMethod) {
@@ -44,13 +44,13 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
         }
         setSelectedAddress(null);
         setSelectedDeliveryMethod(null);
-    }, [deliveryMethod, getProfileAddress, setSelectedAddress, setSelectedDeliveryMethod]);
+    }, [deliveryMethod]);
 
     useEffect(() => {
         if (storeId && selectedAddress && deliveryMethod) {
             getDeliveryMethods({ params: { perPage: 200, addressId: selectedAddress?.id, storeId: storeId } });
         }
-    }, [storeId, selectedAddress, method, getDeliveryMethods, deliveryMethod]);
+    }, [storeId, selectedAddress]);
 
     return (
         <div className={className}>

@@ -265,7 +265,7 @@ const Products = () => {
         </div>}
       >
         <div className="mb-10">
-          <DiscountsSlider />
+          <DiscountsSlider slidesPerview={1.5} />
         </div>
 
         {error

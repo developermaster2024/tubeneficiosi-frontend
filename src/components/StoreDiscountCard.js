@@ -39,7 +39,7 @@ const StoreDiscountCard = ({ storeDiscount, storeType, emitDiscount }) => {
                   storeDiscount?.discountType?.code === "dit-001" &&
                   <>
                     <p>En Bancos seleccionados.</p>
-                    <p className="text-main cursor-pointer" onClick={() => { emitDiscount(storeDiscount) }}>
+                    <p className="cursor-pointer" onClick={() => { emitDiscount(storeDiscount) }}>
                       Ver Bancos
                     </p>
                   </>

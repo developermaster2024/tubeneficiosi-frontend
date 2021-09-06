@@ -77,9 +77,7 @@ const Checkout = (props) => {
     if (deliveryCostData) {
       setDeliveryCost(deliveryMethod ? deliveryCostData.cost : 0);
     }
-  }, [deliveryCostData, setDeliveryCost, deliveryMethod]);
-
-
+  }, [deliveryCostData]);
 
   useEffect(() => {
     if (
@@ -96,32 +94,47 @@ const Checkout = (props) => {
         getDeliveryCost({ data: { ...rest } });
       }
     }
-  }, [errorsForm, checkoutData, getDeliveryCost]);
+  }, [errorsForm, checkoutData, getDeliveryCost, deliveryMethod]);
 
   useEffect(() => {
-    setErrorsForm({
-      cartId: validate(checkoutData.cartId, [
-        { validator: isRequired, errorMessage: "El carrito es obligatorio." },
-      ]),
-      paymentMethodCode: validate(checkoutData.paymentMethodCode, [
-        { validator: isRequired, errorMessage: "El metodo de pago es obligatorio." }
-      ]),
-      deliveryMethodId: deliveryMethod ?
-        validate(checkoutData.deliveryMethodId, [
-          { validator: isRequired, errorMessage: "Por favor seleccione una empresa de envios." },
-        ])
-        :
-        null
-      ,
-      profileAddressId: deliveryMethod ?
-        validate(checkoutData.profileAddressId, [
-          { validator: isRequired, errorMessage: "Por favor seleccione una dirección de envio." },
-        ])
-        :
-        null,
-      totalTransfer: checkoutData?.bankTransfers.length > 0 && (cartSubTotal + Number(deliveryCost)) === checkoutData?.bankTransfers?.reduce((acum, transfer) => acum + Number(transfer.amount), 0) ? null : "El monto de las transferencias no puede estar por encima ni por debajo del total de la orden. Por favor verifique."
+    setErrorsForm((oldErrorsForm) => {
+      return {
+        ...oldErrorsForm,
+        cartId: validate(checkoutData.cartId, [
+          { validator: isRequired, errorMessage: "El carrito es obligatorio." },
+        ]),
+        paymentMethodCode: validate(checkoutData.paymentMethodCode, [
+          { validator: isRequired, errorMessage: "El metodo de pago es obligatorio." }
+        ]),
+        deliveryMethodId: deliveryMethod ?
+          validate(checkoutData.deliveryMethodId, [
+            { validator: isRequired, errorMessage: "Por favor seleccione una empresa de envios." },
+          ])
+          :
+          null
+        ,
+        profileAddressId: deliveryMethod ?
+          validate(checkoutData.profileAddressId, [
+            { validator: isRequired, errorMessage: "Por favor seleccione una dirección de envio." },
+          ])
+          :
+          null,
+        totalTransfer: checkoutData?.bankTransfers.length > 0 && (cartSubTotal + Number(deliveryCost)) === checkoutData?.bankTransfers?.reduce((acum, transfer) => acum + Number(transfer.amount), 0) ? null : "El monto de las transferencias no puede estar por encima ni por debajo del total de la orden. Por favor verifique."
+      }
     });
-  }, [checkoutData, deliveryMethod, cartSubTotal, deliveryCost]);
+  }, [checkoutData, deliveryMethod]);
+
+  useEffect(() => {
+    setCheckoutData((oldCheckoutData) => {
+      return {
+        ...oldCheckoutData,
+        paymentMethodCode: "",
+        deliveryMethodId: "",
+        profileAddressId: "",
+        bankTransfers: []
+      }
+    })
+  }, [deliveryMethod])
 
   useEffect(() => {
     if (!errorsForm.deliveryMethodId && !errorsForm.profileAddressId) {
@@ -132,10 +145,8 @@ const Checkout = (props) => {
   }, [errorsForm]);
 
   useEffect(() => {
-    console.log(checkoutData);
     for (let errors in errorsForm) {
       if (errorsForm[errors] !== null) {
-        console.log(errorsForm[errors])
         setCanBuy(false);
         return;
       }
@@ -147,7 +158,7 @@ const Checkout = (props) => {
     if (createCheckoutData) {
       history.push(`/checkout/${createCheckoutData?.id}`);
     }
-  }, [createCheckoutData, history]);
+  }, [createCheckoutData]);
 
   const handleChange = (e) => {
     setCheckoutData((oldChackoutData) => {

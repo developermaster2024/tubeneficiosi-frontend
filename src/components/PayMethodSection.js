@@ -34,12 +34,12 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
 
     useEffect(() => {
         onChange({ target: { name: "bankTransfers", value: bankTransfers, type: "custom" } })
-    }, [bankTransfers, onChange]);
+    }, [bankTransfers]);
 
     useEffect(() => {
         onChange({ target: { value: "", name: "bankAccountId", type: "checkbox" } });
         setSelectedBankAccountId("")
-    }, [values.paymentMethodCode, onChange]);
+    }, [values.paymentMethodCode]);
 
     useEffect(() => {
         setErrorsForm({

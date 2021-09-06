@@ -26,7 +26,7 @@ const MyAccountAddress = () => {
 
   useEffect(() => {
     setLoading({ show: loading, message: "Obteniendo direcciones" })
-  }, [loading, setLoading])
+  }, [loading])
 
   useEffect(() => {
     if (error) {
@@ -38,7 +38,7 @@ const MyAccountAddress = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${deleteError?.response?.status === 400 ? deleteError?.response?.data.message[0] : deleteError?.response?.data.message}.`, severity: "error" });
     }
-  }, [error, deleteError, setLoading, setCustomAlert]);
+  }, [error, deleteError]);
 
   const handleDelete = (address) => {
     setAddressToDelete(address);
