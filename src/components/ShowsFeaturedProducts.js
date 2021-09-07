@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import useAxios from "../hooks/useAxios";
+import StoreDiscountsModal from "./dicounts/StoreDiscountsModal";
 
 const ShowsFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
 
@@ -17,6 +18,7 @@ const ShowsFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
     const [{ loading, error, data }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
 
     const [productOnModal, setProductOnModal] = useState(null);
+    const [storeAndProduct, setStoreAndProduct] = useState(null);
 
     useEffect(() => {
         setLoading({ show: loading, message: "Añadiendo al carrito." })
@@ -38,6 +40,17 @@ const ShowsFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
 
     const handleCloseModal = async (e) => {
         setProductOnModal(null);
+        if (e) {
+            if (e.discount) {
+                setStoreAndProduct(e);
+                return;
+            }
+            await addToCart({ data: e });
+        }
+    }
+
+    const handleClose = async (e) => {
+        setStoreAndProduct(null);
         if (e) {
             await addToCart({ data: e });
         }
@@ -94,6 +107,7 @@ const ShowsFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
                 }
             </div>
             <ProductModal product={productOnModal} closeModal={handleCloseModal} />
+            <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
         </div>
     )
 }

@@ -185,8 +185,14 @@ const Checkout = (props) => {
   }
 
   const handleCart = (cart) => {
-    setCartSubTotal(cart.subTotal);
     setStoreId(cart?.storeId);
+    if (!cart?.discount) {
+      setCartSubTotal(cart.subTotal);
+      return;
+    }
+
+    setCartSubTotal(cart?.subTotalWithDiscount);
+
   }
 
   const handleBuy = async () => {

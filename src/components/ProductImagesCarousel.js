@@ -5,7 +5,7 @@ import { generateBackendUrl } from "../helpers/url";
 import { FaSearchPlus } from "react-icons/fa";
 import { FaSearchMinus } from "react-icons/fa";
 
-const ProductImagesCarousel = ({images, productName}) => {
+const ProductImagesCarousel = ({ images, productName }) => {
   const [swiper, setSwiper] = useState(null);
 
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -13,7 +13,7 @@ const ProductImagesCarousel = ({images, productName}) => {
   const [zoomScale, setZoomScale] = useState(1);
 
   const isInInitialScale = zoomScale === 1;
-    
+
   return <div>
     <div className="relative">
       <Swiper
@@ -21,17 +21,19 @@ const ProductImagesCarousel = ({images, productName}) => {
         onSlideChange={(swiper) => setActiveSlideIndex(swiper.activeIndex)}
         onZoomChange={(_, scale) => setZoomScale(scale)}
         autoHeight={true}
-        zoom={{maxRatio: 2}}
+        zoom={{ maxRatio: 2 }}
       >
-        {images.map(image => <SwiperSlide key={image.id}>
-          <div className="swiper-zoom-container">
-          <img
-            src={generateBackendUrl(image.path)}
-            alt={productName}
-            className="rounded-xl w-full"
-          />
-          </div>
-        </SwiperSlide>)}
+        {
+          images?.length > 0 &&
+          images?.map(image => <SwiperSlide key={image.id}>
+            <div className="swiper-zoom-container">
+              <img
+                src={generateBackendUrl(image.path)}
+                alt={productName}
+                className="rounded-xl w-full"
+              />
+            </div>
+          </SwiperSlide>)}
       </Swiper>
 
       {swiper && <button
@@ -53,16 +55,17 @@ const ProductImagesCarousel = ({images, productName}) => {
     </div>
 
     <div className="flex justify-center mt-6 space-x-3">
-      {images.map((image, i) => <img
-        key={image.id}
-        src={generateBackendUrl(image.path)}
-        alt={productName}
-        className={clsx(
-          'h-20 w-20 rounded-xl border border-gray-100 rounded shadow hover:shadow-md cursor-pointer',
-          activeSlideIndex === i && 'ring-2 ring-blue-300 ring-opacity-75'
-        )}
-        onClick={() => swiper.slideTo(i)}
-      />)}
+      {images?.length > 0 &&
+        images?.map((image, i) => <img
+          key={image.id}
+          src={generateBackendUrl(image.path)}
+          alt={productName}
+          className={clsx(
+            'h-20 w-20 rounded-xl border border-gray-100 rounded shadow hover:shadow-md cursor-pointer',
+            activeSlideIndex === i && 'ring-2 ring-blue-300 ring-opacity-75'
+          )}
+          onClick={() => swiper.slideTo(i)}
+        />)}
     </div>
   </div>;
 };

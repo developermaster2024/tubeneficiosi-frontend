@@ -66,6 +66,7 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
 
     useEffect(() => {
         if (data) {
+            console.log(data);
             if (!data.isProcessed) {
                 setCart(data);
             }
@@ -154,7 +155,7 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                         <div className="border-t mt-2">
                                             <div className="flex justify-between text-gray-400 my-4">
                                                 <span>Descuento</span>
-                                                <span>$0</span>
+                                                <span>{cart?.discount ? <span className="text-red-500">-${Number(cart?.subTotal - cart?.subTotalWithDiscount).toFixed(2)}</span> : "$0"}</span>
                                             </div>
                                             <div className="flex justify-between text-gray-400 my-4">
                                                 <span>Envio</span>
@@ -162,7 +163,7 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                             </div>
                                             <div className="flex justify-between text-gray-400 my-4">
                                                 <span>Sub total</span>
-                                                <span>$ {cart?.subTotal}</span>
+                                                <span>$ {cart?.discount ? cart?.subTotalWithDiscount : cart?.subTotal}</span>
                                             </div>
                                             <div className="px-8 text-center mt-6">
                                                 <button className={clsx(["text-center text-2xl px-14 py-2 rounded text-white"], {

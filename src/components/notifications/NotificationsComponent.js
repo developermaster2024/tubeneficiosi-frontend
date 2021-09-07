@@ -25,11 +25,8 @@ const NotificationsComponent = () => {
     const [notificationsNumber, setNotificationsNumber] = useState(0);
 
     useEffect(() => {
-        if (seenNotificationsData) {
-            console.log(seenNotificationsData);
-        }
         setNotificationsNumber(notifications?.filter((notification) => !notification?.userToNotification?.seen).length);
-    }, [notifications, setNotificationsNumber, seenNotificationsData]);
+    }, [notifications, setNotificationsNumber]);
 
     useEffect(() => {
         if (notificationsNumber > 0) {
@@ -40,7 +37,6 @@ const NotificationsComponent = () => {
     }, [notificationsNumber]);
 
     useEffect(() => {
-        console.log(oldNotifications);
         setNotification((oldNotificationsActual) => {
             return [...oldNotificationsActual, ...oldNotifications]
         });
@@ -74,8 +70,6 @@ const NotificationsComponent = () => {
     }
 
     const handleScrollEnd = () => {
-        console.log("Pagina Actual: " + filters.page);
-        console.log("Numero de paginas: " + numberOfPages);
         if (numberOfPages > filters.page) {
             setFilters((oldFilters) => {
                 return {

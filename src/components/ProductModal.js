@@ -78,7 +78,8 @@ const ProductModal = ({ product, closeModal, isStore }) => {
       productId: product?.id,
       productFeaturesData,
       quantity: quantity,
-      isDirectPurchase: isStore ? false : true
+      isDirectPurchase: isStore ? false : true,
+      discount: product?.store?.latestActiveDiscount ? true : false
     });
   }
 

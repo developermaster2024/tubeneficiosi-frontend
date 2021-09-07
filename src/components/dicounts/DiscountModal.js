@@ -6,13 +6,9 @@ import DiscountCardRow from "./DiscountCardRow";
 import DiscountCardIssuerRow from "./DiscountCardIssuerRow";
 import Button from "../Button";
 
-const DiscountModal = ({ discount, onClose }) => {
+const DiscountModal = ({ discount, onClose, hiddenStoreButton, description }) => {
 
     const modalRef = useRef();
-
-    useEffect(() => {
-        console.log(discount);
-    }, [discount])
 
     const handleCloseModal = (e) => {
         if (modalRef.current === e.target) {
@@ -69,12 +65,22 @@ const DiscountModal = ({ discount, onClose }) => {
                     </div>
                 }
                 <div className="text-center my-8">
-                    <p className="text-gray-500 mb-4">Pasa por la tienda, realiza una compra y selecciona el descuento que quieras al momento de pagar.</p>
-                    <Link to={`/stores/${discount?.store?.slug}`}>
-                        <Button className="bg-main">
-                            Visitar la tienda
-                        </Button>
-                    </Link>
+                    <p className="text-gray-500 mb-4">
+                        {
+                            description ?
+                                description
+                                :
+                                "Pasa por la tienda, realiza una compra y selecciona el descuento que quieras al momento de pagar."
+                        }
+                    </p>
+                    {
+                        !hiddenStoreButton &&
+                        <Link to={`/stores/${discount?.store?.slug}`}>
+                            <Button className="bg-main">
+                                Visitar la tienda
+                            </Button>
+                        </Link>
+                    }
                 </div>
             </div>
         </div>

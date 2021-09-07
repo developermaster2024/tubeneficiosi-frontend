@@ -30,6 +30,7 @@ import useProducts from "../hooks/useProducts";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ProductImagesCarousel from "../components/ProductImagesCarousel";
 import ProductLoadingComponent from "../components/ProductLoadingComponent";
+import StoreDiscountsModal from "../components/dicounts/StoreDiscountsModal";
 
 
 const NavigationButton = ({ icon, color, className, onClick, canNext, hidden }) => {
@@ -52,6 +53,8 @@ const Product = () => {
   const [swiper, setSwiper] = useState(null);
 
   const [productOnModal, setProductOnModal] = useState(null);
+
+  const [storeAndProduct, setStoreAndProduct] = useState(null);
 
   const [questionFormData, setQuestionFormData] = useState({
     question: '',
@@ -77,14 +80,14 @@ const Product = () => {
       setLoading?.({ show: false, message: "" });
       history.push(`/checkout?cartId=${cart?.id}`);
     }
-  }, [cart, setLoading, history]);
+  }, [cart]);
 
   useEffect(() => {
     if (cartError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
     }
-  }, [cartError, setLoading, setCustomAlert])
+  }, [cartError])
 
   useEffect(() => {
     setQuestionsFormErrors({
@@ -96,13 +99,14 @@ const Product = () => {
 
   useEffect(() => {
     setLoading({ show: productLoading, message: 'Cargando' });
-  }, [productLoading, setLoading]);
+  }, [productLoading]);
 
   useEffect(() => {
     setLoading({ show: questionsDataLoading, message: 'Cargando preguntas' });
-  }, [questionsDataLoading, setLoading]);
+  }, [questionsDataLoading]);
 
   useEffect(() => {
+    console.log(product);
     if (product) {
       fetchQuestions({
         params: {
@@ -122,7 +126,7 @@ const Product = () => {
         }
       })
     }
-  }, [fetchQuestions, product, getProducts]);
+  }, [product]);
 
   const handleQuestionChange = (e) => {
     setQuestionFormData(prevData => ({
@@ -188,9 +192,18 @@ const Product = () => {
   const handleCloseModal = async (e) => {
     setProductOnModal(null);
     if (e) {
-      setLoading?.({ show: true, message: "Realizando compra" });
+      if (e.discount) {
+        setStoreAndProduct(e);
+        return;
+      }
       await addToCart({ data: e });
-      setLoading?.({ show: false, message: "" });
+    }
+  }
+
+  const handleClose = async (e) => {
+    setStoreAndProduct(null);
+    if (e) {
+      await addToCart({ data: e });
     }
   }
 
@@ -209,14 +222,14 @@ const Product = () => {
               {/* Images */}
               <div className="w-1/2 flex flex-col">
                 <ProductImagesCarousel
-                  images={product.productImages}
+                  images={product?.productImages}
                 />
               </div>
 
               {/* Information */}
               <div className="w-1/2">
                 <div className="flex itemx-center text-3xl justify-between">
-                  <h3 className="font-bold mb-2 uppercase">{product.name}</h3>
+                  <h3 className="font-bold mb-2 uppercase">{product?.name}</h3>
                   {
                     favorite ?
                       <IoHeart onClick={() => {
@@ -242,7 +255,7 @@ const Product = () => {
                 </div>
 
                 <p className="mt-6">
-                  {product.shortDescription}
+                  {product?.shortDescription}
                 </p>
 
                 {/* Características */}
@@ -251,12 +264,12 @@ const Product = () => {
                     <ProductFeature
                       className="w-1/2"
                       name="Referencia"
-                      value={product.reference || 'Sin referencia'}
+                      value={product?.reference || 'Sin referencia'}
                     />
                     <ProductFeature
                       className="w-1/2"
                       name="Metodo de Envio"
-                      value={product.deliveryMethodTypes.map(item => item.name).join(', ')}
+                      value={product?.deliveryMethodTypes.map(item => item.name).join(', ')}
                     />
                   </div>
 
@@ -264,14 +277,14 @@ const Product = () => {
                     <ProductFeature
                       className="w-1/2"
                       name="Categorias"
-                      value={product.categories.length === 0
+                      value={product?.categories?.length === 0
                         ? 'Sin categorias'
-                        : product.categories.map((category) => category.name).join(', ')}
+                        : product?.categories?.map((category) => category.name).join(', ')}
                     />
                     <ProductFeature
                       className="w-1/2"
                       name="Stock"
-                      value={product.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
+                      value={product?.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
                     />
                   </div>
 
@@ -280,13 +293,13 @@ const Product = () => {
                       className="w-1/2"
                       name="Tienda"
                       value={<div className="text-center hover:shadow-xl transition duration-500">
-                        <Link to={`/stores/${product.store.slug}`}>
+                        <Link to={`/stores/${product?.store?.slug}`}>
                           <img
                             className="w-12 h-12 rounded m-auto"
-                            src={product.store.storeProfile?.logo ? generateBackendUrl(product.store.storeProfile.logo) : noImage}
-                            alt={product.name}
+                            src={product?.store?.storeProfile?.logo ? generateBackendUrl(product?.store?.storeProfile?.logo) : noImage}
+                            alt={product?.name}
                           />
-                          <p className="text-blue-500">{product.store.name}</p>
+                          <p className="text-blue-500">{product?.store?.name}</p>
                         </Link>
                       </div>}
                     />
@@ -297,23 +310,23 @@ const Product = () => {
                 <div className="flex items-center p-4 bg-white rounded-md mt-10">
                   <div className="w-56 flex-shrink-0">
                     {
-                      product.discount ?
+                      product?.discount ?
                         <div>
                           <p className="text-main text-3xl font-semibold">
                             {
-                              product.price > 0 ?
-                                <span> {(product.price - ((product.price * product.discount) / 100)).toFixed(2)} USD</span>
+                              product?.price > 0 ?
+                                <span> {(product?.price - ((product?.price * product?.discount) / 100)).toFixed(2)} USD</span>
                                 :
                                 "Gratis"
                             }
                           </p>
-                          <p className="line-through text-700 font-semibold opacity-50">{product.price} USD</p>
+                          <p className="line-through text-700 font-semibold opacity-50">{product?.price} USD</p>
                         </div>
                         :
                         <p className="text-main text-3xl font-semibold">
                           {
-                            Number(product.price) > 0 ?
-                              <span> {(Number(product.price)).toFixed(2)} USD</span>
+                            Number(product?.price) > 0 ?
+                              <span> {(Number(product?.price)).toFixed(2)} USD</span>
                               :
                               "Gratis"
                           }
@@ -324,7 +337,11 @@ const Product = () => {
                     <div className="flex items-center justify-end space-x-2">
                       <div className="w-20">
                         <Select>
-                          {[...Array(product.quantity + 1).keys()].slice(1).map(n => <option key={n} value={n}>{n}</option>)}
+                          {Array.from(Array(product?.quantity).keys()).map(n => {
+                            return (
+                              <option key={n} value={n + 1}>{n + 1}</option>
+                            )
+                          })}
                         </Select>
                       </div>
                       <button
@@ -354,16 +371,16 @@ const Product = () => {
               {/* TAB PANELS */}
               {/* Description */}
               <TabPanel className="py-4 animate__animated animate__fadeInUp" value={0}>
-                {product.description}
+                {product?.description}
               </TabPanel>
 
               {/* Questions */}
               <TabPanel className="py-4 space-y-6 animate__animated animate__fadeInUp" value={1}>
                 <QuestionsAnswer
                   questions={questionsData?.results ?? []}
-                  ownerName={product.store.name}
+                  ownerName={product?.store?.name}
                   ownerSlug={product?.store?.slug}
-                  ownerImage={generateBackendUrl(product.store?.storeProfile?.logo)}
+                  ownerImage={generateBackendUrl(product?.store?.storeProfile?.logo)}
                   onChange={handleQuestionChange}
                   value={questionFormData.question}
                   error={questionsFormErrors.question}
@@ -416,9 +433,9 @@ const Product = () => {
               {/* Features */}
               <TabPanel className="py-4 animate__animated animate__fadeInUp" value={3}>
                 {
-                  product.productFeatures.length > 0 &&
+                  product?.productFeatures?.length > 0 &&
                   <ProductFeatureGroup name="Características">
-                    {product.productFeatures.map((feature) => <ProductFeatureCheckbox
+                    {product?.productFeatures?.map((feature) => <ProductFeatureCheckbox
                       key={feature.id}
                       id={feature.id}
                       name={feature.name}
@@ -429,11 +446,11 @@ const Product = () => {
                   </ProductFeatureGroup>
                 }
                 {
-                  product.productFeatureGroups.length > 0 && product.productFeatureGroups.map((featuresGroup) => <ProductFeatureGroup
+                  product?.productFeatureGroups?.length > 0 && product?.productFeatureGroups?.map((featuresGroup) => <ProductFeatureGroup
                     key={featuresGroup.id}
                     name={featuresGroup.name}
                   >
-                    {featuresGroup.productFeatureForGroups.map((feature) => <ProductFeatureCheckbox
+                    {featuresGroup?.productFeatureForGroups?.map((feature) => <ProductFeatureCheckbox
                       key={feature.id}
                       id={feature.id}
                       name={feature.name}
@@ -483,6 +500,7 @@ const Product = () => {
             <NavigationButton className="text-4xl text-main focus:outlined-none focus:border-none" onClick={handleNext} icon={<IoChevronForwardOutline />}></NavigationButton>
           </div>
           <ProductModal product={productOnModal} closeModal={handleCloseModal} />
+          <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
         </div>
     }
   </div>

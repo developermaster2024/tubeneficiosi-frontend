@@ -7,6 +7,7 @@ import { generateImageUrl } from "../helpers/url";
 import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
+import StoreDiscountsModal from "./dicounts/StoreDiscountsModal";
 
 const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) => {
 
@@ -17,6 +18,8 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
   const [{ loading, error, data }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
 
   const [productOnModal, setProductOnModal] = useState(null);
+
+  const [storeAndProduct, setStoreAndProduct] = useState(null);
 
   useEffect(() => {
     setLoading({ show: loading, message: "Añadiendo al carrito." })
@@ -39,10 +42,21 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
         setCustomAlert?.({ show: true, message: `El producto ha sido añadido al carrito exitosamente.`, severity: "success" })
       }
     }
-  }, [data, isStore, history, onAddToCard, setCustomAlert])
+  }, [data])
 
   const handleCloseModal = async (e) => {
     setProductOnModal(null);
+    if (e) {
+      if (e.discount && !isStore) {
+        setStoreAndProduct(e);
+        return;
+      }
+      await addToCart({ data: e });
+    }
+  }
+
+  const handleClose = async (e) => {
+    setStoreAndProduct(null);
     if (e) {
       await addToCart({ data: e });
     }
@@ -91,6 +105,7 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
         </div>
       }
       <ProductModal isStore={isStore} product={productOnModal} closeModal={handleCloseModal} />
+      <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
     </div>
   )
 };

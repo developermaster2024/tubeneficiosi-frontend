@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import useAxios from "../hooks/useAxios";
+import StoreDiscountsModal from "./dicounts/StoreDiscountsModal";
 
 const GastronomyFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
 
@@ -18,26 +19,39 @@ const GastronomyFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
 
     const [productOnModal, setProductOnModal] = useState(null);
 
+    const [storeAndProduct, setStoreAndProduct] = useState(null);
+
     useEffect(() => {
         setLoading({ show: loading, message: "Añadiendo al carrito." })
-    }, [loading, setLoading])
+    }, [loading])
 
     useEffect(() => {
         if (error) {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${error?.response?.status === 400 ? error?.response?.data.message[0] : error?.response?.data.message}.`, severity: "error" });
         }
-    }, [error, setLoading, setCustomAlert])
+    }, [error])
 
     useEffect(() => {
         if (data) {
             history.push(`/checkout?cartId=${data?.id}`);
             return;
         }
-    }, [data, history])
+    }, [data])
 
     const handleCloseModal = async (e) => {
         setProductOnModal(null);
+        if (e) {
+            if (e.discount) {
+                setStoreAndProduct(e);
+                return;
+            }
+            await addToCart({ data: e });
+        }
+    }
+
+    const handleClose = async (e) => {
+        setStoreAndProduct(null);
         if (e) {
             await addToCart({ data: e });
         }
@@ -92,6 +106,7 @@ const GastronomyFeaturedProducts = ({ featuredProducts, categoryInfo }) => {
                 imgSrc={`${process.env.REACT_APP_API_URL}${categoryInfo?.imgPath}`}
             />
             <ProductModal product={productOnModal} closeModal={handleCloseModal} />
+            <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
         </div>
     )
 }

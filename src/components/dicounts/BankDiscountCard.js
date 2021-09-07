@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 const BankDiscountCard = ({ bankDiscount }) => {
 
-  console.log(bankDiscount);
-
   return <div
     className="bg-white flex align-center p-3 rounded-lg text-gray-500"
   >
