@@ -47,7 +47,7 @@ const PrintOrderComponent = ({ order, togglePrintMode, print, onFinalizePrint })
         if (print) {
             handlePrint();
         }
-    }, [print, handlePrint])
+    }, [print])
 
     return (
         <div className="animate__animated animate__fadeInUp text-gray-500 hidden">
@@ -78,6 +78,24 @@ const PrintOrderComponent = ({ order, togglePrintMode, print, onFinalizePrint })
                             <div className="mb-1">
                                 <b>Metodo de pago:</b> <span style={{ textTransform: "capitalize" }}>{order?.paymentMethod?.name}</span>
                             </div>
+                            {
+                                order?.cart?.discount &&
+                                <>
+                                    <div className="mb-1">
+                                        <b>Descuento:</b> <span style={{ textTransform: "capitalize" }}>{order?.cart?.discount?.name}</span>
+                                    </div>
+                                    <div className="mb-1">
+                                        {
+                                            order?.cart?.discount?.discountType?.code === "dit-002" &&
+                                            <p>Al pagar con las siguientes tarjetas: <b>{order?.cart?.discount?.cards?.map(card => card.name).join(", ")}</b></p>
+                                        }
+                                        {
+                                            order?.cart?.discount?.discountType?.code === "dit-001" &&
+                                            <p>Al pagar con los siguientes bancos: <b>{order?.cart?.discount?.cardsIssuers?.map(cardIssuer => cardIssuer.name).join(", ")}</b></p>
+                                        }
+                                    </div>
+                                </>
+                            }
                         </div>
                         <div className="w-1/2">
                             <div className="mb-1">
@@ -127,48 +145,53 @@ const PrintOrderComponent = ({ order, togglePrintMode, print, onFinalizePrint })
                                 {
                                     order?.cart?.cartItems?.map((product, i) => {
                                         return (
-                                            <>
-                                                <tr className={`border-b`} key={i}>
-                                                    <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
-                                                        <div className="text-center">
-                                                            {product.productName}
-                                                        </div>
-                                                    </td>
-                                                    <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
-                                                        <div className="text-center">
-                                                            <img className="m-auto" style={{ width: 80, height: 80 }} src={`${process.env.REACT_APP_API_URL}/${product.productImage}`} alt="" />
-                                                        </div>
-                                                    </td>
-                                                    <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
-                                                        <div className="text-center">
-                                                            ${product.productPrice}
-                                                        </div>
-                                                    </td>
-                                                    <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
-                                                        <div className="text-center">
-                                                            {product.quantity}
-                                                        </div>
-                                                    </td>
-                                                    <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
-                                                        <div className="text-center">
-                                                            ${product.total}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </>
+                                            <tr className={`border-b`} key={i}>
+                                                <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
+                                                    <div className="text-center">
+                                                        {product.productName}
+                                                    </div>
+                                                </td>
+                                                <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
+                                                    <div className="text-center">
+                                                        <img className="m-auto" style={{ width: 80, height: 80 }} src={`${process.env.REACT_APP_API_URL}/${product.productImage}`} alt="" />
+                                                    </div>
+                                                </td>
+                                                <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
+                                                    <div className="text-center">
+                                                        ${product.productPrice}
+                                                    </div>
+                                                </td>
+                                                <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
+                                                    <div className="text-center">
+                                                        {product.quantity}
+                                                    </div>
+                                                </td>
+                                                <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
+                                                    <div className="text-center">
+                                                        ${product.total}
+                                                    </div>
+                                                </td>
+                                            </tr>
                                         )
                                     })
                                 }
                                 <tr>
-                                    <th className="p-4" colSpan={5}>
+                                    <th className="p-4 text-gray-500 space-y-4" colSpan={5}>
                                         <div className="text-right">
-                                            <span>SubTotal:</span> <span className="text-gray-500">${order?.cart?.subTotal}</span>
+                                            <span>Descuento: </span>
+                                            <span>{order?.cart?.discount ? <span className="text-red-500">${Number(order?.cart?.subTotal - order?.cart?.subTotalWithDiscount).toFixed(2)}</span> : "$0"}</span>
                                         </div>
                                         <div className="text-right">
-                                            <span>Envio:</span> <span className="text-gray-500">{order?.delivery?.total > 0 ? `$${order?.delivery?.total}` : "Gratis"}</span>
+                                            <span>Envio: </span>
+                                            <span>${order?.delivery?.total}</span>
                                         </div>
                                         <div className="text-right">
-                                            <span>Total:</span> <span className="text-green-500">${order?.delivery?.total + order?.cart?.subTotal}</span>
+                                            <span>SubTotal: </span>
+                                            <span>${order?.cart?.discount ? order?.cart?.subTotalWithDiscount : order?.cart?.subTotal}</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span>Total: </span>
+                                            <span>${order?.total}</span>
                                         </div>
                                     </th>
                                 </tr>

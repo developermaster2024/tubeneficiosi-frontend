@@ -4,11 +4,12 @@ import Button from "./Button";
 import CustomInput from "./CustomInput";
 import { IoClose } from "react-icons/io5";
 import { isRequired, validate } from "../helpers/formsValidations";
+import useBankAccounts from "../hooks/useBankAccounts";
 
 
 const PayMethodSection = ({ onChange, values, ...rest }) => {
 
-    const [{ payMethods, error, loading }, getPayMethods] = usePayMethods();
+    const [{ payMethods, error, loading }, getPayMethods] = usePayMethods({ options: { useCache: false } });
 
     const [banksAccounts, setBanksAccounts] = useState([]);
 
@@ -22,6 +23,8 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
         reference: null,
         amount: null
     });
+
+    const [{ bankAccounts: newBanksAccounts, numberOfPages, error: bankAccountsError, loading: bankAccountsLoading }, getBankAccounts] = useBankAccounts({ options: { manual: true, useCache: false } })
 
     useEffect(() => {
         if (selectedBankAccountId) {
@@ -38,8 +41,32 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
 
     useEffect(() => {
         onChange({ target: { value: "", name: "bankAccountId", type: "checkbox" } });
-        setSelectedBankAccountId("")
+        setSelectedBankAccountId("");
+        getBankAccounts({
+            params: {
+                paymentMethodCode: values.paymentMethodCode
+            }
+        })
     }, [values.paymentMethodCode]);
+
+    useEffect(() => {
+        console.log(values.discountType);
+        if (values?.discountType === "dit-001") {
+            getPayMethods({
+                params: {
+                    codes: "pym-002"
+                }
+            })
+        }
+
+        if (values?.discountType === "dit-002") {
+            getPayMethods({
+                params: {
+                    codes: "pym-004"
+                }
+            })
+        }
+    }, [values.discountType])
 
     useEffect(() => {
         setErrorsForm({
@@ -124,7 +151,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                                     checked={values.paymentMethodCode === payMethod.code}
                                                     value={payMethod.code}
                                                     onChange={(e) => { handleChange(e, payMethod.bankAccounts) }} />
-                                                <label className="text-center space-x-4" htmlFor={`payment-${payMethod.code}`}>
+                                                <label className="capitalize text-center space-x-4" htmlFor={`payment-${payMethod.code}`}>
                                                     {
                                                         payMethod.imgPath &&
                                                         <img className="h-12 w-16 rounded m-auto" src={`${process.env.REACT_APP_API_URL}${payMethod.imgPath}`} alt={payMethod.name} />
@@ -140,56 +167,78 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                         <div>
                             {
                                 values.paymentMethodCode ?
-                                    banksAccounts?.length > 0 ?
+                                    values.paymentMethodCode !== "pym-002" ?
+                                        <div className="space-y-4 animate__animated animate__fadeInUp mt-8">
+                                            <p className="text-center text-gray-500 text-xl">Ya puede proceder a realizar el pedido.</p>
+                                            <p>
+                                                <b>Nota: </b>
+                                                Recuerde que al momento de pagar debera tener el numero de pedido a la mano. Este se le entregará al crear el pedido. De esta manera la tienda sabra el monto que se le cobrará al momento de pagar.
+                                            </p>
+                                        </div>
+                                        :
                                         <div className="mt-8 animate__animated animate__fadeInUp">
                                             {
                                                 !selectedBankAccountId &&
                                                 <h3 className="mb-2 text-gray-500 font-bold">Por favor seleccione la cuenta a la cual va a pagar:</h3>
                                             }
                                             {
-                                                banksAccounts?.map((bankAccount, i) => {
-                                                    return (
-                                                        <div key={i} className="mb-2 flex items-center space-x-2">
-                                                            <input
-                                                                type="checkbox"
-                                                                name="bankAccountId"
-                                                                id={`bank-account-${bankAccount.id}`}
-                                                                checked={selectedBankAccountId === bankAccount.id}
-                                                                value={bankAccount.id}
-                                                                onChange={handleBankAccount} />
-                                                            <label className="flex items-center justify-between space-x-8" htmlFor={`bank-account-${bankAccount.id}`}>
-                                                                <div className="text-center">
-                                                                    {
-                                                                        bankAccount?.cardIssuer?.imgPath &&
-                                                                        <img className="h-12 w-16 rounded" src={`${process.env.REACT_APP_API_URL}/${bankAccount?.cardIssuer?.imgPath}`} alt="" />
-                                                                    }
-                                                                    {bankAccount?.cardIssuer?.name}
-                                                                </div>
-                                                                <div className="text-center">
-                                                                    <b>Alias</b>
-                                                                    <p>{bankAccount.alias}</p>
-                                                                </div>
-                                                                <div className="text-center">
-                                                                    <b>Nro. de cuenta</b>
-                                                                    <p>{bankAccount?.accountNumber}</p>
-                                                                </div>
-                                                                <div className="text-center">
-                                                                    <b>Oficina</b>
-                                                                    <p>{bankAccount?.branchOffice}</p>
-                                                                </div>
-                                                                <div className="text-center">
-                                                                    <b>CBU</b>
-                                                                    <p>{bankAccount?.cbu}</p>
-                                                                </div>
-                                                            </label>
+                                                bankAccountsError ?
+                                                    <div className="text-red-500 text-center">
+                                                        <p>Ha ocurrido un error.</p>
+                                                        <Button>
+                                                            Reintentar
+                                                        </Button>
+                                                    </div>
+                                                    :
+                                                    bankAccountsLoading ?
+                                                        <div className="text-center text-gray-500 text-xl">
+                                                            Obteniendo cuentas...
                                                         </div>
-                                                    )
-                                                })
+                                                        :
+                                                        newBanksAccounts?.length > 0 ?
+                                                            newBanksAccounts?.map((bankAccount, i) => {
+                                                                return (
+                                                                    <div key={i} className="mb-2 flex items-center space-x-2">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            name="bankAccountId"
+                                                                            id={`bank-account-${bankAccount.id}`}
+                                                                            checked={selectedBankAccountId === bankAccount.id}
+                                                                            value={bankAccount.id}
+                                                                            onChange={handleBankAccount} />
+                                                                        <label className="flex items-center justify-between space-x-8" htmlFor={`bank-account-${bankAccount.id}`}>
+                                                                            <div className="text-center">
+                                                                                {
+                                                                                    bankAccount?.cardIssuer?.imgPath &&
+                                                                                    <img className="h-12 w-16 rounded" src={`${process.env.REACT_APP_API_URL}/${bankAccount?.cardIssuer?.imgPath}`} alt="" />
+                                                                                }
+                                                                                {bankAccount?.cardIssuer?.name}
+                                                                            </div>
+                                                                            <div className="text-center">
+                                                                                <b>Alias</b>
+                                                                                <p>{bankAccount.alias}</p>
+                                                                            </div>
+                                                                            <div className="text-center">
+                                                                                <b>Nro. de cuenta</b>
+                                                                                <p>{bankAccount?.accountNumber}</p>
+                                                                            </div>
+                                                                            <div className="text-center">
+                                                                                <b>Oficina</b>
+                                                                                <p>{bankAccount?.branchOffice}</p>
+                                                                            </div>
+                                                                            <div className="text-center">
+                                                                                <b>CBU</b>
+                                                                                <p>{bankAccount?.cbu}</p>
+                                                                            </div>
+                                                                        </label>
+                                                                    </div>
+                                                                )
+                                                            })
+                                                            :
+                                                            <div className="text-red-500 text-xl">
+                                                                No hay cuentas disponibles para este metodo de pago.
+                                                            </div>
                                             }
-                                        </div>
-                                        :
-                                        <div className="text-red-500 text-xl">
-                                            No hay cuentas disponibles para este metodo de pago.
                                         </div>
                                     :
                                     <div>

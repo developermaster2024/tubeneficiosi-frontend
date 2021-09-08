@@ -55,7 +55,7 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
     return (
         <div className={className}>
 
-            <h1 className="text-xl text-gray-500 font-bold mb-12">¿Como desea retirar los productos?</h1>
+            <h1 className="text-xl text-gray-500 font-bold mb-12 text-center">¿Por favor indique como desea recibir los productos?</h1>
 
             <div className="flex items-center justify-around space-x-12">
                 <div onClick={() => { onSelectDeliveryMethod(true) }} className={clsx(["hover:text-main cursor-pointer"], {

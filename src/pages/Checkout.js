@@ -20,6 +20,8 @@ const Checkout = (props) => {
 
   const [showPayments, setShowPayments] = useState(false);
 
+  const [discountType, setDiscountType] = useState(null);
+
   const [checkoutData, setCheckoutData] = useState({
     cartId: "",
     paymentMethodCode: "",
@@ -100,6 +102,7 @@ const Checkout = (props) => {
   }, [errorsForm.deliveryMethodId, errorsForm.profileAddressId, checkoutData.profileAddressId, checkoutData.deliveryMethodId, deliveryMethod]);
 
   useEffect(() => {
+    console.log(checkoutData.paymentMethodCode);
     setErrorsForm((oldErrorsForm) => {
       return {
         ...oldErrorsForm,
@@ -122,7 +125,7 @@ const Checkout = (props) => {
           ])
           :
           null,
-        totalTransfer: checkoutData?.bankTransfers.length > 0 && (cartSubTotal + Number(deliveryCost)) === checkoutData?.bankTransfers?.reduce((acum, transfer) => acum + Number(transfer.amount), 0) ? null : "El monto de las transferencias no puede estar por encima ni por debajo del total de la orden. Por favor verifique."
+        totalTransfer: checkoutData.paymentMethodCode === "pym-001" || checkoutData.paymentMethodCode === "pym-004" || checkoutData.paymentMethodCode === "pym-003" ? null : checkoutData?.bankTransfers.length > 0 && (cartSubTotal + Number(deliveryCost)) === checkoutData?.bankTransfers?.reduce((acum, transfer) => acum + Number(transfer.amount), 0) ? null : "El monto de las transferencias no puede estar por encima ni por debajo del total de la orden. Por favor verifique."
       }
     });
   }, [checkoutData, deliveryMethod]);
@@ -185,12 +188,16 @@ const Checkout = (props) => {
   }
 
   const handleCart = (cart) => {
+
     setStoreId(cart?.storeId);
+
     if (!cart?.discount) {
+      console.log(cart?.discount?.discountType?.code)
       setCartSubTotal(cart.subTotal);
       return;
     }
 
+    setDiscountType(cart?.discount?.discountType?.code);
     setCartSubTotal(cart?.subTotalWithDiscount);
 
   }
@@ -221,7 +228,12 @@ const Checkout = (props) => {
           {
             showPayments &&
             <PayMethodSection
-              values={{ paymentMethodCode: checkoutData.paymentMethodCode, bankAccountId: checkoutData.bankAccountId, bankTransfers: checkoutData.bankTransfers }}
+              values={{
+                paymentMethodCode: checkoutData.paymentMethodCode,
+                bankAccountId: checkoutData.bankAccountId,
+                bankTransfers: checkoutData.bankTransfers,
+                discountType: discountType
+              }}
               onChange={handleChange} />
           }
         </div>

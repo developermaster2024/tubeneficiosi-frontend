@@ -27,7 +27,7 @@ const OrderDetails = () => {
       setOrder(updateData);
       setCustomAlert?.({ show: true, message: "La orden ha sido finalizada exitosamente.", severity: "success" });
     }
-  }, [updateData, setLoading, setOrder, setCustomAlert])
+  }, [updateData])
 
   useEffect(() => {
     if (orderError) {
@@ -39,17 +39,18 @@ const OrderDetails = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${updateError?.response?.status === 400 ? updateError?.response?.data.message[0] : updateError?.response?.data.message}.`, severity: "error" });
     }
-  }, [orderError, updateError, setLoading, setCustomAlert]);
+  }, [orderError, updateError]);
 
   useEffect(() => {
     setLoading?.({ show: orderLoading, message: "Obteniendo informacion del pedido" });
-  }, [orderLoading, setLoading])
+  }, [orderLoading])
 
   useEffect(() => {
     if (orderData) {
+      console.log(orderData)
       setOrder(orderData)
     }
-  }, [orderData, setOrder]);
+  }, [orderData]);
 
   const handlePrint = () => {
     setPrint((oldPrint) => !oldPrint);
@@ -97,6 +98,26 @@ const OrderDetails = () => {
         </div>
 
         {/*Informacion de Pago */}
+
+        {
+          order?.cart?.discount &&
+          <div className="bg-white rounded text-xl p-4 my-4 text-gray-500">
+            <div className="mb-1">
+              <b>Descuento:</b> <span style={{ textTransform: "capitalize" }}>{order?.cart?.discount?.name}</span>
+            </div>
+            <div className="mb-1">
+              {
+                order?.cart?.discount?.discountType?.code === "dit-002" &&
+                <p>Al pagar con las siguientes tarjetas: <b>{order?.cart?.discount?.cards?.map(card => card.name).join(", ")}</b></p>
+              }
+              {
+                order?.cart?.discount?.discountType?.code === "dit-001" &&
+                <p>Al pagar con los siguientes bancos: <b>{order?.cart?.discount?.cardsIssuers?.map(cardIssuer => cardIssuer.name).join(", ")}</b></p>
+              }
+            </div>
+          </div>
+        }
+
         <div className="bg-white rounded text-lg p-8 my-4 text-gray-500">
           <h2>Estado de la orden: <span className="px-4 py-1 capitalize rounded text-white" style={{ backgroundColor: order?.orderStatus?.color }}>{order?.orderStatus?.name}</span></h2>
           {
@@ -201,9 +222,22 @@ const OrderDetails = () => {
           </table>
 
           <div className="text-right my-8 px-8">
-            <p className="my-4"><span className="font-bold">Productos: </span>${order?.cart?.subTotal}</p>
-            <p className="my-4"><span className="font-bold">Envio:</span> {order?.delivery?.total > 0 ? `$${order?.delivery?.total}` : "Gratis"}</p>
-            <p className="my-4"><span className="font-bold">Total:</span> $ {order?.total}</p>
+            <p className="space-x-4 text-gray-400 my-4">
+              <span>Descuento:</span>
+              <span>{order?.cart?.discount ? <span className="text-red-500">-${Number(order?.cart?.subTotal - order?.cart?.subTotalWithDiscount).toFixed(2)}</span> : "$0"}</span>
+            </p>
+            <p className="space-x-4 text-gray-400 my-4">
+              <span>Envio:</span>
+              <span>${order?.delivery?.total ? order?.delivery?.total : "0"}</span>
+            </p>
+            <p className="space-x-4 text-gray-400 my-4">
+              <span>Subtotal:</span>
+              <span>${order?.cart?.discount ? order?.cart?.subTotalWithDiscount : order?.cart?.subTotal}</span>
+            </p>
+            <p className="space-x-4 text-gray-400 my-4">
+              <span>Total:</span>
+              <span>${order?.total}</span>
+            </p>
           </div>
         </div>
 

@@ -22,17 +22,15 @@ const CheckoutSuccess = () => {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${checkoutError?.response?.status === 400 ? checkoutError?.response?.data.message[0] : checkoutError?.response?.data.message}.`, severity: "error" });
         }
-    }, [checkoutError, setLoading, setCustomAlert]);
+    }, [checkoutError]);
 
     useEffect(() => {
         setLoading?.({ show: checkoutLoading, message: "Obteniendo informacion del pedido" });
-    }, [checkoutLoading, setLoading])
+    }, [checkoutLoading]);
 
     useEffect(() => {
-        if (checkout) {
-            console.log(checkout);
-        }
-    }, [checkout]);
+        console.log(checkout);
+    }, [checkout])
 
     const handlePrint = () => {
         setPrint((oldPrint) => !oldPrint);
@@ -114,7 +112,7 @@ const CheckoutSuccess = () => {
                                 <div className="border-t mt-2">
                                     <div className="flex justify-between text-gray-400 my-4">
                                         <span>Descuento</span>
-                                        <span>$0</span>
+                                        <span>{checkout?.cart?.discount ? <span className="text-red-500">-${Number(checkout?.cart?.subTotal - checkout?.cart?.subTotalWithDiscount).toFixed(2)}</span> : "$0"}</span>
                                     </div>
                                     <div className="flex justify-between text-gray-400 my-4">
                                         <span>Envio</span>
@@ -122,7 +120,11 @@ const CheckoutSuccess = () => {
                                     </div>
                                     <div className="flex justify-between text-gray-400 my-4">
                                         <span>Sub total</span>
-                                        <span>$ {checkout?.cart?.subTotal}</span>
+                                        <span>$ {checkout?.cart?.discount ? checkout?.cart?.subTotalWithDiscount : checkout?.cart?.subTotal}</span>
+                                    </div>
+                                    <div className="flex justify-between text-gray-400 my-4">
+                                        <span>Total</span>
+                                        <span>$ {checkout?.total}</span>
                                     </div>
                                 </div>
                             </div>
