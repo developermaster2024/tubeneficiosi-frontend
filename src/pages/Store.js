@@ -14,7 +14,7 @@ import {
 import StoreCart from "../components/StoreCart";
 import useProducts from "../hooks/useProducts";
 import useCategoriesStores from "../hooks/useCategoriesStores";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import useAxios from "../hooks/useAxios";
 
@@ -26,10 +26,13 @@ import TagsFilter from "../components/TagsFilter";
 import useTags from "../hooks/useTags";
 import { validURL } from "../helpers/formsValidations";
 import DiscountsSlider from "../components/dicounts/DiscountsSlider";
+import StoreDiscountsModal from "../components/dicounts/StoreDiscountsModal";
 
 const Store = () => {
 
   const params = useParams();
+
+  const history = useHistory();
 
   const { setLoading, setCustomAlert, user } = useAuth();
 
@@ -39,6 +42,18 @@ const Store = () => {
 
   const [filters, setFilters] = useState({ page: 1, categoryIds: [], rating: [], tagIds: [], perPage: 12, storeId: "" });
   const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" });
+
+  const [isInGridView] = useState(true);
+
+  const [favorite, setFavorite] = useState(false);
+
+  const [showCart, setShowCart] = useState(false);
+
+  const [cart, setCart] = useState(null);
+
+  const [cartQuantity, setCartQuantity] = useState(0);
+
+  const [storeAndProduct, setStoreAndProduct] = useState(null);
 
   const [{ data: store, error: storeError, loading: loadingStore }] = useAxios({ url: `/stores/${params?.slug}` }, { useCache: false });
 
@@ -64,15 +79,7 @@ const Store = () => {
     }
   }, { manual: true, useCache: false });
 
-  const [isInGridView] = useState(true);
-
-  const [favorite, setFavorite] = useState(false);
-
-  const [showCart, setShowCart] = useState(false);
-
-  const [cart, setCart] = useState(null);
-
-  const [cartQuantity, setCartQuantity] = useState(0);
+  const [{ data: updateCartData, error: updateCartError, loading: updateCartLoading }, updateCart] = useAxios({ url: `/carts/${cart?.id}/update-discount`, method: "PUT" }, { manual: true, useCache: false });
 
   useEffect(() => {
     setLoading({ show: loadingStore, message: "Cargando Informacion de la tienda." })
@@ -116,7 +123,21 @@ const Store = () => {
         setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
       }
     }
-  }, [error, errorCategoriesStores, storeError, errorTags, cartError, setLoading, setCustomAlert]);
+
+    if (updateCartError) {
+      setLoading?.({ show: false, message: "" });
+      if (updateCartError?.response?.data.message !== "Carrito no encontrado") {
+        setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${updateCartError?.response?.status === 400 ? updateCartError?.response?.data.message[0] : updateCartError?.response?.data.message}.`, severity: "error" });
+      }
+    }
+  }, [error, errorCategoriesStores, storeError, errorTags, cartError, updateCartError]);
+
+  useEffect(() => {
+    if (updateCartData) {
+      setLoading({ show: false, message: "" });
+      history.push(`/checkout?cartId=${updateCartData?.id}`);
+    }
+  }, [updateCartData])
 
   useEffect(() => {
     if (store) {
@@ -212,8 +233,35 @@ const Store = () => {
     setCart(cart);
   }
 
+  const handleCloseCart = async (e) => {
+    setShowCart(false)
+    if (store.latestActiveDiscount) {
+      setStoreAndProduct({
+        storeId: store?.storeId
+      });
+      return;
+    }
+    history.push(`/checkout?cartId=${cart?.id}`);
+  }
+
+  const handleClose = async (e) => {
+    setStoreAndProduct(null);
+    if (e) {
+      if (e.discountId) {
+        setLoading({ show: true, message: "Cargando..." })
+        await updateCart({
+          data: {
+            ...e
+          }
+        });
+        setLoading({ show: false, message: "" })
+        return;
+      }
+      history.push(`/checkout?cartId=${cart?.id}`);
+    }
+  }
+
   return <>
-    <StoreCart show={showCart} cart={cart} onChangeCart={handleCart} closeCart={() => { setShowCart(false) }} />
     <div>
       <Swiper
         navigation
@@ -416,6 +464,8 @@ const Store = () => {
         </div>
       </div>
     </Container>
+    <StoreCart show={showCart} cart={cart} onChangeCart={handleCart} closeCart={handleCloseCart} />
+    <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
   </>;
 };
 

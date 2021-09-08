@@ -10,6 +10,7 @@ import StoreCard from "../components/StoreCard";
 import ProductModal from "../components/ProductModal";
 import useAxios from "../hooks/useAxios";
 import { IoFastFoodOutline, IoStorefrontOutline } from "react-icons/io5";
+import StoreDiscountsModal from "../components/dicounts/StoreDiscountsModal";
 
 
 const SearchResults = () => {
@@ -29,6 +30,10 @@ const SearchResults = () => {
     const [productsList, setProductsList] = useState([]);
 
     const [storesList, setStoresList] = useState([]);
+
+    const [productOnModal, setProductOnModal] = useState(null);
+
+    const [storeAndProduct, setStoreAndProduct] = useState(null);
 
     const [{ error: cartError, data: cart }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
 
@@ -114,7 +119,7 @@ const SearchResults = () => {
         })
     }, [storePage, setLoading, getStores, filters]);
 
-    const [productOnModal, setProductOnModal] = useState(null);
+
 
     const handleProductsEnd = (e) => {
         if (productPage < productsPages && productsList.length > 0) {
@@ -134,6 +139,19 @@ const SearchResults = () => {
 
     const handleCloseModal = async (e) => {
         setProductOnModal(null);
+        if (e) {
+            if (e.discount) {
+                setStoreAndProduct(e);
+                return;
+            }
+            setLoading?.({ show: true, message: "Realizando compra" });
+            await addToCart({ data: e });
+            setLoading?.({ show: false, message: "" });
+        }
+    }
+
+    const handleClose = async (e) => {
+        setStoreAndProduct(null);
         if (e) {
             setLoading?.({ show: true, message: "Realizando compra" });
             await addToCart({ data: e });
@@ -215,7 +233,6 @@ const SearchResults = () => {
                                 onReachEnd={handleStoresEnd}
                             >
                                 {
-
                                     storesList.map((store, i) => {
                                         return (
                                             <SwiperSlide key={i}>
@@ -244,6 +261,7 @@ const SearchResults = () => {
                 </div>
             </div>
             <ProductModal product={productOnModal} closeModal={handleCloseModal} />
+            <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
         </div>
     )
 }

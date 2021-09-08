@@ -102,7 +102,7 @@ const StoreDiscountsModal = ({ storeAndProduct, onClose }) => {
                                     {
                                         actualDiscount?.map((discount, i) => {
                                             return (
-                                                <div className="shadow-xl flex items-center p-4 justify-between">
+                                                <div key={i} className="shadow-xl flex items-center p-4 justify-between">
                                                     <img className="w-10 h-10 rounded" src={`${process.env.REACT_APP_API_URL}/${discount?.imgPath}`} alt="" />
                                                     <p>
                                                         {discount.name}

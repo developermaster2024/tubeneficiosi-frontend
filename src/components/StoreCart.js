@@ -107,10 +107,8 @@ const StoreCart = (props) => {
         </div>
 
         <div className="text-center my-6">
-          <button className="px-6 py-2 bg-main rounded w-8/12 text-white font-bold text-xl transition duration-300 hover:text-main hover:bg-gray-100">
-            <Link to={`/checkout?cartId=${cart?.id}`}>
-              Pagar
-            </Link>
+          <button onClick={() => { closeCart(cart) }} className="px-6 py-2 bg-main rounded w-8/12 text-white font-bold text-xl transition duration-300 hover:text-main hover:bg-gray-100">
+            Pagar
           </button>
         </div>
       </div>
