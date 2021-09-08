@@ -101,6 +101,26 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                 <p>{cart?.store?.address}</p>
                             </div>
                         </div>
+                        {
+                            cart?.discount &&
+                            <div className="bg-white p-4 rounded items-center mb-4 text-gray-500 flex space-x-4">
+                                <img className="w-12 h-12 rounded" src={`${process.env.REACT_APP_API_URL}/${cart?.discount?.imgPath}`} alt={cart?.discount?.name} />
+                                <div className="w-2/3">
+                                    <p className="font-bold text-xl">{cart?.discount?.name}</p>
+                                    <div className="mb-1">
+                                        {
+                                            cart?.discount?.discountType?.code === "dit-002" &&
+                                            <p>Al pagar con las siguientes tarjetas: <b>{cart?.discount?.cards?.map(card => card.name).join(", ")}</b></p>
+                                        }
+                                        {
+                                            cart?.discount?.discountType?.code === "dit-001" &&
+                                            <p>Al pagar con los siguientes bancos: <b>{cart?.discount?.cardsIssuers?.map(cardIssuer => cardIssuer.name).join(", ")}</b></p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
                         <div className="bg-white rounded p-8">
                             {
                                 data?.isProcessed ?
