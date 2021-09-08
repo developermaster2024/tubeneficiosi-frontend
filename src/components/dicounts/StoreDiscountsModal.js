@@ -76,7 +76,7 @@ const StoreDiscountsModal = ({ storeAndProduct, onClose }) => {
                         <IoClose />
                     </button>
                 </div>
-                <div style={{ height: "50vh" }} className="flex">
+                <div style={{ overflowY: "auto", height: "50vh" }} className="flex custom-scrollbar">
                     {discountsError ?
                         <div className="m-auto text-center space-y-4 space-x-4 text-red-500 text-xl">
                             <p>Ha ocurrido un error al obtener los decuentos.</p>
