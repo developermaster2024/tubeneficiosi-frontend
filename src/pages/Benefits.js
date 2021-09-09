@@ -69,10 +69,6 @@ const Benefits = () => {
     })
   }, [card]);
 
-  useEffect(() => {
-    console.log(discounts);
-  }, [discounts]);
-
   const handleCardIssuer = (cardIssuer) => {
     setCardIssuer(cardIssuer)
   }

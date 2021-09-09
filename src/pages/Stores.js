@@ -21,12 +21,27 @@ import RatingsFilter from "../components/RatingsFilter";
 import useAds from "../hooks/useAds";
 import HomeSlider from "../components/HomeSlider";
 import DiscountsSlider from "../components/dicounts/DiscountsSlider";
+import CardIssuersList from "../components/CardIssuersList";
+import CardsList from "../components/CardsList";
 
 const Stores = () => {
 
   const { setLoading, setCustomAlert } = useAuth();
 
-  const [filters, setFilters] = useState({ page: 1, perPage: 12, storeCategoryId: [], rating: null, withCheapestProduct: true, cardDiscount: null });
+  const [filters, setFilters] = useState({
+    page: 1,
+    perPage: 12,
+    storeCategoryId: [],
+    rating: null,
+    withCheapestProduct: true,
+    cardIssuerIds: [],
+    cardIds: []
+  });
+
+  const [cardIssuer, setCardIssuer] = useState(null);
+
+  const [card, setCard] = useState(null);
+
   const [viewType, setViewType] = useState('grid');
   const [canShowLoading, setCanShowLoading] = useState(false);
 
@@ -36,7 +51,9 @@ const Stores = () => {
 
   const [{ stores, total, numberOfPages, error, loading }, getStores] = useStores({
     params: {
-      ...filters
+      ...filters,
+      cardIssuerIds: filters.cardIssuerIds.join(","),
+      cardIds: filters.cardIds.join(",")
     }
   });
 
@@ -59,7 +76,7 @@ const Stores = () => {
     if (canShowLoading) {
       setLoading({ show: loading, message: "Cargando tiendas" });
     }
-  }, [loading, setLoading, canShowLoading]);
+  }, [canShowLoading]);
 
   useEffect(() => {
     if (error) {
@@ -79,6 +96,29 @@ const Stores = () => {
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorLeftBanners?.response?.status === 400 ? errorLeftBanners?.response?.data.message[0] : errorLeftBanners?.response?.data.message}.`, severity: "error" });
     }
   }, [error, errorCategories, errorBannersAds, errorLeftBanners, setLoading, setCustomAlert]);
+
+  useEffect(() => {
+    handleCard(null);
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        cardIssuerIds: cardIssuer?.id ? [cardIssuer?.id] : [],
+        cardIds: [],
+        page: 1
+      }
+    })
+  }, [cardIssuer]);
+
+  useEffect(() => {
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        cardIssuerIds: card ? [] : oldFilters.cardIssuerIds,
+        cardIds: card?.id ? [card?.id] : [],
+        page: 1
+      }
+    })
+  }, [card]);
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
@@ -118,6 +158,14 @@ const Stores = () => {
         [e.target.name]: e.target.value,
       }
     })
+  }
+
+  const handleCardIssuer = (cardIssuer) => {
+    setCardIssuer(cardIssuer)
+  }
+
+  const handleCard = (card) => {
+    setCard(card);
   }
 
   return <>
@@ -191,6 +239,15 @@ const Stores = () => {
               )}
             </ul>
           </div> */}
+
+          <div className="text-center text-xl">
+            Entes
+          </div>
+          <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
+
+          <div className="mt-8">
+            <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
+          </div>
 
           <Button
             color="white"

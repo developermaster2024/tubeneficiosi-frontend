@@ -20,6 +20,8 @@ import HomeSlider from "../components/HomeSlider";
 import useAds from "../hooks/useAds";
 import { useLocation } from "react-router-dom";
 import DiscountsSlider from "../components/dicounts/DiscountsSlider";
+import CardIssuersList from "../components/CardIssuersList";
+import CardsList from "../components/CardsList";
 
 const Products = () => {
 
@@ -28,14 +30,21 @@ const Products = () => {
   const { setLoading, setCustomAlert } = useAuth();
 
   const [isInGridView, setIsInGridView] = useState(true);
+
   const [filters, setFilters] = useState({
     page: 1,
     perPage: 12,
     storeCategoryIds: [],
     tagIds: [],
     rating: null,
-    cardDiscount: null,
+    cardIds: [],
+    cardIssuerIds: []
   });
+
+  const [cardIssuer, setCardIssuer] = useState(null);
+
+  const [card, setCard] = useState(null);
+
   const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" });
   const [{ products, total, numberOfPages, error, loading }, getProducts] = useProducts({
     params: {
@@ -67,15 +76,15 @@ const Products = () => {
 
   useEffect(() => {
     setLoading({ show: loading, message: "Cargando" });
-  }, [loading, setLoading]);
+  }, [loading]);
 
   useEffect(() => {
     setLoading({ show: loadingBannersAds, message: "Obteniendo Banners" });
-  }, [loadingBannersAds, setLoading]);
+  }, [loadingBannersAds]);
 
   useEffect(() => {
     setLoading({ show: loadingLeftBannersAds, message: "Cargando publicidades" });
-  }, [loadingLeftBannersAds, setLoading]);
+  }, [loadingLeftBannersAds]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -91,11 +100,36 @@ const Products = () => {
       params: {
         ...filters,
         storeCategoryIds: filters.storeCategoryIds.join(","),
+        cardIds: filters?.cardIds?.join(","),
+        cardIssuerIds: filters?.cardIssuerIds?.join?.(","),
         tagIds: filters.tagIds.join(","),
         ...priceFilter
       }
     });
-  }, [filters, getProducts, priceFilter]);
+  }, [filters]);
+
+  useEffect(() => {
+    handleCard(null);
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        cardIssuerIds: cardIssuer?.id ? [cardIssuer?.id] : [],
+        cardIds: [],
+        page: 1
+      }
+    })
+  }, [cardIssuer]);
+
+  useEffect(() => {
+    setFilters((oldFilters) => {
+      return {
+        ...oldFilters,
+        cardIssuerIds: card ? [] : oldFilters.cardIssuerIds,
+        cardIds: card?.id ? [card?.id] : [],
+        page: 1
+      }
+    })
+  }, [card]);
 
   const handleChange = (e) => {
     if (e.target.type === "checkbox") {
@@ -142,6 +176,14 @@ const Products = () => {
         [e.target.name]: e.target.value
       }
     })
+  }
+
+  const handleCardIssuer = (cardIssuer) => {
+    setCardIssuer(cardIssuer)
+  }
+
+  const handleCard = (card) => {
+    setCard(card);
   }
 
   return <>
@@ -245,6 +287,14 @@ const Products = () => {
               )}
             </ul>
           </div> */}
+          <div className="text-center text-xl">
+            Entes
+          </div>
+          <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
+
+          <div className="mt-8">
+            <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
+          </div>
 
           <Button
             color="white"
