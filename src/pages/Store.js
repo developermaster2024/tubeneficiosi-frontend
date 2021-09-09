@@ -172,7 +172,7 @@ const Store = () => {
         getCart();
       }
     }
-  }, [store, user, getCart, getCategoriesStores, getTags]);
+  }, [store, user]);
 
   useEffect(() => {
 
@@ -247,17 +247,14 @@ const Store = () => {
   const handleClose = async (e) => {
     setStoreAndProduct(null);
     if (e) {
-      if (e.discountId) {
-        setLoading({ show: true, message: "Cargando..." })
-        await updateCart({
-          data: {
-            ...e
-          }
-        });
-        setLoading({ show: false, message: "" })
-        return;
-      }
-      history.push(`/checkout?cartId=${cart?.id}`);
+      setLoading({ show: true, message: "Cargando..." })
+      await updateCart({
+        data: {
+          ...e,
+          discountId: e.discountId ? e.discountId : null
+        }
+      });
+      setLoading({ show: false, message: "" })
     }
   }
 
