@@ -114,7 +114,7 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                         }
                                         {
                                             cart?.discount?.discountType?.code === "dit-001" &&
-                                            <p>Al pagar con los siguientes bancos: <b>{cart?.discount?.cardsIssuers?.map(cardIssuer => cardIssuer.name).join(", ")}</b></p>
+                                            <p>Al pagar con los siguientes bancos: <b>{cart?.discount?.cardIssuers?.map(cardIssuer => cardIssuer.name).join(", ")}</b></p>
                                         }
                                     </div>
                                 </div>

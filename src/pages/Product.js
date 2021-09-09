@@ -435,14 +435,13 @@ const Product = () => {
                 {
                   product?.productFeatures?.length > 0 &&
                   <ProductFeatureGroup name="Características">
-                    {product?.productFeatures?.map((feature) => <ProductFeatureCheckbox
-                      key={feature.id}
-                      id={feature.id}
-                      name={feature.name}
-                      value={feature.value}
-                      price={feature.price}
-                      isSelectable={feature.isSelectable}
-                    />)}
+                    {product?.productFeatures?.map((feature) => {
+                      return (
+                        <div>
+                          {feature.name}
+                        </div>
+                      )
+                    })}
                   </ProductFeatureGroup>
                 }
                 {
@@ -450,14 +449,13 @@ const Product = () => {
                     key={featuresGroup.id}
                     name={featuresGroup.name}
                   >
-                    {featuresGroup?.productFeatureForGroups?.map((feature) => <ProductFeatureCheckbox
-                      key={feature.id}
-                      id={feature.id}
-                      name={feature.name}
-                      value={feature.value}
-                      price={feature.price}
-                      isSelectable={feature.isSelectable}
-                    />)}
+                    {featuresGroup?.productFeatureForGroups?.map((feature) => {
+                      return (
+                        <div>
+                          {feature?.name}
+                        </div>
+                      )
+                    })}
                   </ProductFeatureGroup>)}
               </TabPanel>
             </TabsProvider>
