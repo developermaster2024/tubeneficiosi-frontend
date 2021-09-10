@@ -237,7 +237,7 @@ const Checkout = (props) => {
               onChange={handleChange} />
           }
         </div>
-        <div className="w-4/12 p-8">
+        <div className="w-5/12 p-8">
           <CheckoutDetailsCard onBuy={handleBuy} deliveryCost={deliveryCost} loadingDeliveryCost={deliveryCostLoading} canBuy={canBuy} emitCart={handleCart} cartId={checkoutData.cartId} />
         </div>
       </div>

@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import Button from "./Button";
+import ProductFeaturesModal from "./ProductFeaturesModal";
 
 const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, deliveryCost, onBuy }) => {
 
@@ -13,6 +14,8 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
     const [productToDelete, setProductToDelete] = useState(null);
 
     const [cart, setCart] = useState(null);
+
+    const [productDetails, setProductDetails] = useState(null);
 
     const [{ data, error: cartError, loading: cartLoading }, getCart] = useAxios({ url: `/carts/${cartId}` }, { useCache: false, manual: true });
 
@@ -75,6 +78,14 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
 
     const handleDelete = (product) => {
         setProductToDelete(product);
+    }
+
+    const handleFeatures = (product) => {
+        setProductDetails(product);
+    }
+
+    const handleClose = () => {
+        setProductDetails(null);
     }
 
     return (
@@ -150,9 +161,19 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                                                 <div className="flex justify-between items-center w-full">
                                                                     <div className="w-1/2 flex items-center">
                                                                         <img src={`${process.env.REACT_APP_API_URL}/${product?.productImage}`} className="rounded-full h-12 w-12" alt="" />
-                                                                        <div className="ml-2">
+                                                                        <div className="ml-2 space-y-2">
                                                                             <h3>{product?.productName}</h3>
-                                                                            <b className="text-main">$ {product?.productPrice}</b>
+                                                                            {
+                                                                                product?.cartItemFeatures?.length > 0 &&
+                                                                                <div className="cursor-pointer text-main" onClick={() => { handleFeatures(product) }}>
+                                                                                    Ver acompañantes
+                                                                                </div>
+                                                                            }
+                                                                            <p>
+                                                                                <b className="text-main">
+                                                                                    $ {Number(product?.productPrice) + product?.cartItemFeatures?.map(feature => Number(feature?.price)).reduce((price, acum) => { return price + acum }, 0)}
+                                                                                </b>
+                                                                            </p>
                                                                         </div>
                                                                     </div>
                                                                     <div className="bg-gray-100 text-main w-12 h-12 flex rounded">
@@ -185,6 +206,10 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                                 <span>Sub total</span>
                                                 <span>$ {cart?.discount ? cart?.subTotalWithDiscount : cart?.subTotal}</span>
                                             </div>
+                                            <div className="flex font-bold justify-between text-gray-400 my-4">
+                                                <span>Total a pagar</span>
+                                                <span>$ {cart?.discount ? (cart?.subTotalWithDiscount + Number(deliveryCost)) : (cart?.subTotal + Number(deliveryCost))}</span>
+                                            </div>
                                             <div className="px-8 text-center mt-6">
                                                 <button className={clsx(["text-center text-2xl px-14 py-2 rounded text-white"], {
                                                     'bg-red-500': canBuy,
@@ -200,8 +225,8 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                         </div>
                     </>
             }
+            <ProductFeaturesModal product={productDetails} closeModal={handleClose} />
         </>
-
     )
 }
 
