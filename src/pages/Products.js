@@ -54,10 +54,14 @@ const Products = () => {
 
   const [{ ads: adsBanners, error: errorBannersAds, loading: loadingBannersAds }] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5, isActive: "true" } } })
 
-  const [{ ads: adsLeftBanners, error: errorLeftBanners, loading: loadingLeftBannersAds }] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 5, isActive: "true" } } })
+  const [{ ads: adsLeftBanners, error: errorLeftBanners, loading: loadingLeftBannersAds }] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 4, isActive: "true" } } })
 
   const [{ categories, error: errorCategories }] = useCategories();
   const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });
+
+  useEffect(() => {
+    console.log(adsLeftBanners);
+  }, [adsLeftBanners])
 
   useEffect(() => {
     if (errorBannersAds) {
@@ -259,7 +263,7 @@ const Products = () => {
           {tags?.length > 0 && <div>
             <h4 className="text-xl font-semibold mb-2">Etiquetas</h4>
 
-            <ul className="max-h-40 overflow-y-auto text-gray-800 space-y-2">
+            <ul className="max-h-72 custom-scrollbar overflow-y-auto text-gray-800 space-y-2">
               {tags?.map((tag) => <li key={tag.id}>
                 <Checkbox
                   onChange={handleChange}
@@ -273,23 +277,6 @@ const Products = () => {
             </ul>
           </div>}
 
-          {/*Cards*/}
-          {/* <div>
-            <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
-
-            <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
-              {cards.map((card, i) =>
-                <CategoryCheckbox
-                  key={i}
-                  label={card.name}
-                  children={card.children}
-                />
-              )}
-            </ul>
-          </div> */}
-          <div className="text-center text-xl">
-            Entes
-          </div>
           <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
 
           <div className="mt-8">

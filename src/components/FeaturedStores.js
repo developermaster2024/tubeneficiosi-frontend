@@ -36,7 +36,11 @@ const FeaturedStores = ({ storesAds }) => {
                                             />
 
                                             <div className="p-4 pt-16 space-y-7">
-                                                <h4 className="text-2xl text-center">{storesAd?.store?.name}</h4>
+                                                <h4 className="text-2xl text-center">
+                                                    <Link className="hover:text-main" to={`/stores/${storesAd.store?.slug}`}>
+                                                        {storesAd?.store?.name}
+                                                    </Link>
+                                                </h4>
 
                                                 <div className="flex justify-evenly space-x-2">
                                                     {
@@ -60,7 +64,7 @@ const FeaturedStores = ({ storesAds }) => {
                                                 </div>
 
                                                 <div className="text-center">
-                                                    <Link to={`/stores/${storesAd.store?.slug}`}>
+                                                    <Link className="hover:text-main" to={`/stores/${storesAd.store?.slug}`}>
                                                         Ver Tienda
                                                     </Link>
                                                 </div>

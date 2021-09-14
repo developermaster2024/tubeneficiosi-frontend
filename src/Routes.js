@@ -14,6 +14,8 @@ import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import CheckoutSuccess from "./pages/CheckoutSuccess";
 import SearchResults from "./pages/SearchResults";
+import RenewPassword from "./pages/RenewPassword";
+import Helps from "./pages/Helps";
 
 const Routes = () => {
 
@@ -34,6 +36,8 @@ const Routes = () => {
       <Route path="/products/:slug" exact component={Product} />
       <Route path="/benefits" exact component={Benefits} />
       <Route path="/login" exact component={Login} />
+      <Route path="/forgot-password" exact component={RenewPassword} />
+      <Route path="/helps" exact component={Helps} />
       <Route path="/register" exact component={Register} />
       <Route path="/search" exact component={SearchResults} />
 

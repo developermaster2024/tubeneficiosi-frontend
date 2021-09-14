@@ -80,7 +80,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <nav className="space-x-5 mr-5">
               <Link className="hover:text-main" to="/products">Comprar</Link>
-              <a className="hover:text-main" href="/#">Ayuda</a>
+              <a className="hover:text-main" href="/helps">Ayuda</a>
             </nav>
             {
               user ?

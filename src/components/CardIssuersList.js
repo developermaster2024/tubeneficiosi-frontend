@@ -48,48 +48,51 @@ const CardIssuersList = ({ emitCardIssuer, selectedCardIssuer }) => {
     }, [cardsIssuers]);
 
     return (
-        <div style={{ maxHeight: "500px", overflowY: "auto" }} className="custom-scrollbar px-2">
-            {
-                error &&
-                <div className="text-center text-red-500">
-                    <p>Ha ocurrido un error al obtener los entes</p>
-                    <Button className="bg-main" onClick={() => { getCardsIssuers() }}>
-                        Reintentar
-                    </Button>
-                </div>
-            }
-            {
-                actualCardIssuers?.map((cardIssuer, i) => {
-                    return (
-                        <div className="relative" key={i}>
-                            {
-                                selectedCardIssuer?.id === cardIssuer?.id &&
-                                <IoCloseCircleSharp
-                                    onClick={() => { emitCardIssuer(null) }}
-                                    className="absolute -top-2 -right-2 text-2xl hover:text-main cursor-pointer transition duration-500"
-                                />
-                            }
-                            <div
-                                onClick={() => { emitCardIssuer(cardIssuer) }}
-                                ref={i + 1 === actualCardIssuers.length ? lastCardIssuerRef : null}
-                                className="text-center p-4 rounded bg-gray-200 my-4 space-y-2 cursor-pointer transition duration-500 hover:bg-white hover:shadow-xl">
+        <>
+            <h4 className="text-center text-xl font-bold">Entes</h4>
+            <div style={{ maxHeight: "500px", overflowY: "auto" }} className="custom-scrollbar px-2">
+                {
+                    error &&
+                    <div className="text-center text-red-500">
+                        <p>Ha ocurrido un error al obtener los entes</p>
+                        <Button className="bg-main" onClick={() => { getCardsIssuers() }}>
+                            Reintentar
+                        </Button>
+                    </div>
+                }
+                {
+                    actualCardIssuers?.map((cardIssuer, i) => {
+                        return (
+                            <div className="relative" key={i}>
                                 {
-                                    cardIssuer?.imgPath &&
-                                    <img className="w-12 h-12 rounded m-auto" src={`${process.env.REACT_APP_API_URL}/${cardIssuer?.imgPath}`} alt={cardIssuer?.name} />
+                                    selectedCardIssuer?.id === cardIssuer?.id &&
+                                    <IoCloseCircleSharp
+                                        onClick={() => { emitCardIssuer(null) }}
+                                        className="absolute -top-2 -right-2 text-2xl hover:text-main cursor-pointer transition duration-500"
+                                    />
                                 }
-                                <p>{cardIssuer?.name}</p>
+                                <div
+                                    onClick={() => { emitCardIssuer(cardIssuer) }}
+                                    ref={i + 1 === actualCardIssuers.length ? lastCardIssuerRef : null}
+                                    className="text-center p-4 rounded bg-gray-200 my-4 space-y-2 cursor-pointer transition duration-500 hover:bg-white hover:shadow-xl">
+                                    {
+                                        cardIssuer?.imgPath &&
+                                        <img className="w-12 h-12 rounded m-auto" src={`${process.env.REACT_APP_API_URL}/${cardIssuer?.imgPath}`} alt={cardIssuer?.name} />
+                                    }
+                                    <p>{cardIssuer?.name}</p>
+                                </div>
                             </div>
-                        </div>
-                    )
-                })
-            }
-            {
-                cardIssuersLoading &&
-                <div className="text-center text-xl">
-                    Cargando...
-                </div>
-            }
-        </div>
+                        )
+                    })
+                }
+                {
+                    cardIssuersLoading &&
+                    <div className="text-center text-xl">
+                        Cargando...
+                    </div>
+                }
+            </div>
+        </>
     )
 }
 

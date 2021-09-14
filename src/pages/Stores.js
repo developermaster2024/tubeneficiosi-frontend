@@ -31,7 +31,7 @@ const Stores = () => {
   const [filters, setFilters] = useState({
     page: 1,
     perPage: 12,
-    storeCategoryId: [],
+    storeCategoryIds: [],
     rating: null,
     withCheapestProduct: true,
     cardIssuerIds: [],
@@ -53,7 +53,8 @@ const Stores = () => {
     params: {
       ...filters,
       cardIssuerIds: filters.cardIssuerIds.join(","),
-      cardIds: filters.cardIds.join(",")
+      cardIds: filters.cardIds.join(","),
+      storeCategoryIds: filters.storeCategoryIds.join(",")
     }
   });
 
@@ -212,9 +213,16 @@ const Stores = () => {
             <h4 className="text-xl font-semibold mb-2">Categorias</h4>
             <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
               {categories.map((category, i) =>
-                <div key={i} className="flex items-center space-x-4">
-                  <input onChange={handleChange} name="storeCategoryId" value={category.id} checked={filters.storeCategoryId.includes(category.id)} className="text-main focus:ring-white" id={`${category.name}-${i}`} type="checkbox" />
-                  <label htmlFor={`${category.name}-${i}`}>
+                <div key={i} className="flex items-center space-x-4 cursor-pointer">
+                  <input
+                    onChange={handleChange}
+                    name="storeCategoryIds"
+                    value={category.id}
+                    checked={filters.storeCategoryIds.includes(category.id)}
+                    className="text-main focus:ring-white"
+                    id={`${category.name}-${i}`}
+                    type="checkbox" />
+                  <label className="cursor-pointer capitalize" htmlFor={`${category.name}-${i}`}>
                     <p>{category.name}</p>
                   </label>
                 </div>

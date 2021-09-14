@@ -37,8 +37,6 @@ const Home = () => {
 
   const [{ storeAds, error: errorStoresAds }, getStoreAds] = useStoreAds({ axiosConfig: { params: { isActive: "true" } }, options: { manual: true, useCache: false } });
 
-  const [{ featuredProducts, error: featuredProductError }, getFeaturedProducts] = useFeaturedProducts({ axiosConfig: { params: { isActive: "true" } }, options: { manual: true, useCache: false } });
-
   const [{ ads, error: adsError }, getAds] = useAds({ axiosConfig: { params: { isActive: "true" } }, options: { manual: true, useCache: false } });
 
   const [{ categories, error: errorCategories }, getCategories] = useCategories({ options: { manual: true, useCache: false } });
@@ -51,13 +49,12 @@ const Home = () => {
       getNecessaryInfoData(),
       getBanners({ params: { isActive: "true" } }),
       getStoreAds({ params: { isActive: "true" } }),
-      getFeaturedProducts({ params: { isActive: "true" } }),
       getAds({ params: { isActive: "true" } }),
       getCategories()
     ]).then((values) => {
       setLoading({ show: false, message: "" });
     })
-  }, [getBusinessInfo, getAppSectionData, getNecessaryInfoData, getBanners, getStoreAds, getFeaturedProducts, getAds, getCategories, setLoading]);
+  }, [getBusinessInfo, getAppSectionData, getNecessaryInfoData, getBanners, getStoreAds, getAds, getCategories, setLoading]);
 
   useEffect(() => {
 
@@ -86,11 +83,6 @@ const Home = () => {
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorStoresAds?.response?.status === 400 ? errorStoresAds?.response?.data.message[0] : errorStoresAds?.response?.data.message}.`, severity: "error" });
     }
 
-    if (featuredProductError) {
-      setLoading?.({ show: false, message: "" });
-      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${featuredProductError?.response?.status === 400 ? featuredProductError?.response?.data.message[0] : featuredProductError?.response?.data.message}.`, severity: "error" });
-    }
-
     if (adsError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${adsError?.response?.status === 400 ? adsError?.response?.data.message[0] : adsError?.response?.data.message}.`, severity: "error" });
@@ -100,7 +92,7 @@ const Home = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
     }
-  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, featuredProductError, adsError, errorCategories, setCustomAlert, setLoading]);
+  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, adsError, errorCategories]);
 
   return <>
     <HomeSlider banners={banners} />
@@ -149,29 +141,29 @@ const Home = () => {
 
     {/* GASTRONOMIA */}
     <div className="container mt-20">
-      <GastronomyFeaturedProducts categoryInfo={categories.filter(category => category.id === 1)[0]} featuredProducts={featuredProducts.filter(product => product?.storeCategory?.id === 1)} />
+      <GastronomyFeaturedProducts categoryInfo={categories.filter(category => category.id === 1)[0]} />
     </div>
 
     {/* ESPECTACULOS */}
     <div className="container mt-20">
-      <ShowsFeaturedProducts categoryInfo={categories.filter(category => category.id === 2)[0]} featuredProducts={featuredProducts} />
+      <ShowsFeaturedProducts categoryInfo={categories.filter(category => category.id === 2)[0]} />
     </div>
 
     {/* Supermercados */}
     <div className="container my-20">
-      <SuperMarketsFeaturedProducts categoryInfo={categories.filter(category => category.id === 3)[0]} featuredProducts={featuredProducts} />
+      <SuperMarketsFeaturedProducts categoryInfo={categories.filter(category => category.id === 3)[0]} />
     </div>
 
     <HomeSlider className="my-12 h-84" imgHeight="400px" banners={ads.filter(ads => ads.adsPosition.id === 3)} />
 
     {/* Boliches */}
     <div className="container my-20">
-      <BolichesFeaturedProducts categoryInfo={categories.filter(category => category.id === 4)[0]} featuredProducts={featuredProducts} />
+      <BolichesFeaturedProducts categoryInfo={categories.filter(category => category.id === 4)[0]} />
     </div>
 
     {/* Farmcias */}
     <div className="container mt-20">
-      <PharmacyFeaturedProducts categoryInfo={categories.filter(category => category.id === 5)[0]} featuredProducts={featuredProducts} />
+      <PharmacyFeaturedProducts categoryInfo={categories.filter(category => category.id === 5)[0]} />
     </div>
 
     <div className="container mt-20">
