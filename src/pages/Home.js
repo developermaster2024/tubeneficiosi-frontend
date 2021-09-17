@@ -123,7 +123,7 @@ const Home = () => {
     </div>
 
     <div className="container mt-20">
-      <SectionHeading>Descrubrí</SectionHeading>
+      <SectionHeading>Descubrí</SectionHeading>
     </div>
 
     {/* PRODUCT ADS */}

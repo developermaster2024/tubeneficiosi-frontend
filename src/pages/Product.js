@@ -75,6 +75,8 @@ const Product = () => {
 
   const [{ error: cartError, data: cart }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
 
+  const [{ data: favoriteData, loading: loadingFavorite, error: favoriteError }, toggleFavorite] = useAxios({ url: `/favorite-products/${product?.id}`, method: 'POST' }, { manual: true, useCache: false });
+
   useEffect(() => {
     if (cart) {
       setLoading?.({ show: false, message: "" });
@@ -83,11 +85,20 @@ const Product = () => {
   }, [cart]);
 
   useEffect(() => {
+    setFavorite(favoriteData);
+  }, [favoriteData]);
+
+  useEffect(() => {
     if (cartError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
     }
-  }, [cartError])
+
+    if (favoriteError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${favoriteError?.response?.status === 400 ? favoriteError?.response?.data.message[0] : favoriteError?.response?.data.message}.`, severity: "error" });
+    }
+  }, [cartError, favoriteError])
 
   useEffect(() => {
     setQuestionsFormErrors({
@@ -114,6 +125,8 @@ const Product = () => {
           sort: 'createdAt,DESC',
         }
       });
+
+      setFavorite(product?.isFavorite);
 
       setQuestionFormData(prevData => ({
         ...prevData,
@@ -231,18 +244,19 @@ const Product = () => {
                 <div className="flex itemx-center text-3xl justify-between">
                   <h3 className="font-bold mb-2 uppercase">{product?.name}</h3>
                   {
-                    favorite ?
-                      <IoHeart onClick={() => {
-                        setFavorite((actualValue) => {
-                          return !actualValue;
-                        })
-                      }} className="text-main cursor-pointer" />
+                    loadingFavorite ?
+                      <div>
+                        Cargando
+                      </div>
                       :
-                      <IoHeartOutline onClick={() => {
-                        setFavorite((actualValue) => {
-                          return !actualValue;
-                        })
-                      }} className="text-main hover:text-main cursor-pointer" />
+                      favorite ?
+                        <IoHeart onClick={() => {
+                          toggleFavorite()
+                        }} className="text-main cursor-pointer" />
+                        :
+                        <IoHeartOutline onClick={() => {
+                          toggleFavorite()
+                        }} className="text-main hover:text-main cursor-pointer" />
                   }
                 </div>
 
@@ -435,9 +449,9 @@ const Product = () => {
                 {
                   product?.productFeatures?.length > 0 &&
                   <ProductFeatureGroup name="Características">
-                    {product?.productFeatures?.map((feature) => {
+                    {product?.productFeatures?.map((feature, i) => {
                       return (
-                        <div>
+                        <div key={i}>
                           {feature.name}
                         </div>
                       )
@@ -449,9 +463,9 @@ const Product = () => {
                     key={featuresGroup.id}
                     name={featuresGroup.name}
                   >
-                    {featuresGroup?.productFeatureForGroups?.map((feature) => {
+                    {featuresGroup?.productFeatureForGroups?.map((feature, i) => {
                       return (
-                        <div>
+                        <div key={i}>
                           {feature?.name}
                         </div>
                       )

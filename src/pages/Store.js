@@ -81,6 +81,12 @@ const Store = () => {
 
   const [{ data: updateCartData, error: updateCartError, loading: updateCartLoading }, updateCart] = useAxios({ url: `/carts/${cart?.id}/update-discount`, method: "PUT" }, { manual: true, useCache: false });
 
+  const [{ data: favoriteData, loading: loadingFavorite, error: favoriteError }, toggleFavorite] = useAxios({ url: `/favorite-stores/${store?.storeId}`, method: 'POST' }, { manual: true, useCache: false });
+
+  useEffect(() => {
+    setFavorite(favoriteData);
+  }, [favoriteData]);
+
   useEffect(() => {
     setLoading({ show: loadingStore, message: "Cargando Informacion de la tienda." })
   }, [loadingStore, setLoading]);
@@ -130,7 +136,12 @@ const Store = () => {
         setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${updateCartError?.response?.status === 400 ? updateCartError?.response?.data.message[0] : updateCartError?.response?.data.message}.`, severity: "error" });
       }
     }
-  }, [error, errorCategoriesStores, storeError, errorTags, cartError, updateCartError]);
+
+    if (favoriteError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${favoriteError?.response?.status === 400 ? favoriteError?.response?.data.message[0] : favoriteError?.response?.data.message}.`, severity: "error" });
+    }
+  }, [error, errorCategoriesStores, storeError, errorTags, cartError, updateCartError, favoriteError]);
 
   useEffect(() => {
     if (updateCartData) {
@@ -164,6 +175,8 @@ const Store = () => {
           storeId: store.storeId
         }
       });
+
+      setFavorite(store?.isFavorite);
 
       getCategoriesStores();
       getTags();
@@ -363,21 +376,6 @@ const Store = () => {
             onChange={handleChange}
             name="tagIds"
             className="my-8" />
-          {/*Cards*/}
-
-          {/* <div className="my-8">
-            <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
-
-            <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
-              {cards.map((card, i) =>
-                <CategoryCheckbox
-                  key={i}
-                  label={card.name}
-                  children={card.children}
-                />
-              )}
-            </ul>
-          </div> */}
 
           <Button
             color="white"
@@ -397,18 +395,19 @@ const Store = () => {
             {/* Cart and Favorite Button */}
             <div className="w-3/12 p-4 flex items-center space-x-8">
               {
-                favorite ?
-                  <IoHeart onClick={() => {
-                    setFavorite((actualValue) => {
-                      return !actualValue;
-                    })
-                  }} className="text-[50px] bg-white p-2 rounded-full shadow-lg text-main cursor-pointer" />
+                loadingFavorite ?
+                  <div>
+                    Cargando
+                  </div>
                   :
-                  <IoHeartOutline onClick={() => {
-                    setFavorite((actualValue) => {
-                      return !actualValue;
-                    })
-                  }} className="text-[50px] bg-white p-2 rounded-full shadow-lg text-main hover:text-main cursor-pointer" />
+                  favorite ?
+                    <IoHeart onClick={() => {
+                      toggleFavorite()
+                    }} className="text-[50px] bg-white p-2 rounded-full shadow-lg text-main cursor-pointer" />
+                    :
+                    <IoHeartOutline onClick={() => {
+                      toggleFavorite()
+                    }} className="text-[50px] bg-white p-2 rounded-full shadow-lg text-main hover:text-main cursor-pointer" />
               }
 
               {

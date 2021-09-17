@@ -76,7 +76,7 @@ const Products = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
     }
-  }, [errorBannersAds, errorCategories, errorLeftBanners, setLoading, setCustomAlert])
+  }, [errorBannersAds, errorCategories, errorLeftBanners])
 
   useEffect(() => {
     setLoading({ show: loading, message: "Cargando" });

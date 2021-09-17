@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { IoCheckmarkDoneOutline, IoEye, IoStorefrontSharp } from "react-icons/io5";
+import { IoCheckmarkDoneOutline, IoEye, IoStorefrontSharp, IoStarOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import useAxios from "../hooks/useAxios";
+import ProductToRatingModal from "./ProductToRatingModal";
 
 
 const OrdersRows = ({ orderValue, ...rest }) => {
@@ -11,7 +12,10 @@ const OrdersRows = ({ orderValue, ...rest }) => {
 
     const [order, setOrder] = useState(null);
 
+    const [productsToRating, setProductsToRating] = useState(null);
+
     const [{ data: updateData, error: updateError }, updateOrder] = useAxios({ url: `/orders/${order?.id}/status`, method: "PUT" }, { manual: true, useCache: false });
+
 
 
     useEffect(() => {
@@ -40,6 +44,10 @@ const OrdersRows = ({ orderValue, ...rest }) => {
         setLoading?.({ show: true, message: "Marcando como recibido." });
         await updateOrder({ data: { orderStatusCode: "ors-007" } })
         setLoading?.({ show: false, message: "" });
+    }
+
+    const handleSetRating = () => {
+        setProductsToRating(order?.cart?.cartItems);
     }
 
     return (
@@ -87,7 +95,15 @@ const OrdersRows = ({ orderValue, ...rest }) => {
                     order?.orderStatus?.code === "ors-005" &&
                     <IoCheckmarkDoneOutline onClick={handleAccept} title="Marcar como recibido." className="m-auto text-2xl cursor-pointer hover:text-green-500 transition duration-300" />
                 }
+                {
+                    order?.orderStatus?.code === "ors-007" &&
+                    <IoStarOutline
+                        onClick={handleSetRating}
+                        title="Agregar rating a los productos."
+                        className="m-auto text-2xl cursor-pointer text-yellow-500 transition duration-300" />
+                }
             </div>
+            <ProductToRatingModal products={productsToRating} onClose={() => { setProductsToRating(null) }} />
         </div>
     )
 }

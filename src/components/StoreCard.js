@@ -1,16 +1,38 @@
 import { Link } from "react-router-dom";
 import StarIcon from "./StarIcon";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoStorefrontOutline, IoLocationSharp, IoHeartOutline, IoHeart, } from "react-icons/io5";
 import Button from "./Button";
+import useAxios from "../hooks/useAxios";
+import { useAuth } from "../contexts/AuthContext";
 
 
 
-const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, i, isFavorite, slug, open }) => {
+const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, i, isFavorite, slug, open, id }) => {
+
+  const { setLoading, setCustomAlert } = useAuth();
+
   const finalImgAlt = imgAlt ?? name;
 
   const [storeSelected, setStoreSelected] = useState(null);
-  const [favorite, setFavorite] = useState(isFavorite);
+  const [favorite, setFavorite] = useState(false);
+
+  const [{ data: favoriteData, loading: loadingFavorite, error: favoriteError }, toggleFavorite] = useAxios({ url: `/favorite-stores/${id}`, method: 'POST' }, { manual: true, useCache: false });
+
+  useEffect(() => {
+    setFavorite(favoriteData);
+  }, [favoriteData]);
+
+  useEffect(() => {
+    setFavorite(isFavorite);
+  }, [isFavorite])
+
+  useEffect(() => {
+    if (favoriteError) {
+      setLoading?.({ show: false, message: "" });
+      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${favoriteError?.response?.status === 400 ? favoriteError?.response?.data.message[0] : favoriteError?.response?.data.message}.`, severity: "error" });
+    }
+  }, [favoriteError]);
 
   return <div
     onMouseEnter={() => { setStoreSelected(`${name} - ${i}`) }}
@@ -29,15 +51,11 @@ const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating,
             {
               favorite ?
                 <IoHeart onClick={() => {
-                  setFavorite((actualValue) => {
-                    return !actualValue;
-                  })
+                  toggleFavorite()
                 }} className="text-[40px] text-main cursor-pointer" />
                 :
                 <IoHeartOutline onClick={() => {
-                  setFavorite((actualValue) => {
-                    return !actualValue;
-                  })
+                  toggleFavorite()
                 }} className="text-[40px] text-gray-600 hover:text-main cursor-pointer" />
             }
           </div>
