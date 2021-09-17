@@ -6,6 +6,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import PrintOrderComponent from '../components/PrintOrderComponent';
 import Button from '../components/Button';
+import ProductToRatingModal from '../components/ProductToRatingModal';
+import isAllRated from '../helpers/isAllRated';
 
 const OrderDetails = () => {
 
@@ -16,6 +18,10 @@ const OrderDetails = () => {
   const [print, setPrint] = useState(false);
 
   const [order, setOrder] = useState(null);
+
+  const [productsToRating, setProductsToRating] = useState(null);
+
+
 
   const [{ data: orderData, error: orderError, loading: orderLoading }] = useAxios({ url: `/orders/${params?.id}` }, { useCache: false });
 
@@ -60,6 +66,10 @@ const OrderDetails = () => {
     setLoading?.({ show: true, message: "Marcando como recibido." });
     await updateOrder({ data: { orderStatusCode: "ors-007" } })
     setLoading?.({ show: false, message: "" });
+  }
+
+  const handleSetRating = () => {
+    setProductsToRating({ products: order?.cart?.cartItems, ratedProducts: order?.productIdsFromRatings });
   }
 
   return (
@@ -134,6 +144,26 @@ const OrderDetails = () => {
                 Marcar como recibido.
               </button>
             </div>
+          }
+
+          {
+            order?.orderStatus?.code === "ors-008" &&
+            <div className="text-right mt-2">
+              <button onClick={handleAccept} className="bg-main rounded text-white px-4 py-1 transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
+                Marcar como recibido.
+              </button>
+            </div>
+          }
+
+          {
+            order?.orderStatus?.code === "ors-007" && !isAllRated(order?.cart?.cartItems, order?.productIdsFromRatings) ?
+              <div className="text-right mt-2">
+                <button onClick={handleSetRating} className="bg-main rounded text-white px-4 py-1 transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
+                  Calificar productos.
+                </button>
+              </div>
+              :
+              null
           }
         </div>
 
@@ -322,6 +352,7 @@ const OrderDetails = () => {
         </div>
       </>
       <PrintOrderComponent print={print} onFinalizePrint={() => { setPrint(false) }} order={order} />
+      <ProductToRatingModal products={productsToRating?.products} orderId={order?.id} ratedProducts={productsToRating?.ratedProducts} onClose={() => { setProductsToRating(null) }} />
     </div>
   )
 }
