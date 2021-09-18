@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { IoHomeSharp } from "react-icons/io5";
+import { IoHeart, IoHomeSharp } from "react-icons/io5";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoDocumentTextOutline } from "react-icons/io5";
@@ -28,49 +28,56 @@ const MyAccountLayout = ({ children }) => {
       <div className="flex">
         <div className="w-[5vw] bg-white h-screen text-gray-500 text-[2vw]">
           <div>
-            <Link to={'/my-account/dashboard'}>
+            <Link title="Dashboard" to={'/my-account/dashboard'}>
               <IoHomeSharp className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
                 'text-main': currentPath === '/my-account/dashboard'
               })} ></IoHomeSharp>
             </Link>
           </div>
           <div>
-            <Link to={'/my-account/info'}>
+            <Link title="Mi perfil" to={'/my-account/info'}>
               <IoPersonCircleSharp className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
                 'text-main': currentPath === '/my-account/info'
               })}></IoPersonCircleSharp>
             </Link>
           </div>
           <div>
-            <Link to={'/my-account/address'}>
+            <Link title="Direcciones" to={'/my-account/address'}>
               <IoLocationSharp className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
                 'text-main': currentPath === '/my-account/address'
               })}></IoLocationSharp>
             </Link>
           </div>
           <div>
-            <Link to={'/my-account/orders'}>
+            <Link title="Ordenes" to={'/my-account/orders'}>
               <IoDocumentTextOutline className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
                 'text-main': currentPath === '/my-account/orders'
               })}></IoDocumentTextOutline>
             </Link>
           </div>
           <div>
-            <Link to={'/my-account/conversations'}>
+            <Link title="Mis favoritos" to={'/my-account/favorites'}>
+              <IoHeart className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
+                'text-main': currentPath === '/my-account/favorites'
+              })}></IoHeart>
+            </Link>
+          </div>
+          <div>
+            <Link title="Conversaciones" to={'/my-account/conversations'}>
               <IoChatboxEllipsesOutline className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
                 'text-main': currentPath === '/my-account/conversations'
               })}></IoChatboxEllipsesOutline>
             </Link>
           </div>
           <div>
-            <Link to={'/my-account/carts'}>
+            <Link title="Carritos" to={'/my-account/carts'}>
               <IoCartOutline className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
                 'text-main': currentPath === '/my-account/carts'
               })}></IoCartOutline>
             </Link>
           </div>
           <div className="text-center">
-            <button onClick={() => { setShow(true) }} className="my-6 cursor-pointer hover:text-main transition duration-500">
+            <button title="Cerrar sesión" onClick={() => { setShow(true) }} className="my-6 cursor-pointer hover:text-main transition duration-500">
               <IoLogOutOutline ></IoLogOutOutline>
             </button>
           </div>

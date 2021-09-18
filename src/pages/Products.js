@@ -60,8 +60,8 @@ const Products = () => {
   const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });
 
   useEffect(() => {
-    console.log(adsLeftBanners);
-  }, [adsLeftBanners])
+    console.log(products);
+  }, [products]);
 
   useEffect(() => {
     if (errorBannersAds) {

@@ -105,6 +105,7 @@ const PharmacyFeaturedProducts = ({ categoryInfo }) => {
                                                     imgSrc={generateImageUrl(featuredProduct?.product.productImages?.[0]?.path)}
                                                     imgAlt={featuredProduct?.product?.name}
                                                     price={featuredProduct?.product?.price}
+                                                    rating={featuredProduct?.product?.rating}
                                                     quantity={featuredProduct?.product?.quantity}
                                                     onBuy={() => { setProductOnModal(featuredProduct.product) }}
                                                     slug={featuredProduct?.product?.slug}

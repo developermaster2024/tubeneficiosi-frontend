@@ -233,21 +233,6 @@ const Stores = () => {
           {/* Rating */}
           <RatingsFilter />
 
-          {/*Cards*/}
-          {/* <div>
-            <h4 className="text-xl font-semibold mb-2">Selecciona tu tarjeta</h4>
-
-            <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
-              {cards.map((card, i) =>
-                <CategoryCheckbox
-                  key={i}
-                  label={card.name}
-                  children={card.children}
-                />
-              )}
-            </ul>
-          </div> */}
-
           <div className="text-center text-xl">
             Entes
           </div>

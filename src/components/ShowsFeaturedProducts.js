@@ -111,6 +111,7 @@ const ShowsFeaturedProducts = ({ categoryInfo }) => {
                                                     description={featuredProduct?.product?.shortDescription}
                                                     imgSrc={generateImageUrl(featuredProduct?.product.productImages?.[0]?.path)}
                                                     imgAlt={featuredProduct?.product?.name}
+                                                    rating={featuredProduct?.product?.rating}
                                                     price={featuredProduct?.product?.price}
                                                     quantity={featuredProduct?.product?.quantity}
                                                     onBuy={() => { setProductOnModal(featuredProduct.product) }}

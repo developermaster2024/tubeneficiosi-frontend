@@ -79,6 +79,7 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
               imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
               imgAlt={product.name}
               price={product.price}
+              rating={product?.rating}
               onBuy={() => { setProductOnModal(product) }}
               buttonText={isStore ? "Añadir al carrito" : "Comprar"}
             />
@@ -88,6 +89,7 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
           {products.map((product) => <ProductHorizontalCard
             key={product.id}
             name={product.name}
+            rating={product?.rating}
             slug={product.slug}
             description={product.shortDescription}
             quantity={product.quantity}

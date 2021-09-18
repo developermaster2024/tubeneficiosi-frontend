@@ -103,6 +103,7 @@ const GastronomyFeaturedProducts = ({ categoryInfo }) => {
                                                     name={featuredProduct?.product?.name}
                                                     description={featuredProduct?.product?.shortDescription}
                                                     imgSrc={generateImageUrl(featuredProduct?.product.productImages?.[0]?.path)}
+                                                    rating={featuredProduct?.product?.rating}
                                                     imgAlt={featuredProduct?.product?.name}
                                                     price={featuredProduct?.product?.price}
                                                     quantity={featuredProduct?.product?.quantity}
