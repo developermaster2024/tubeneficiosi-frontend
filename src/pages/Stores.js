@@ -32,7 +32,7 @@ const Stores = () => {
     page: 1,
     perPage: 12,
     storeCategoryIds: [],
-    rating: null,
+    minRating: "",
     withCheapestProduct: true,
     cardIssuerIds: [],
     cardIds: []
@@ -122,6 +122,18 @@ const Stores = () => {
   }, [card]);
 
   const handleChange = (e) => {
+
+    if (e.target.name === "minRating") {
+      setFilters((oldFilters) => {
+        return {
+          ...oldFilters,
+          [e.target.name]: oldFilters[e.target.name] === e.target.value ? "" : e.target.value
+        }
+      });
+      return;
+    }
+
+
     if (e.target.type === "checkbox") {
       const value = filters[e.target.name].includes(Number(e.target.value));
       if (value) {
@@ -231,7 +243,12 @@ const Stores = () => {
           </div>
 
           {/* Rating */}
-          <RatingsFilter />
+          <RatingsFilter
+            className="my-8"
+            onChange={handleChange}
+            name="minRating"
+            values={filters.minRating}
+          />
 
           <div className="text-center text-xl">
             Entes

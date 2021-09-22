@@ -40,7 +40,15 @@ const Store = () => {
 
   const [videoPreview, setVideoPreview] = useState("");
 
-  const [filters, setFilters] = useState({ page: 1, categoryIds: [], rating: [], tagIds: [], perPage: 12, storeId: "" });
+  const [filters, setFilters] = useState({
+    page: 1,
+    categoryIds: [],
+    rating: [],
+    tagIds: [],
+    perPage: 12,
+    storeId: "",
+    minRating: ""
+  });
   const [priceFilter, setPriceFilter] = useState({ minPrice: "", maxPrice: "" });
 
   const [isInGridView] = useState(true);
@@ -201,6 +209,17 @@ const Store = () => {
   }, [filters, getProducts]);
 
   const handleChange = (e) => {
+
+    if (e.target.name === "minRating") {
+      setFilters((oldFilters) => {
+        return {
+          ...oldFilters,
+          [e.target.name]: oldFilters[e.target.name] === e.target.value ? "" : e.target.value
+        }
+      });
+      return;
+    }
+
     if (e.target.type === "checkbox") {
       const value = filters[e.target.name].includes(Number(e.target.value));
       if (value) {
@@ -344,8 +363,8 @@ const Store = () => {
           <RatingsFilter
             className="my-8"
             onChange={handleChange}
-            name="rating"
-            values={filters.rating}
+            name="minRating"
+            values={filters.minRating}
           />
 
           <PriceFilter

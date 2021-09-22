@@ -15,8 +15,8 @@ const RatingsFilter = (props) => {
                     className="flex items-center space-x-2"
                 >
                     <Checkbox
-                        value={i}
-                        checked={values?.includes(i)}
+                        value={i + 1}
+                        checked={values?.includes(i + 1)}
                         onChange={onChange}
                         name={name}
                         label={

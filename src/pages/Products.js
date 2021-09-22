@@ -36,9 +36,9 @@ const Products = () => {
     perPage: 12,
     storeCategoryIds: [],
     tagIds: [],
-    rating: null,
     cardIds: [],
-    cardIssuerIds: []
+    cardIssuerIds: [],
+    minRating: ""
   });
 
   const [cardIssuer, setCardIssuer] = useState(null);
@@ -79,16 +79,16 @@ const Products = () => {
   }, [errorBannersAds, errorCategories, errorLeftBanners])
 
   useEffect(() => {
-    setLoading({ show: loading, message: "Cargando" });
-  }, [loading]);
-
-  useEffect(() => {
     setLoading({ show: loadingBannersAds, message: "Obteniendo Banners" });
   }, [loadingBannersAds]);
 
   useEffect(() => {
     setLoading({ show: loadingLeftBannersAds, message: "Cargando publicidades" });
   }, [loadingLeftBannersAds]);
+
+  useEffect(() => {
+    setLoading({ show: loading, message: "Cargando" });
+  }, [loading]);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -136,6 +136,16 @@ const Products = () => {
   }, [card]);
 
   const handleChange = (e) => {
+    if (e.target.name === "minRating") {
+      setFilters((oldFilters) => {
+        return {
+          ...oldFilters,
+          [e.target.name]: oldFilters[e.target.name] === e.target.value ? "" : e.target.value
+        }
+      });
+      return;
+    }
+
     if (e.target.type === "checkbox") {
       const value = filters[e.target.name].includes(Number(e.target.value));
       if (value) {
@@ -247,8 +257,8 @@ const Products = () => {
           <RatingsFilter
             className="my-8"
             onChange={handleChange}
-            name="rating"
-            values={filters.rating}
+            name="minRating"
+            values={filters.minRating}
           />
 
           <PriceFilter
