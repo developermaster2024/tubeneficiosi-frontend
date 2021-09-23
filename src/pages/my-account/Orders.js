@@ -6,10 +6,15 @@ import useOrders from '../../hooks/useOrders';
 import { useAuth } from '../../contexts/AuthContext';
 import usePayMethods from '../../hooks/usePayMethods';
 import useOrdersStatuses from '../../hooks/useOrdersStatuses';
+import { useLocation } from 'react-router';
 
 const MyAccountOrders = () => {
 
+  const location = useLocation();
+
   const { setLoading, setCustomAlert } = useAuth();
+
+  const [alert, setAlert] = useState(null);
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -30,6 +35,15 @@ const MyAccountOrders = () => {
   const [{ payMethods, error: payMethodsError }] = usePayMethods();
 
   const [{ ordersStatuses, error: ordersStatusesError }] = useOrdersStatuses();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mercadopagoStatus = params.get('mercadopago-status');
+
+    if (mercadopagoStatus) {
+      setAlert(mercadopagoStatus);
+    }
+  }, [location]);
 
   useEffect(() => {
     setLoading({ show: ordersLoading, message: "Obteniendo tus pedidos" });
@@ -95,6 +109,28 @@ const MyAccountOrders = () => {
         <IoDocumentTextSharp className="text-4xl"></IoDocumentTextSharp>
         <span className="ml-4">Mis Pedidos</span>
       </h1>
+
+      {
+        alert === 'failed' &&
+        <div className="flex justify-between items-center bg-red-500 p-4 rounded shadow-xl text-white">
+          <p>El pago de la orden ha sido rechazado por mercadopago.</p>
+          <p className="cursor-pointer" onClick={() => { setAlert(null) }}>X</p>
+        </div>
+      }
+      {
+        alert === 'pending' &&
+        <div className="flex justify-between items-center p-4 rounded shadow-xl text-white" style={{ background: 'orange' }}>
+          <p>El pago de la orden ha quedado en espera por mercadopago.</p>
+          <p className="cursor-pointer" onClick={() => { setAlert(null) }}>X</p>
+        </div>
+      }
+      {
+        alert === 'success' &&
+        <div className="flex justify-between items-center bg-green-500 p-4 rounded shadow-xl text-white">
+          <p>El pago de la orden ha confirmado por mercadopago.</p>
+          <p className="cursor-pointer" onClick={() => { setAlert(null) }}>X</p>
+        </div>
+      }
 
       <OrdersTable
         onClearFilters={handleClearFilters}
