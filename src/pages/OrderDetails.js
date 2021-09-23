@@ -8,6 +8,7 @@ import PrintOrderComponent from '../components/PrintOrderComponent';
 import Button from '../components/Button';
 import ProductToRatingModal from '../components/ProductToRatingModal';
 import isAllRated from '../helpers/isAllRated';
+import StoreToRatingModal from '../components/StoreToRatingModal';
 
 const OrderDetails = () => {
 
@@ -21,7 +22,7 @@ const OrderDetails = () => {
 
   const [productsToRating, setProductsToRating] = useState(null);
 
-
+  const [storeToRating, setStoreToRating] = useState(null);
 
   const [{ data: orderData, error: orderError, loading: orderLoading }] = useAxios({ url: `/orders/${params?.id}` }, { useCache: false });
 
@@ -157,7 +158,14 @@ const OrderDetails = () => {
 
           {
             order?.orderStatus?.code === "ors-007" && !isAllRated(order?.cart?.cartItems, order?.productIdsFromRatings) ?
-              <div className="text-right mt-2">
+              <div className="text-right mt-2 space-x-4">
+                {
+                  !order?.storeHasBeenRated &&
+                  <button onClick={() => { setStoreToRating(order?.store) }} className="bg-main rounded text-white px-4 py-1 transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
+                    Calificar tienda.
+                  </button>
+                }
+
                 <button onClick={handleSetRating} className="bg-main rounded text-white px-4 py-1 transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
                   Calificar productos.
                 </button>
@@ -353,6 +361,7 @@ const OrderDetails = () => {
       </>
       <PrintOrderComponent print={print} onFinalizePrint={() => { setPrint(false) }} order={order} />
       <ProductToRatingModal products={productsToRating?.products} orderId={order?.id} ratedProducts={productsToRating?.ratedProducts} onClose={() => { setProductsToRating(null) }} />
+      <StoreToRatingModal store={storeToRating} orderId={order?.id} onClose={() => { setStoreToRating(null) }} />
     </div>
   )
 }

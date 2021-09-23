@@ -11,6 +11,7 @@ import ConversationsChat from "./pages/my-account/ConversationsChat";
 import EditAddress from "./pages/my-account/EditAddress";
 import OrderDetails from "./pages/OrderDetails";
 import Favorites from "./pages/my-account/Favorites";
+import Cards from "./pages/my-account/Cards";
 
 const MyAccountRoutes = () => {
 
@@ -29,6 +30,8 @@ const MyAccountRoutes = () => {
         <Route path="/my-account/orders/:id" exact component={OrderDetails} />
 
         <Route path="/my-account/favorites" exact component={Favorites} />
+
+        <Route path="/my-account/cards" exact component={Cards} />
 
         <Route path="/my-account/conversations" exact component={MyAccountConversations} />
         <Route path="/my-account/conversations/:id" exact component={ConversationsChat} />

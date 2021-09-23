@@ -32,7 +32,7 @@ const FeaturedStores = ({ storesAds }) => {
                                             <img
                                                 src={`${process.env.REACT_APP_API_URL}/${storesAd?.store?.storeProfile?.logo}`}
                                                 alt={storesAd.name}
-                                                className="absolute left-1/2 top-[40px] h-20 w-20 transform -translate-x-1/2 rounded shadow-md"
+                                                className="absolute bg-white left-1/2 top-[40px] h-20 w-20 transform -translate-x-1/2 rounded shadow-md"
                                             />
 
                                             <div className="p-4 pt-16 space-y-7">

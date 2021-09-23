@@ -174,7 +174,11 @@ const Checkout = (props) => {
 
   useEffect(() => {
     if (createCheckoutData) {
-      history.push(`/checkout/${createCheckoutData?.id}`);
+      if (createCheckoutData?.url) {
+        window.open(createCheckoutData?.url, '_blank').focus();
+
+      }
+      history.push(`/checkout/${createCheckoutData?.order?.id}`);
     }
   }, [createCheckoutData]);
 

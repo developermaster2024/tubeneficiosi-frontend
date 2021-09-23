@@ -1,12 +1,16 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { IoHeart, IoHomeSharp } from "react-icons/io5";
-import { IoPersonCircleSharp } from "react-icons/io5";
-import { IoLocationSharp } from "react-icons/io5";
-import { IoDocumentTextOutline } from "react-icons/io5";
-import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import { IoCartOutline } from "react-icons/io5";
-import { IoLogOutOutline } from "react-icons/io5";
+import {
+  IoDocumentTextOutline,
+  IoLogOutOutline,
+  IoCartOutline,
+  IoLocationSharp,
+  IoHeart,
+  IoHomeSharp,
+  IoChatboxEllipsesOutline,
+  IoCard,
+  IoPersonCircleSharp
+} from "react-icons/io5";
 import { Link } from "react-router-dom";
 import LogOutModal from './logOutModal.js';
 
@@ -53,6 +57,13 @@ const MyAccountLayout = ({ children }) => {
               <IoDocumentTextOutline className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
                 'text-main': currentPath === '/my-account/orders'
               })}></IoDocumentTextOutline>
+            </Link>
+          </div>
+          <div>
+            <Link title="Mis tarjetas" to={'/my-account/cards'}>
+              <IoCard className={clsx(["mx-auto my-6 cursor-pointer hover:text-main transition duration-500"], {
+                'text-main': currentPath === '/my-account/cards'
+              })}></IoCard>
             </Link>
           </div>
           <div>
