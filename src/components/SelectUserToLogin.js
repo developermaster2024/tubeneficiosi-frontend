@@ -27,10 +27,6 @@ const SelectUserToLogin = (props) => {
     closeModal();
   }
 
-  useEffect(() => {
-
-  });
-
   const handleClick = (e) => {
     setUserType(e)
   }

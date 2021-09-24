@@ -1,14 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { IoCheckmark } from "react-icons/io5";
+import { useAuth } from "../contexts/AuthContext";
 import useCards from "../hooks/useCards";
+import Button from "./Button";
 import CustomInput from "./CustomInput";
 
 const SelectCardsList = ({ onChange, name, className, values }) => {
 
+    const { user } = useAuth();
+
     const [{ cards, total, numberOfPages, error, loading }, getCards] = useCards();
+
+    const [showMyCards, setShowMyCards] = useState(false);
 
     const [actualCards, setActualCards] = useState([]);
 
-    const [filters, setFilters] = useState({ name: "", cardIssuerName: "", page: 1 });
+    const [filters, setFilters] = useState({ name: "", cardIssuerName: "", page: 1, isOwnedById: "" });
 
     const observer = useRef();
 
@@ -24,7 +31,16 @@ const SelectCardsList = ({ onChange, name, className, values }) => {
         if (card) observer?.current?.observe?.(card)
     }, [loading, numberOfPages, filters]);
 
-
+    useEffect(() => {
+        setActualCards([]);
+        setFilters((oldFilters) => {
+            return {
+                ...oldFilters,
+                page: 1,
+                isOwnedById: showMyCards ? user?.id : ''
+            }
+        })
+    }, [showMyCards])
 
     useEffect(() => {
         setActualCards((oldCards) => {
@@ -53,8 +69,8 @@ const SelectCardsList = ({ onChange, name, className, values }) => {
         })
     }
 
-    const handleChange = (e) => {
-        onChange(e);
+    const handleChange = (card) => {
+        onChange(card);
     }
 
     return (
@@ -62,6 +78,11 @@ const SelectCardsList = ({ onChange, name, className, values }) => {
             <div className="flex justify-between">
                 <h3>Filtros:</h3>
                 <p>Resultados: {actualCards.length}</p>
+                <div className="text-right">
+                    <Button onClick={() => { setShowMyCards((oldShowMyCards) => !oldShowMyCards) }} className="bg-main">
+                        Mostrar solo mis tarjetas
+                    </Button>
+                </div>
             </div>
             <div className="flex items-center space-x-4 my-2">
                 <CustomInput name="name" onChange={handleFilterChange} value={filters.name} placeholder="Nombre" />
@@ -75,22 +96,32 @@ const SelectCardsList = ({ onChange, name, className, values }) => {
                         </div>
                         :
                         actualCards.length > 0 ?
-                            <div className="flex flex-wrap space-y-4 space-x-4 justify-center items-center mt-4 animate__animated animate__fadeInUp">
-                                {
-                                    actualCards?.map((card, i) => {
-                                        return (
-                                            <div
-                                                ref={i + 1 === actualCards.length ? lastCardRef : null}
-                                                key={i}
-                                                className="space-x-4 bg-white text-center shadow p-4 rounded space-y-2">
-                                                {card?.imgPath &&
-                                                    <img className="w-20 h-14 rounded inline" src={`${process.env.REACT_APP_API_URL}/${card?.imgPath}`} alt="" />
-                                                }
-                                                <p>{card?.name} {`- ${card?.cardIssuer?.name}`}</p>
-                                            </div>
-                                        )
-                                    })
-                                }
+                            <div>
+                                <h1 className="text-center mt-4 font-bold">Seleccione sus tarjetas</h1>
+                                <div className="flex cursor-pointer flex-wrap space-y-4 space-x-4 justify-center items-center mt-4 animate__animated animate__fadeInUp">
+                                    {
+                                        actualCards?.map((card, i) => {
+                                            return (
+                                                <div
+                                                    onClick={() => { handleChange(card) }}
+                                                    ref={i + 1 === actualCards.length ? lastCardRef : null}
+                                                    key={i}
+                                                    className="space-x-4 relative bg-white text-center shadow p-4 rounded space-y-2">
+                                                    {
+                                                        values?.includes(card?.id) &&
+                                                        <IoCheckmark
+                                                            className="absolute text-green-500 -top-2 -right-2 text-2xl hover:text-main cursor-pointer transition duration-500"
+                                                        />
+                                                    }
+                                                    {card?.imgPath &&
+                                                        <img className="w-20 h-14 rounded inline" src={`${process.env.REACT_APP_API_URL}/${card?.imgPath}`} alt="" />
+                                                    }
+                                                    <p>{card?.name} {`- ${card?.cardIssuer?.name}`}</p>
+                                                </div>
+                                            )
+                                        })
+                                    }
+                                </div>
                             </div>
                             :
                             <div className="text-center text-red-500">
