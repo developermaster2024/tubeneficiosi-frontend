@@ -7,18 +7,19 @@ import PhoneIcon from "./PhoneIcon";
 import ShareIcon from "./ShareIcon";
 import StarIcon from "./StarIcon";
 
-const MapContainer = ({google, height = 500, stores}) => {
+const MapContainer = ({ google, height = 100, stores }) => {
+
   const [selectedStore, setSelectedStore] = useState(null);
-  
+
   return <Map
     google={google}
     zoom={12}
     containerStyle={{
-      position: 'relative',  
+      position: 'relative',
       width: '100%',
-      height: `${height}px`,
+      height: `800px`,
     }}
-    initialCenter={{lat: -34.605349, lng: -58.478619}}
+    initialCenter={{ lat: -34.605349, lng: -58.478619 }}
   >
     {stores?.map((store, i) => <Marker
       key={i}
@@ -41,7 +42,7 @@ const MapContainer = ({google, height = 500, stores}) => {
           &times;
         </button>
       </div>
-      
+
       <div className="flex flex-col space-y-5 mt-3">
         <h4 className="font-semibold">{selectedStore.name}</h4>
         <div className="flex space-x-1">
@@ -60,7 +61,7 @@ const MapContainer = ({google, height = 500, stores}) => {
             </div>
             <span>Compartir</span>
           </a>
-          
+
           <a href="/#" className="inline-flex flex-col items-center space-y-2">
             <div className="inline-flex items-center justify-center w-10 h-10 border border-blue-500 rounded-full">
               <HeartIcon

@@ -9,7 +9,7 @@ const loader = new Loader({
     libraries: ['drawing', 'geometry', 'places', 'visualization']
 });
 
-const Map = ({ searchBox, onClick, markers, options }) => {
+const Map = ({ searchBox, onClick, markers, options, height = '50vh', forStores, onSelectedStore }) => {
 
 
     const [mapApi, setMapApi] = useState(null);
@@ -20,6 +20,8 @@ const Map = ({ searchBox, onClick, markers, options }) => {
 
     const [actualMarkers, setActualMarkers] = useState([]);
 
+    const [selectedStore, setSelectedStore] = useState(null);
+
     const mapRef = useRef(null);
 
     const searchRef = useRef(null);
@@ -29,6 +31,10 @@ const Map = ({ searchBox, onClick, markers, options }) => {
             setMapApi(response);
         });
     }, []);
+
+    useEffect(() => {
+        onSelectedStore(selectedStore);
+    }, [selectedStore])
 
     useEffect(() => {
         if (mapApi && mapRef.current) {
@@ -78,20 +84,28 @@ const Map = ({ searchBox, onClick, markers, options }) => {
 
     useEffect(() => {
         if (markers && mapApi && map) {
-            actualMarkers?.forEach((actualMarker, i) => {
+            actualMarkers?.map((actualMarker, i) => {
                 actualMarker?.setMap(null);
             });
             setActualMarkers([]);
+
             markers?.forEach((marker, i) => {
                 let newMarker = new mapApi.maps.Marker({
                     animation: mapApi.maps.Animation.DROP,
                     position: new mapApi.maps.LatLng(marker.lat, marker.lng)
                 });
                 newMarker.setMap(map)
-                setActualMarkers([...actualMarkers, newMarker]);
+                if (forStores) {
+                    newMarker.addListener('click', (e) => {
+                        setSelectedStore(marker.store);
+                    });
+                }
+                setActualMarkers((oldActualMarkers) => {
+                    return [...oldActualMarkers, newMarker]
+                });
             });
         }
-    }, [markers, mapApi, map, actualMarkers]);
+    }, [markers, mapApi, map]);
 
 
     return (
@@ -116,7 +130,7 @@ const Map = ({ searchBox, onClick, markers, options }) => {
                             :
                             null
                         }
-                        <div className="cursor-pointer rounded shadow-xl h-[50vh] w-full mt-4" ref={mapRef}>
+                        <div style={{ height: `${height}` }} className={`cursor-pointer rounded shadow-xl w-full mt-4`} ref={mapRef}>
 
                         </div>
                     </div>
@@ -125,7 +139,7 @@ const Map = ({ searchBox, onClick, markers, options }) => {
                         Cargando el mapa...
                     </div>
             }
-        </div>
+        </div >
     )
 }
 

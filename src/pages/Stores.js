@@ -121,6 +121,25 @@ const Stores = () => {
     })
   }, [card]);
 
+  useEffect(() => {
+    if (viewType === 'map') {
+      setFilters((oldFilters) => {
+        return {
+          ...oldFilters,
+          perPage: 100,
+          page: 1
+        }
+      });
+    } else {
+      setFilters((oldFilters) => {
+        return {
+          ...oldFilters,
+          perPage: 12,
+        }
+      });
+    }
+  }, [viewType])
+
   const handleChange = (e) => {
 
     if (e.target.name === "minRating") {
