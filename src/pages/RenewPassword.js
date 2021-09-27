@@ -62,7 +62,7 @@ const RenewPassword = () => {
     }, [passwordRenewData])
 
     useEffect(() => {
-        if (data) {
+        if (data !== undefined) {
             setCustomAlert?.({ show: true, message: `La contraseña ha sido renovada exitosamente.`, severity: "success" });
             history.push('/login');
         }
@@ -113,7 +113,7 @@ const RenewPassword = () => {
                         <input
                             placeholder="Nueva contraseña"
                             type="password"
-                            name="email"
+                            name="password"
                             className="rounded p-2 w-1/3 focus:ring-main focus:border-main"
                             value={passwordRenewData.password}
                             onChange={handleChange}

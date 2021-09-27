@@ -12,7 +12,7 @@ const ForgotPassword = () => {
     const [{ data, loading, error }, renewPassword] = useAxios({ url: `/auth/forgot-client-password`, method: 'POST' }, { manual: true, useCache: false });
 
     useEffect(() => {
-        if (data) {
+        if (data !== undefined) {
             setCustomAlert?.({ show: true, message: `Se ha enviado la solicitud exitosamente.`, severity: "success" });
         }
     }, [data]);
@@ -46,7 +46,7 @@ const ForgotPassword = () => {
                     <img src={SystemInfo.logo} className="h-16 w-16 m-auto" alt="" />
 
                     <h1 className="text-xl font-bold">
-                        Por favor ingrese aca su correo electronico.
+                        Por favor ingrese su correo electronico.
                     </h1>
 
                     <input

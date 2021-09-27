@@ -308,6 +308,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                             }
                                         </div>
                                         <div className="w-1/3">
+                                            <p className="text-sm text-gray-500">Tamaño maximo: <b>3MB</b></p>
                                             <ImgUploadInput name="image" change={handlePaymentChange} className="h-16" description="Comprobante" />
                                             {
                                                 errorsForm.image &&

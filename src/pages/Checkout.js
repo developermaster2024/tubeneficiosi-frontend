@@ -210,6 +210,8 @@ const Checkout = (props) => {
     setLoading?.({ show: true, message: "Creando orden" });
     const data = new FormData();
     const { bankAccountId, ...rest } = checkoutData;
+    console.log(bankAccountId);
+    console.log(checkoutData);
     if (rest.cartId) {
       data.append('cartId', rest.cartId);
     }
@@ -224,9 +226,10 @@ const Checkout = (props) => {
     }
     if (rest.bankTransfers && rest.bankTransfers.length > 0) {
       rest.bankTransfers.forEach((banktransfer, i) => {
-        data.append(`banktransfer[${i}][reference]`, banktransfer.reference);
-        data.append(`banktransfer[${i}][amount]`, banktransfer.amount);
-        data.append(`images[${i}]`, banktransfer.image, banktransfer.image.name);
+        data.append(`bankTransfers[${i}][reference]`, banktransfer.reference);
+        data.append(`bankTransfers[${i}][amount]`, banktransfer.amount);
+        data.append(`bankTransfers[${i}][bankAccountId]`, banktransfer.bankAccountId);
+        data.append(`images`, banktransfer.image, banktransfer.image.name);
       })
     }
 
