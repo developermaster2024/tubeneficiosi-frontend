@@ -208,8 +208,29 @@ const Checkout = (props) => {
 
   const handleBuy = async () => {
     setLoading?.({ show: true, message: "Creando orden" });
+    const data = new FormData();
     const { bankAccountId, ...rest } = checkoutData;
-    await createCheckout({ data: rest });
+    if (rest.cartId) {
+      data.append('cartId', rest.cartId);
+    }
+    if (rest.deliveryMethodId) {
+      data.append('deliveryMethodId', rest.deliveryMethodId);
+    }
+    if (rest.paymentMethodCode) {
+      data.append('paymentMethodCode', rest.paymentMethodCode);
+    }
+    if (rest.profileAddressId) {
+      data.append('profileAddressId', rest.profileAddressId);
+    }
+    if (rest.bankTransfers && rest.bankTransfers.length > 0) {
+      rest.bankTransfers.forEach((banktransfer, i) => {
+        data.append(`banktransfer[${i}][reference]`, banktransfer.reference);
+        data.append(`banktransfer[${i}][amount]`, banktransfer.amount);
+        data.append(`images[${i}]`, banktransfer.image, banktransfer.image.name);
+      })
+    }
+
+    await createCheckout({ data });
     setLoading?.({ show: false, message: "" });
   }
 

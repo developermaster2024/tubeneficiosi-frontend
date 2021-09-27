@@ -5,6 +5,7 @@ import CustomInput from "./CustomInput";
 import { IoClose } from "react-icons/io5";
 import { isRequired, validate } from "../helpers/formsValidations";
 import useBankAccounts from "../hooks/useBankAccounts";
+import ImgUploadInput from "./ImgUploadInput";
 
 
 const PayMethodSection = ({ onChange, values, ...rest }) => {
@@ -17,11 +18,12 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
 
     const [selectedBankAccountId, setSelectedBankAccountId] = useState("");
 
-    const [paymentInfoForm, setPaymentInfoForm] = useState({ reference: "", amount: 0 });
+    const [paymentInfoForm, setPaymentInfoForm] = useState({ reference: "", amount: 0, image: null });
 
     const [errorsForm, setErrorsForm] = useState({
         reference: null,
-        amount: null
+        amount: null,
+        image: null
     });
 
     const [{ bankAccounts: newBanksAccounts, numberOfPages, error: bankAccountsError, loading: bankAccountsLoading }, getBankAccounts] = useBankAccounts({ options: { manual: true, useCache: false } })
@@ -75,7 +77,10 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
             ]),
             amount: validate(paymentInfoForm.amount, [
                 { validator: isRequired, errorMessage: "El monto es obligatorio." },
-            ])
+            ]),
+            image: validate(paymentInfoForm.image, [
+                { validator: isRequired, errorMessage: "El comprobante es obligatorio" },
+            ]),
         });
     }, [paymentInfoForm])
 
@@ -92,7 +97,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
         setPaymentInfoForm((oldPaymentInfoForm) => {
             return {
                 ...oldPaymentInfoForm,
-                [e.target.name]: e.target.value
+                [e.target.name]: e.target.type === "file" ? e.target.files[0] : e.target.value
             }
         })
     }
@@ -253,12 +258,15 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                 {
                                     bankTransfers.map((bankTransfer, i) => {
                                         return (
-                                            <div className="animate__animated animate__fadeInLeft flex items-center mt-4 space-x-8">
+                                            <div key={i} className="animate__animated animate__fadeInLeft flex items-center mt-4 space-x-8">
                                                 <div>
-                                                    {bankTransfer.reference}
+                                                    {bankTransfer?.reference}
                                                 </div>
                                                 <div>
-                                                    {bankTransfer.amount}
+                                                    {bankTransfer?.amount}
+                                                </div>
+                                                <div>
+                                                    {bankTransfer?.image?.name}
                                                 </div>
                                                 <div>
                                                     <Button type="button" onClick={(e) => { handleRemove(bankTransfer) }} className="bg-main transition duration-500 hover:bg-white hover:text-main">
@@ -281,7 +289,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                                 name="reference" />
                                             {
                                                 errorsForm.reference &&
-                                                <p className="text-red-500">{errorsForm.reference}</p>
+                                                <p className="text-red-500 truncate">{errorsForm.reference}</p>
                                             }
                                         </div>
                                         <div>
@@ -299,9 +307,16 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                                 <p className="text-red-500">{errorsForm.amount}</p>
                                             }
                                         </div>
+                                        <div className="w-1/3">
+                                            <ImgUploadInput name="image" change={handlePaymentChange} className="h-16" description="Comprobante" />
+                                            {
+                                                errorsForm.image &&
+                                                <p className="text-red-500 truncate">{errorsForm.image}</p>
+                                            }
+                                        </div>
                                         <div>
                                             <Button className="bg-main transition duration-500 hover:bg-white hover:text-main">
-                                                Agregar mas
+                                                Aceptar
                                             </Button>
                                         </div>
                                     </div>
