@@ -49,16 +49,16 @@ const MyAccountCartsTable = (props) => {
             <p>Total</p>
             <CustomInput
               placeholder="min"
-              name="minPrice"
+              name="minTotal"
               onChange={onFiltersChange}
-              value={values.minPrice}
+              value={values.minTotal}
               className="my-2"
             />
             <CustomInput
               placeholder="max"
-              name="maxPrice"
+              name="maxTotal"
               onChange={onFiltersChange}
-              value={values.maxPrice}
+              value={values.maxTotal}
               className="my-2"
             />
           </div>

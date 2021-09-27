@@ -14,8 +14,8 @@ const MyAccountCarts = () => {
     storeName: "",
     from: "",
     until: "",
-    minPrice: "",
-    maxPrice: "",
+    minTotal: "",
+    maxTotal: "",
     isProcessed: "false",
     isExpired: "false",
     isDirectPurchase: "false"
@@ -49,8 +49,8 @@ const MyAccountCarts = () => {
       storeName: "",
       from: "",
       until: "",
-      minPrice: "",
-      maxPrice: "",
+      minTotal: "",
+      maxTotal: "",
       isProcessed: "false",
       isExpired: "false",
       isDirectPurchase: "false"
