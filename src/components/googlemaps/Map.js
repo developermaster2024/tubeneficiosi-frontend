@@ -33,7 +33,7 @@ const Map = ({ searchBox, onClick, markers, options, height = '50vh', forStores,
     }, []);
 
     useEffect(() => {
-        onSelectedStore(selectedStore);
+        onSelectedStore?.(selectedStore);
     }, [selectedStore])
 
     useEffect(() => {
