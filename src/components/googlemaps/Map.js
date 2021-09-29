@@ -33,6 +33,7 @@ const Map = ({ searchBox, onClick, markers, options, height = '50vh', forStores,
     }, []);
 
     useEffect(() => {
+        console.log('hola');
         onSelectedStore?.(selectedStore);
     }, [selectedStore])
 
