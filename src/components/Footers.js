@@ -1,6 +1,22 @@
+import useAxios from "../hooks/useAxios";
 import { Link } from "react-router-dom";
 import SystemInfo from "../util/SystemInfo";
+import { useEffect, useState } from "react";
+import clsx from "clsx";
+import WidgetComponent from "./WidgetComponent";
 const Footer = () => {
+
+    const [{ data: footerData, error: footerError, loading: footerLoading }, getFooter] = useAxios({ url: `/settings/footer-sections` }, { useCache: false });
+
+    const [footer, setFooter] = useState({});
+
+    useEffect(() => {
+        if (footerData) {
+            console.log(footerData);
+            setFooter(footerData);
+        }
+    }, [footerData])
+
     return (
         <footer className="bg-gray-800 text-white mt-auto pt-12 pr-12 pl-12 pb-2">
             <div className="container h-full">
@@ -9,88 +25,30 @@ const Footer = () => {
                     <p className="font-bold text-white text-md ml-3">{SystemInfo.name}</p>
                 </div>
                 <div className="flex justify-between items-top h-full">
-                    <div>
-                        <div>
-                            <h1 className="text-white font-bold my-5">
-                                Get in touch
-                            </h1>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">About us</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Careers</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Press Releases</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Blog</p>
-                            </Link>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div>
-                            <h1 className="text-white font-bold my-5">
-                                Connections
-                            </h1>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Facebook</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Twitter</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Instagram</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Youtube</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Linkedin</p>
-                            </Link>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div>
-                            <h1 className="text-white font-bold my-5">
-                                Earnings
-                            </h1>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Become an Affiliate</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Adversite your product</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Sell on Market</p>
-                            </Link>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div>
-                            <h1 className="text-white font-bold my-5">
-                                Account
-                            </h1>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Your Account</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Returns Centre</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">100% pucharse protection</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Chat with us</p>
-                            </Link>
-                            <Link to={`#`}>
-                                <p className="my-4 hover:text-main transition duration-500">Help</p>
-                            </Link>
-                        </div>
-                    </div>
+                    {
+                        Object.keys(footer).map((section, i) => {
+                            return (
+                                <div key={i} className={clsx({
+                                    'hidden': !footer[section]?.isActive
+                                })}>
+                                    <div>
+                                        <h1 className="text-white font-bold my-5">
+                                            {footer[section]?.name}
+                                        </h1>
+                                        <div className="space-y-2">
+                                            {
+                                                footer[section]?.widgets?.map((widget, i2) => {
+                                                    return (
+                                                        <WidgetComponent widget={widget} key={i2} />
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
                 </div>
                 <div className="text-center mt-4">
                     <p>© 2019 <span className="text-main">{SystemInfo.name}.</span> Todos los derechos reservados. Diseñado por J.V & A.N</p>
