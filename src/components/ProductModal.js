@@ -3,7 +3,6 @@ import { IoClose, IoCart } from "react-icons/io5";
 import { generateImageUrl } from "../helpers/url";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Checkbox from "./Checkbox";
-import StarIcon from "./StarIcon";
 import CustomSelect from "./CustomSelect";
 import reactDom from "react-dom";
 import { useAuth } from "../contexts/AuthContext";

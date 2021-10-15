@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import SelectUserToLogin from './SelectUserToLogin';
@@ -6,7 +6,10 @@ import { IoLogOut, IoPersonCircleSharp } from "react-icons/io5";
 import useCategories from '../hooks/useCategories';
 import SystemInfo from "../util/SystemInfo";
 import NotificationsComponent from './notifications/NotificationsComponent';
+import IPData from 'ipdata';
+import useAxios from '../hooks/useAxios';
 
+const ipdata = new IPData('67c7dfbb37526fc8f7beacac55a5030413e74e26dab32be0e25cbc57');
 
 const Navbar = () => {
 
@@ -14,11 +17,22 @@ const Navbar = () => {
 
   const { user, setAuthInfo } = useAuth();
 
+  const [locationInfo, setLocationInfo] = useState({});
+
+  const [ipData, setIpData] = useState(ipdata);
+
   const [show, setShow] = useState(false);
 
   const [searchData, setSearchData] = useState({ storeCategoryId: "", search: "" })
 
   const [{ categories, error: errorCategories, loading: categoriesLoading }] = useCategories();
+
+  useEffect(() => {
+    ipData.lookup().then((response) => {
+      console.log(response);
+      setLocationInfo(response);
+    })
+  }, [ipData])
 
   const handleClick = () => {
     setAuthInfo({ isAuthenticated: false, user: null, token: null });
@@ -115,15 +129,17 @@ const Navbar = () => {
 
     <div className="bg-main text-white py-2">
       <div className="container relative">
-        <div className="flex items-center absolute -mt-2 space-x-2 text-xs">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <div className="flex flex-col">
-            <span>Enviar a </span>
-            <b>C.A.B.A</b>
-          </div>
+        <div className="absolute -mt-2 space-x-2 text-xs">
+          <Link className="flex items-center" to={locationInfo?.city ? `/map?city=${locationInfo?.city}` : `/map`}>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <div className="flex flex-col">
+              <span>Enviar a </span>
+              <b>{locationInfo?.region}, {locationInfo?.city}</b>
+            </div>
+          </Link>
         </div>
         <div className="flex items-center justify-center">
           <nav className="flex items-center space-x-7">

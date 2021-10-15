@@ -18,6 +18,7 @@ import RenewPassword from "./pages/RenewPassword";
 import Helps from "./pages/Helps";
 import HelpsDetails from "./pages/HelpsDetails";
 import ForgotPassword from "./pages/ForgotPassword";
+import StoresInMap from "./pages/StoresInMap";
 
 const Routes = () => {
 
@@ -44,6 +45,7 @@ const Routes = () => {
       <Route path="/helps/:id" exact component={HelpsDetails} />
       <Route path="/register" exact component={Register} />
       <Route path="/search" exact component={SearchResults} />
+      <Route path="/map" exact component={StoresInMap} />
 
       <PrivateRoute>
         <Route path="/my-account" component={MyAccountRoutes} />

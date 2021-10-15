@@ -16,15 +16,15 @@ const StoresInMap = ({ stores }) => {
   }
 
   useEffect(() => {
-    if (stores?.length > 0) {
-      setGoogleMapsMarkers(stores?.map((store) => {
-        return {
-          lat: store?.latitude,
-          lng: store?.longitude,
-          store: store
-        }
-      }));
-    }
+
+    setGoogleMapsMarkers(stores?.map((store) => {
+      return {
+        lat: store?.latitude,
+        lng: store?.longitude,
+        store: store
+      }
+    }));
+
   }, [stores])
 
   return <div>
