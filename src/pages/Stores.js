@@ -23,6 +23,8 @@ import HomeSlider from "../components/HomeSlider";
 import DiscountsSlider from "../components/dicounts/DiscountsSlider";
 import CardIssuersList from "../components/CardIssuersList";
 import CardsList from "../components/CardsList";
+import Checkbox from "../components/Checkbox";
+import useStoreFeatures from "../hooks/useStoresFeatures";
 
 const Stores = () => {
 
@@ -35,7 +37,8 @@ const Stores = () => {
     minRating: "",
     withCheapestProduct: true,
     cardIssuerIds: [],
-    cardIds: []
+    cardIds: [],
+    storeFeatureIds: []
   });
 
   const [cardIssuer, setCardIssuer] = useState(null);
@@ -49,12 +52,15 @@ const Stores = () => {
 
   const [{ ads: adsLeftBanners, error: errorLeftBanners }, getLeftAds] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 8, isActive: "true" } } })
 
+  const [{ storeFeatures, loading: featuresStoresLoading, error: featuresStoresError }] = useStoreFeatures({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });
+
   const [{ stores, total, numberOfPages, error, loading }, getStores] = useStores({
     params: {
       ...filters,
       cardIssuerIds: filters.cardIssuerIds.join(","),
       cardIds: filters.cardIds.join(","),
-      storeCategoryIds: filters.storeCategoryIds.join(",")
+      storeCategoryIds: filters.storeCategoryIds.join(","),
+      storeFeatureIds: filters.storeFeatureIds.join(",")
     }
   });
 
@@ -268,6 +274,30 @@ const Stores = () => {
             name="minRating"
             values={filters.minRating}
           />
+
+          {
+            featuresStoresLoading ?
+              <div className="text-center">
+                Cargando preferencias...
+              </div>
+              :
+              storeFeatures?.length > 0 && <div>
+                <h4 className="text-xl font-semibold mb-2">Preferencia</h4>
+
+                <ul className="max-h-72 custom-scrollbar overflow-y-auto text-gray-800 space-y-2">
+                  {storeFeatures?.map((storeFeature) => <li key={storeFeature.id}>
+                    <Checkbox
+                      onChange={handleChange}
+                      name="storeFeatureIds"
+                      value={storeFeature.id}
+                      checked={filters.storeFeatureIds.includes(storeFeature.id)}
+                      id={`${storeFeature.name}-${storeFeature.id}`}
+                      label={storeFeature.name}
+                    />
+                  </li>)}
+                </ul>
+              </div>
+          }
 
           <div className="text-center text-xl">
             Entes
