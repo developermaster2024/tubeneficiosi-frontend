@@ -52,7 +52,8 @@ const StoresMap = () => {
             ...filters,
             cardIssuerIds: filters.cardIssuerIds.join(","),
             cardIds: filters.cardIds.join(","),
-            storeCategoryIds: filters.storeCategoryIds.join(",")
+            storeCategoryIds: filters.storeCategoryIds.join(","),
+            storeFeatureIds: filters.storeFeatureIds.join(",")
         }
     });
 
