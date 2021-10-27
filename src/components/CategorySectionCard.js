@@ -1,5 +1,5 @@
 const CategorySectionCard = ({ text, imgSrc, categoryId }) => {
-  return <a href={`/products?storeCategoryId=${categoryId}`} className="group w-1/2 relative rounded-md overflow-hidden bg-full shadow-md">
+  return <a href={`/products?storeCategoryId=${categoryId}`} className="group hidden md:block w-1/2 relative rounded-md overflow-hidden bg-full shadow-md">
     <div className="absolute inset-0">
       <img
         src={imgSrc}

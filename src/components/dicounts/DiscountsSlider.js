@@ -41,7 +41,7 @@ const DiscountsSlider = ({ showTitle, storeId, slidesPerview }) => {
                 </div>
             }
 
-            <div className="my-20 px-24">
+            <div className="my-20 md:px-24">
                 {
                     discountsError ?
                         <div className="text-red-500 text-center">

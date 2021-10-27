@@ -25,7 +25,7 @@ const HomeBanksDiscountsSlider = () => {
                 <SectionHeading>Beneficios por banco</SectionHeading>
             </div>
 
-            <div className="my-20 px-24">
+            <div className="my-20 md:px-24">
                 {
                     discountsError ?
                         <div className="text-red-500 text-center">
@@ -43,9 +43,9 @@ const HomeBanksDiscountsSlider = () => {
                             discounts.length > 0 ?
                                 <Swiper
                                     navigation
-                                    style={{ padding: '0 100px' }}
+                                    style={{ padding: window.innerWidth > 768 ? '0 100px' : '0' }}
                                     onSlideChange={() => { }}
-                                    slidesPerView={2}
+                                    slidesPerView={window.innerWidth > 768 ? 2 : 1}
                                     spaceBetween={50}
                                     onSwiper={(swiper) => { }}
                                 >

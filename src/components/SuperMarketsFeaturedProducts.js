@@ -66,10 +66,10 @@ const SuperMarketsFeaturedProducts = ({ categoryInfo }) => {
 
 
     return (
-        <div className="flex space-x-4">
-            <div className="w-1/2">
-                <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
+        <div className="block md:flex space-x-4">
+            <div className="md:w-1/2">
 
+                <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
                 {
                     featuredProductError ?
                         <div className="text-center flex text-xl h-72 text-red-500">

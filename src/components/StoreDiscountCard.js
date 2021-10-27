@@ -67,7 +67,7 @@ const StoreDiscountCard = ({ storeDiscount, storeType, emitDiscount }) => {
               </div>
               <div className="mt-2">
                 <Link to={`/stores/${storeDiscount.store?.slug}`}>
-                  <button className="mt-2 bg-red-100 px-5 transition text-red-600 duration-500 hover:text-white hover:bg-main py-1 rounded-full">
+                  <button className="mt-2 bg-red-100 md:px-5 transition text-red-600 duration-500 hover:text-white hover:bg-main py-1 rounded-full">
                     <p className="font-extrabold text-lg">
                       Ir a tienda
                     </p>

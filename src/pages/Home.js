@@ -1,7 +1,3 @@
-import shield from '../assets/images/shield.png';
-import callCenterAgent from '../assets/images/call-center-agent.png';
-import rent from '../assets/images/rent.png';
-import appBg from '../assets/images/app-bg.jpg';
 import HomeSlider from "../components/HomeSlider";
 import SectionHeading from "../components/SectionHeading";
 import { useEffect } from "react";
@@ -22,16 +18,14 @@ import useCategories from '../hooks/useCategories';
 import BussinessSection from '../components/BussinessSection';
 import HomeBanksDiscountsSlider from '../components/HomeBanksDiscountsSlider';
 import DiscountsSlider from '../components/dicounts/DiscountsSlider';
+import NecessaryInfo from '../components/NecessaryInfo';
+import MobileAppSection from '../components/MobileAppSection';
 
 const Home = () => {
 
   const { setLoading, setCustomAlert } = useAuth();
 
   const [{ data: businessSectionData, error: businessSectionError }, getBusinessInfo] = useAxios({ url: "/settings/business-info" }, { useCache: false, manual: true });
-
-  const [{ data: appSectionData, error: appSectionError }, getAppSectionData] = useAxios({ url: "settings/app-section" }, { useCache: false, manual: true });
-
-  const [{ data: necessaryInfoSectionData, error: necessaryInfoSectionError }, getNecessaryInfoData] = useAxios({ url: "/settings/needed-info" }, { useCache: false, manual: true });
 
   const [{ banners, error: errorBanners, }, getBanners] = useBanners({ axiosConfig: { params: { isActive: "true" } }, options: { manual: true, useCache: false } });
 
@@ -45,8 +39,6 @@ const Home = () => {
     setLoading({ show: true, message: "Cargando datos" });
     Promise.all([
       getBusinessInfo(),
-      getAppSectionData(),
-      getNecessaryInfoData(),
       getBanners({ params: { isActive: "true" } }),
       getStoreAds({ params: { isActive: "true" } }),
       getAds({ params: { isActive: "true" } }),
@@ -54,23 +46,13 @@ const Home = () => {
     ]).then((values) => {
       setLoading({ show: false, message: "" });
     })
-  }, [getBusinessInfo, getAppSectionData, getNecessaryInfoData, getBanners, getStoreAds, getAds, getCategories, setLoading]);
+  }, [getBusinessInfo, getBanners, getStoreAds, getAds, getCategories, setLoading]);
 
   useEffect(() => {
 
     if (businessSectionError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${businessSectionError?.response?.status === 400 ? businessSectionError?.response?.data.message[0] : businessSectionError?.response?.data.message}.`, severity: "error" });
-    }
-
-    if (appSectionError) {
-      setLoading?.({ show: false, message: "" });
-      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${appSectionError?.response?.status === 400 ? appSectionError?.response?.data.message[0] : appSectionError?.response?.data.message}.`, severity: "error" });
-    }
-
-    if (necessaryInfoSectionError) {
-      setLoading?.({ show: false, message: "" });
-      setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${necessaryInfoSectionError?.response?.status === 400 ? necessaryInfoSectionError?.response?.data.message[0] : necessaryInfoSectionError?.response?.data.message}.`, severity: "error" });
     }
 
     if (errorBanners) {
@@ -92,14 +74,14 @@ const Home = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${errorCategories?.response?.status === 400 ? errorCategories?.response?.data.message[0] : errorCategories?.response?.data.message}.`, severity: "error" });
     }
-  }, [errorBanners, businessSectionError, appSectionError, necessaryInfoSectionError, errorStoresAds, adsError, errorCategories]);
+  }, [errorBanners, businessSectionError, errorStoresAds, adsError, errorCategories]);
 
   return <>
     <HomeSlider banners={banners} />
 
     {/* CATEGORIES */}
     <div className="container mt-20">
-      <div className="flex space-x-4">
+      <div className="block space-y-4 md:flex md:space-x-4 md:space-y-0">
         {categories.map((category, index) => <a
           key={index}
           href={`/products?storeCategoryId=${category?.id}`}
@@ -135,22 +117,22 @@ const Home = () => {
     {/* HAGAMOSLO JUNTOS */}
     <BussinessSection businessSectionData={businessSectionData} />
 
-    <div className="container mt-20">
+    <div className="container mt-0 md:mt-20 mt-20">
       <SectionHeading>Explorá</SectionHeading>
     </div>
 
     {/* GASTRONOMIA */}
-    <div className="container mt-20">
+    <div className="container mt-0 md:mt-20">
       <GastronomyFeaturedProducts categoryInfo={categories.filter(category => category.id === 1)[0]} />
     </div>
 
     {/* ESPECTACULOS */}
-    <div className="container mt-20">
+    <div className="container mt-0 md:mt-20">
       <ShowsFeaturedProducts categoryInfo={categories.filter(category => category.id === 2)[0]} />
     </div>
 
     {/* Supermercados */}
-    <div className="container my-20">
+    <div className="container my-0 md:my-20">
       <SuperMarketsFeaturedProducts categoryInfo={categories.filter(category => category.id === 3)[0]} />
     </div>
 
@@ -176,7 +158,7 @@ const Home = () => {
 
     {/*Descuentos*/}
 
-    <DiscountsSlider showTitle slidesPerview={3} />
+    <DiscountsSlider showTitle slidesPerview={window.innerWidth > 768 ? 3 : 1} />
 
     {/* BENEFICIOS POR BANCO */}
 
@@ -193,80 +175,11 @@ const Home = () => {
     </div>
 
     {/* MOBILE APP SECTION */}
-    <div className="relative py-32 mt-20 text-white"
-      style={{ background: appSectionData?.backgroundColor ? appSectionData?.backgroundColor : "#F04141", }}
-    >
-      <div className="container flex items-center">
-        <div className="w-7/12 space-y-6">
-          <div className="text-center">
-            <img
-              src={appSectionData?.leftSideImage ? process.env.REACT_APP_API_URL + "/" + appSectionData?.leftSideImage : appBg}
-              alt="Smartphone"
-              className="m-auto w-62 h-28"
-            />
-          </div>
-          <h4 className="text-5xl text-center font-bold flex-wrap" style={{ color: appSectionData?.titleColor ? appSectionData?.titleColor : "white" }}>{appSectionData?.title ? appSectionData?.title : "Descárgate  la app"}</h4>
-          <p className="text-center" style={{ color: appSectionData?.descriptionColor ? appSectionData?.descriptionColor : "white" }}>
-            {
-              appSectionData?.description ? appSectionData?.description : "Pide lo que sea y síguelo en tiempo real con la app BeneficioSi."
-            }
-          </p>
-          <div className="text-center">
-            {/* <a href="/#">
-              <img
-                className="m-auto"
-                src={downloadAndroidApp}
-                alt="Descargar app para android"
-              />
-            </a> */}
-
-          </div>
-        </div>
-        <div className="w-5/12">
-          <img
-            src={appSectionData?.rightSideImage ? process.env.REACT_APP_API_URL + "/" + appSectionData?.rightSideImage : appBg}
-            alt="App"
-            className="w-full"
-          />
-        </div>
-      </div>
-    </div>
+    <MobileAppSection />
 
     {/* WHAT WE OFFER */}
-    <div className="container my-20">
-      <div className="flex justify-evenly">
-        {[
-          {
-            imgSrc: necessaryInfoSectionData?.leftSectionImage ? process.env.REACT_APP_API_URL + "/" + necessaryInfoSectionData?.leftSectionImage : shield,
-            title: necessaryInfoSectionData?.leftSectionTitle ? necessaryInfoSectionData?.leftSectionTitle : 'Publicaciones verificadas',
-            content: necessaryInfoSectionData?.leftSectionDescription ? necessaryInfoSectionData?.leftSectionDescription : 'Nuestras publicaciones requieren una validación por datos y controlamos lo publicado'
-          },
-          {
-            imgSrc: necessaryInfoSectionData?.middleSectionImage ? process.env.REACT_APP_API_URL + "/" + necessaryInfoSectionData?.middleSectionImage : rent,
-            title: necessaryInfoSectionData?.middleSectionTitle ? necessaryInfoSectionData?.middleSectionTitle : 'Compra protegida',
-            content: necessaryInfoSectionData?.middleSectionDescription ? necessaryInfoSectionData?.middleSectionDescription : 'Podés señar el auto que quieras y si la compra no se hace efectiva se te devuelve el importe al 100%'
-          },
-          {
-            imgSrc: necessaryInfoSectionData?.rightSectionImage ? process.env.REACT_APP_API_URL + "/" + necessaryInfoSectionData?.rightSectionImage : callCenterAgent,
-            title: necessaryInfoSectionData?.rightSectionTitle ? necessaryInfoSectionData?.rightSectionTitle : 'Soporte',
-            content: necessaryInfoSectionData?.rightSectionDescription ? necessaryInfoSectionData?.rightSectionDescription : 'Acompañamos el proceso asegurandonos de que todo salga correctamente'
-          },
-        ].map(item => <div
-          className="flex flex-col items-center space-y-4 w-full max-w-xs"
-          key={item.title}
-        >
-          <img
-            src={item.imgSrc}
-            alt={item.title}
-            className="h-20 w-20"
-          />
 
-          <h4 className="text-xl font-semibold">{item.title}</h4>
-
-          <p className="text-center">{item.content}</p>
-        </div>)}
-      </div>
-    </div>
+    <NecessaryInfo />
   </>;
 };
 

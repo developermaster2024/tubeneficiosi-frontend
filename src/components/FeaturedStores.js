@@ -11,8 +11,9 @@ const FeaturedStores = ({ storesAds }) => {
                     <Swiper
                         navigation
                         autoplay
+                        centeredSlides={window.innerWidth > 768 ? false : true}
                         style={{ padding: "30px 0" }}
-                        slidesPerView={4}
+                        slidesPerView={window.innerWidth > 768 ? 4 : 1}
                         spaceBetween={25}
                         pagination={{ clickable: true }}
                         onSlideChange={() => { }}
@@ -22,7 +23,7 @@ const FeaturedStores = ({ storesAds }) => {
                             storesAds?.map((storesAd, i) => {
                                 return (
                                     <SwiperSlide key={storesAd.id}>
-                                        <div className="relative bg-white max-w-xs w-full rounded-md overflow-hidden shadow">
+                                        <div className="relative bg-white md:max-w-xs w-full rounded-md overflow-hidden shadow">
                                             <img
                                                 src={`${process.env.REACT_APP_API_URL}/${storesAd?.store?.storeProfile?.frontImage}`}
                                                 alt={storesAd.name}

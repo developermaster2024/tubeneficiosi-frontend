@@ -66,14 +66,14 @@ const ShowsFeaturedProducts = ({ categoryInfo }) => {
 
 
     return (
-        <div className="flex space-x-4">
+        <div className="block md:flex space-x-4">
             <CategorySectionCard
                 categoryId={categoryInfo?.id}
                 text={categoryInfo?.name}
                 imgSrc={`${process.env.REACT_APP_API_URL}${categoryInfo?.imgPath}`}
             />
 
-            <div className="w-1/2">
+            <div className="md:w-1/2">
                 <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
 
                 {

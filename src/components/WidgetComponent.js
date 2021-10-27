@@ -4,7 +4,7 @@ const WidgetComponent = ({ widget }) => {
 
     if (widget.type === 'text') {
         return (
-            <p className="text-white text-justify">
+            <p className="text-white text-center md:text-justify">
                 {widget.value}
             </p>
         )
@@ -13,7 +13,7 @@ const WidgetComponent = ({ widget }) => {
     if (widget.type === 'url') {
         return (
             <div>
-                <a href={widget.url} className="text-white text-justify border-b">
+                <a href={widget.url} className="text-white text-center md:text-justify border-b">
                     {widget.value}
                 </a>
             </div>
@@ -22,13 +22,13 @@ const WidgetComponent = ({ widget }) => {
 
     if (widget.type === 'image') {
         return (
-            <img src={`${process.env.REACT_APP_API_URL}/${widget?.image}`} className="w-full" />
+            <img src={`${process.env.REACT_APP_API_URL}/${widget?.image}`} className="mx-auto md:m-none w-full" />
         )
     }
 
     if (widget.type === 'socials') {
         return (
-            <div className="flex space-x-4">
+            <div className="flex justify-center md:justify-none space-x-4">
                 {
                     widget.facebook &&
                     <a className="text-2xl hover:text-main" href={widget.facebook} target="_blank">

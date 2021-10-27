@@ -24,11 +24,11 @@ const Footer = () => {
                     <img src={SystemInfo.logo} className="w-12" alt={SystemInfo.name} />
                     <p className="font-bold text-white text-md ml-3">{SystemInfo.name}</p>
                 </div>
-                <div className="flex justify-between items-top h-full">
+                <div className="block md:flex justify-between items-top h-full">
                     {
                         Object.keys(footer).map((section, i) => {
                             return (
-                                <div key={i} className={clsx({
+                                <div key={i} className={clsx(['text-center'], {
                                     'hidden': !footer[section]?.isActive
                                 })}>
                                     <div>

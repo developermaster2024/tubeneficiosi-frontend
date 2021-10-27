@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import laptop from "../assets/images/laptop.jpg";
 import computadora from "../assets/images/monitos.jpg";
@@ -5,11 +6,15 @@ import ProductAdCard from './ProductAdCard';
 
 const ProductsAdsSlider = ({ productAds, className }) => {
 
+    useEffect(() => {
+        console.log();
+    }, [])
+
     return <Swiper
         className={className}
         navigation
         spaceBetween={8}
-        slidesPerView={2}
+        slidesPerView={window.innerWidth > 768 ? 2 : 1}
         pagination={{ clickable: true }}
         onSlideChange={() => { }}
         onSwiper={(swiper) => { }}

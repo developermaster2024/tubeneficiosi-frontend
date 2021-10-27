@@ -7,7 +7,7 @@ const BussinessSection = ({ businessSectionData }) => {
 
     return (
         <div
-            className="my-80 bg-white relative"
+            className="my-24 md:my-80 bg-white relative"
         >
             <img
                 src={waveUp}
@@ -18,7 +18,7 @@ const BussinessSection = ({ businessSectionData }) => {
 
                 <h3 className="text-5xl text-center font-semibold">{businessSectionData?.sectionTitle ? businessSectionData?.sectionTitle : 'Hagámoslo juntos'}</h3>
 
-                <div className="flex space-x-4 mt-20">
+                <div className="md:flex space-y-8 md:space-y-0 space-x-4 mt-20">
                     {[
                         {
                             imgSrc: businessSectionData?.leftSectionImage ? process.env.REACT_APP_API_URL + "/" + businessSectionData?.leftSectionImage : partner,
@@ -42,7 +42,7 @@ const BussinessSection = ({ businessSectionData }) => {
                         },
                     ].map((item, i) => <div
                         key={i}
-                        className="w-1/2 flex flex-col items-center"
+                        className="md:w-1/2 flex flex-col items-center"
                     >
                         <div className="flex flex-col items-center space-y-6 mb-6">
                             <img

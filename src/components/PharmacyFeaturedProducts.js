@@ -65,8 +65,8 @@ const PharmacyFeaturedProducts = ({ categoryInfo }) => {
     }
 
     return (
-        <div className="flex space-x-4">
-            <div className="w-1/2">
+        <div className="block md:flex space-x-4">
+            <div className="md:w-1/2">
                 <h4 className="mb-4 text-center text-3xl font-semibold">Mejores productos</h4>
 
                 {

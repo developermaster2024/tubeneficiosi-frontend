@@ -67,8 +67,8 @@ const Login = () => {
 
   return (
     <div>
-      <div className="flex justify-between">
-        <div className="w-1/2 bg-gray-50 text-center py-8">
+      <div className="md:flex md:justify-between">
+        <div className="md:w-1/2 bg-gray-50 text-center py-8">
           <img className="m-auto w-1/3 text-gray-700" src={SystemInfo.logo} alt="" />
           <h1 className="my-8 font-bold text-[70px]">
             {SystemInfo.name}
@@ -76,7 +76,7 @@ const Login = () => {
           <p className="text-lg text-gray-500">{SystemInfo.description}</p>
           <img src={DeliveryMotion} alt="" />
         </div>
-        <div className="w-1/2 bg-white p-6 relative">
+        <div className="md:w-1/2 bg-white p-6 relative">
           <div className="flex justify-right items-center">
             <img className="ml-auto w-1/12 text-gray-700" src={SystemInfo.logo} alt="" />
             <h1 className="ml-2 font-bold text-[40px]">
@@ -85,14 +85,14 @@ const Login = () => {
           </div>
           <div className="border-b border-main mt-24">
             <h2 className="text-center text-2xl">
-              Login de clientes
+              Inicio de sesión
             </h2>
           </div>
 
           <form className="text-2xl mt-5" onSubmit={handleSubmit}>
             <div className="my-12">
               <h2 className="text-gray-600 font-bold">
-                E-Mail Address
+                Email
               </h2>
               <input name="email" autoComplete="email" onChange={handleChange} className="rounded w-full mt-1" type="text" placeholder="Correo Electronico" />
               {
@@ -105,9 +105,16 @@ const Login = () => {
 
             <div className="my-12">
               <h2 className="text-gray-600 font-bold">
-                Password
+                Contraseña
               </h2>
-              <input name="password" autoComplete="current-password" onChange={handleChange} className="rounded w-full mt-1" type="password" placeholder="Password" />
+              <input
+                name="password"
+                autoComplete="current-password"
+                onChange={handleChange}
+                className="rounded w-full mt-1"
+                type="password"
+                placeholder="Contraseña" />
+
               {
                 errorsForm.password ?
                   <p className="text-sm mt-2 text-red-500">{errorsForm.password}</p>

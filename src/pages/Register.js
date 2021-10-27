@@ -97,8 +97,8 @@ const Register = () => {
 
   return (
     <div>
-      <div className="flex justify-between">
-        <div className="w-1/2 bg-gray-50 text-center py-8">
+      <div className="md:flex md:justify-between">
+        <div className="md:w-1/2 mt-4 md:mt-0 bg-gray-50 text-center md:py-8">
           <img className="m-auto w-1/3 text-gray-700" src={SystemInfo.logo} alt="" />
           <h1 className="my-8 font-bold text-[70px]">
             {SystemInfo.name}
@@ -106,21 +106,21 @@ const Register = () => {
           <p className="text-lg text-gray-500">{SystemInfo.description}</p>
           <img src={DeliveryMotion} alt="" />
         </div>
-        <div className="w-1/2 bg-white p-6 relative">
-          <div className="flex justify-right items-center">
+        <div className="md:w-1/2 bg-white p-6 relative">
+          <div className="hidden md:flex justify-right items-center">
             <img className="ml-auto w-1/12 text-gray-700" src={SystemInfo.logo} alt="" />
             <h1 className="ml-2 font-bold text-[40px]">
               {SystemInfo.name}
             </h1>
           </div>
-          <div className="border-b border-main mt-24">
+          <div className="border-b border-main mt-8 md:mt-24">
             <h2 className="text-center text-2xl">
               Registro de clientes
             </h2>
           </div>
 
           <form className="text-2xl mt-5 px-14" onSubmit={handleSubmit}>
-            <div className="my-12 flex justify-between">
+            <div className="my-12 md:flex space-y-4 md:space-y-0 justify-between">
               <div>
                 <h2 className="text-gray-600 font-bold">
                   Nombre y Apellido
@@ -147,7 +147,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="my-12 flex justify-between">
+            <div className="my-12 md:flex md:justify-between space-y-4 md:space-y-0">
               <div>
                 <h2 className="text-gray-600 font-bold">
                   Contraseña
@@ -174,7 +174,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="my-12 flex justify-between">
+            <div className="my-12 md:flex md:justify-between">
               <div>
                 <h2 className="text-gray-600 font-bold">
                   Telefono
