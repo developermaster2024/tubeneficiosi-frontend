@@ -68,7 +68,7 @@ const Pagination = (props) => {
     return null;
   }
 
-  return <ul className={`flex items-center space-x-2 ${className}`}>
+  return <ul className={`hidden-scrollbar flex items-center space-x-2 ${className}`} style={{ maxWidth: '100%', overflowX: 'auto', scrollBehavior: 'none' }}>
     <li>
       <p>
         <NavigationButton hidden={!canBack} disable={!canBack} onClick={() => { backPage(activePage - 1) }} color="main" className="text-xl hover:text-gray-500 transition duraion-500 transform hover:scale-150" icon={<IoChevronBack />}></NavigationButton>

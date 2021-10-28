@@ -69,7 +69,7 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
         <ProductsGrid>
           {products.map((product) => <div
             key={product.id}
-            className="flex justify-center"
+            className="justify-center"
           >
             <ProductCard
               name={product.name}

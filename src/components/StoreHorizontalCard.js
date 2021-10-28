@@ -21,10 +21,10 @@ const StoreHorizontalCard = ({ cheapestProduct, imgSrc, imgAlt, name, descriptio
         <img
           src={`${process.env.REACT_APP_API_URL}/${imgSrc}`}
           alt={imgAlt}
-          className="w-56 mr-4 h-56 rounded-xl"
+          className="w-12 h-12 md:w-56  md:h-56 mr-4 rounded-xl"
         />
         :
-        <IoStorefrontOutline className="w-56 mr-4 h-56 rounded-xl" />
+        <IoStorefrontOutline className="w-12 h-12 md:w-56  md:h-56 mr-4 rounded-xl" />
     }
 
     <div className="flex-grow flex flex-col">
@@ -86,7 +86,7 @@ const StoreHorizontalCard = ({ cheapestProduct, imgSrc, imgAlt, name, descriptio
               <p className="text-xl text-red-500 font-bold p-4">Sin Productos</p>
           }
 
-          <p className="text-gray-500 flex items-center">
+          <p className="hidden md:block text-gray-500 flex items-center">
             <IoLocationSharp className="text-lg mr-2"></IoLocationSharp> <span>A 5km de ti.</span>
           </p>
         </div>
@@ -96,7 +96,7 @@ const StoreHorizontalCard = ({ cheapestProduct, imgSrc, imgAlt, name, descriptio
         <p>Productos: <span className="text-main">320</span></p>
       </div>
       <div className="flex my-4 items-center">
-        <div className="flex w-1/2 flex-wrap">
+        <div className="hidden md:block w-1/2 flex-wrap">
           {
             Array.from(Array(5).keys()).splice(1).map((n) => {
               return (
@@ -107,8 +107,7 @@ const StoreHorizontalCard = ({ cheapestProduct, imgSrc, imgAlt, name, descriptio
             })
           }
         </div>
-        <div className="flex justify-right w-1/2">
-
+        <div className="flex justify-right md:w-1/2">
           <Link to={`/stores/${slug}`} className="ml-auto text-gray-600 flex items-center hover:text-main">
             <IoStorefrontOutline className="text-[30px] mr-1" />
             <p>Ver tienda</p>

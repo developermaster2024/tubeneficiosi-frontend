@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 
+.hidden-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .swiper-container,
 .swiper-wrapper {
   z-index: auto !important;

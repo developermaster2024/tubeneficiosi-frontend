@@ -3,7 +3,7 @@ import StoreHorizontalCard from "./StoreHorizontalCard";
 
 const StoresCollection = ({ isInGridView, stores }) => {
   return isInGridView
-    ? <div className="grid grid-cols-3 gap-8">
+    ? <div className="grid md:grid-cols-3 gap-8">
       {stores.map((store, i) => <div
         key={i}
         className="flex justify-center"

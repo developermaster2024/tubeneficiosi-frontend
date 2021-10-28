@@ -3,11 +3,8 @@ import ChevronRightIcon from "../components/ChevronRightIcon";
 import Container from "../components/Container";
 import Pagination from "../components/Pagination";
 import Checkbox from "../components/Checkbox";
-import GridIcon from "../components/GridIcon";
-import ListIcon from "../components/ListIcon";
 import LeftSidebarLayout from "../components/LeftSidebarLayout";
 import { useEffect, useState } from "react";
-import clsx from "clsx";
 import ProductsCollection from "../components/ProductsCollection";
 import { useAuth } from "../contexts/AuthContext";
 import ErrorMsg from "../components/ErrorMsg";
@@ -22,6 +19,9 @@ import { useLocation } from "react-router-dom";
 import DiscountsSlider from "../components/dicounts/DiscountsSlider";
 import CardIssuersList from "../components/CardIssuersList";
 import CardsList from "../components/CardsList";
+import SelectGridMode from "../components/SelectGridMode";
+import ProductsFilters from "../components/ProductsFilters";
+import FiltersModal from "../components/FiltersModal";
 
 const Products = () => {
 
@@ -30,6 +30,8 @@ const Products = () => {
   const { setLoading, setCustomAlert } = useAuth();
 
   const [isInGridView, setIsInGridView] = useState(true);
+
+  const [showFiltersModal, setShowFiltersModal] = useState(false);
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -57,7 +59,7 @@ const Products = () => {
   const [{ ads: adsLeftBanners, error: errorLeftBanners, loading: loadingLeftBannersAds }] = useAds({ options: { useCahe: false }, axiosConfig: { params: { adsPositionId: 4, isActive: "true" } } })
 
   const [{ categories, error: errorCategories }] = useCategories();
-  const [{ tags }] = useTags({ params: { storeCategoryIds: filters.storeCategoryIds.join(","), } });
+
 
   useEffect(() => {
     console.log(products);
@@ -200,121 +202,76 @@ const Products = () => {
     setCard(card);
   }
 
+  const handleView = (value) => {
+
+    if (value === 'grid') {
+      setIsInGridView(true);
+      return;
+    }
+
+    if (value === 'list') {
+      setIsInGridView(false);
+      return;
+    }
+  }
+
   return <>
     <HomeSlider banners={adsBanners} />
     <div className="bg-white shadow-sm">
       <Container className="py-5">
-        <div className="flex justify-between items-center">
+        <div className="md:flex justify-between items-center space-y-4 md:space-y-0">
           <h2 className="text-3xl font-semibold">Comprar</h2>
-
-          <div className="flex space-x-4">
-            <span
-              className={clsx(['inline-flex items-center space-x-1 cursor-pointer', !isInGridView && 'opacity-75'])}
-              onClick={() => setIsInGridView(true)}
-            >
-              <GridIcon className="w-4 h-4" />
-              <span>Vista de grilla</span>
-            </span>
-            <span
-              className={clsx(['inline-flex items-center space-x-1 cursor-pointer', isInGridView && 'opacity-75'])}
-              onClick={() => setIsInGridView(false)}
-            >
-              <ListIcon className="w-4 h-4" />
-              <span>Vista de lista</span>
-            </span>
-            <span className="inline-flex items-center space-x-1 cursor-pointer">
-              <span className="px-1.5 py-0.5 text-xs bg-yellow-100 text-red-500 font-semibold rounded-lg">{total}</span>
-              <span>Productos</span>
-            </span>
-          </div>
+          <SelectGridMode onChange={handleView} />
         </div>
       </Container>
     </div>
-
-    <Container withMargin className="mb-20">
-      <LeftSidebarLayout
-        leftSide={<div className="space-y-6">
-
-          <div>
-            <h4 className="text-xl font-semibold mb-2">Categorias</h4>
-            <ul className="text-gray-800 space-y-2 max-h-56 overflow-y-auto">
-              {categories.map((category, i) =>
-                <li key={i} className="flex items-center space-x-4">
-                  <Checkbox
-                    className="capitalize"
-                    onChange={handleChange}
-                    name="storeCategoryIds"
-                    value={category.id}
-                    checked={filters.storeCategoryIds.includes(category.id)}
-                    id={`${category.name}-${i}`}
-                    label={category.name}
-                  />
-                </li>
-              )}
-            </ul>
-          </div>
-
-          <RatingsFilter
-            className="my-8"
-            onChange={handleChange}
-            name="minRating"
-            values={filters.minRating}
-          />
-
-          <PriceFilter
-            className=" my-8"
-            min={{ value: priceFilter.minPrice, name: "minPrice" }}
-            max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
-            onChange={handleChangePriceFilter}
-            onSubmit={(e) => { if (e) { e?.preventDefault() } getProducts({ params: { ...filters, ...priceFilter, storeCategoryId: filters?.storeCategoryId?.join(",") } }) }}
-          />
-
-          {/* Categories */}
-          {tags?.length > 0 && <div>
-            <h4 className="text-xl font-semibold mb-2">Etiquetas</h4>
-
-            <ul className="max-h-72 custom-scrollbar overflow-y-auto text-gray-800 space-y-2">
-              {tags?.map((tag) => <li key={tag.id}>
-                <Checkbox
-                  onChange={handleChange}
-                  name="tagIds"
-                  value={tag.id}
-                  checked={filters.tagIds.includes(tag.id)}
-                  id={`${tag.name}-${tag.id}`}
-                  label={tag.name}
-                />
-              </li>)}
-            </ul>
-          </div>}
-
-          <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
-
-          <div className="mt-8">
-            <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
-          </div>
-
-          <Button
-            color="white"
-            endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}
-            to="/benefits"
-          >
-            Beneficios
-          </Button>
-          {
-            adsLeftBanners.map((leftBanner, i) => {
-              return (
-                <a href={leftBanner.url} key={i}>
-                  <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} alt={`leftBanner-${i}`} />
-                </a>
-              )
-            })
-          }
-        </div>}
+    <div className="p-4 block md:hidden">
+      <button
+        className="w-full bg-white text-center text-gray-500 p-4 rounded shadow-xl"
+        onClick={() => { setShowFiltersModal((oldShowModal) => !oldShowModal) }}
       >
-        <div className="mb-10">
-          <DiscountsSlider slidesPerview={1.5} />
-        </div>
-
+        <span>Mostrar filtros</span>
+      </button>
+    </div>
+    <Container withMargin className="mb-10 md:mb-20 mt-0 md:mt-20">
+      <LeftSidebarLayout
+        leftSide={
+          window.innerWidth > 768 ?
+            <>
+              <ProductsFilters />
+              <PriceFilter
+                className=" my-8"
+                min={{ value: priceFilter.minPrice, name: "minPrice" }}
+                max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
+                onChange={handleChangePriceFilter}
+                onSubmit={(e) => { if (e) { e?.preventDefault() } getProducts({ params: { ...filters, ...priceFilter, storeCategoryId: filters?.storeCategoryId?.join(",") } }) }}
+              />
+              <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
+              <div className="mt-8">
+                <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
+              </div>
+              <Button
+                color="white"
+                endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}
+                to="/benefits"
+              >
+                Beneficios
+              </Button>
+              {
+                adsLeftBanners.map((leftBanner, i) => {
+                  return (
+                    <a href={leftBanner.url} key={i}>
+                      <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} alt={`leftBanner-${i}`} />
+                    </a>
+                  )
+                })
+              }
+            </>
+            :
+            null
+        }
+      >
+        <DiscountsSlider slidesPerview={window.innerWidth > 768 ? 1.5 : 1} />
         {error
           ? <ErrorMsg message="Error al cargar los productos. Nuestro equipo ha sido notificado, intente más tarde." />
           : products.length > 0
@@ -341,6 +298,37 @@ const Products = () => {
         }
       </div>
     </Container>
+    <FiltersModal show={showFiltersModal} onClose={() => { setShowFiltersModal((oldShowModal) => !oldShowModal) }}>
+      <ProductsFilters onChange={handleChange} filters={filters} />
+      <PriceFilter
+        className=" my-8"
+        min={{ value: priceFilter.minPrice, name: "minPrice" }}
+        max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
+        onChange={handleChangePriceFilter}
+        onSubmit={(e) => { if (e) { e?.preventDefault() } getProducts({ params: { ...filters, ...priceFilter, storeCategoryId: filters?.storeCategoryId?.join(",") } }) }}
+      />
+      <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
+      <div className="mt-8">
+        <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
+      </div>
+      <br />
+      <Button
+        color="white"
+        endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}
+        to="/benefits"
+      >
+        Beneficios
+      </Button>
+      {
+        adsLeftBanners.map((leftBanner, i) => {
+          return (
+            <a href={leftBanner.url} key={i}>
+              <img className="w-full h-[120px] my-6 rounded" src={`${process.env.REACT_APP_API_URL}/${leftBanner.imgPath}`} alt={`leftBanner-${i}`} />
+            </a>
+          )
+        })
+      }
+    </FiltersModal>
   </>
 };
 
