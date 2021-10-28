@@ -27,6 +27,8 @@ import useTags from "../hooks/useTags";
 import { validURL } from "../helpers/formsValidations";
 import DiscountsSlider from "../components/dicounts/DiscountsSlider";
 import StoreDiscountsModal from "../components/dicounts/StoreDiscountsModal";
+import ProductsFilters from "../components/ProductsFilters";
+import FiltersModal from "../components/FiltersModal";
 
 const Store = () => {
 
@@ -60,6 +62,8 @@ const Store = () => {
   const [cart, setCart] = useState(null);
 
   const [cartQuantity, setCartQuantity] = useState(0);
+
+  const [showFiltersModal, setShowFiltersModal] = useState(false);
 
   const [storeAndProduct, setStoreAndProduct] = useState(null);
 
@@ -296,13 +300,14 @@ const Store = () => {
         navigation
         onSlideChange={() => null}
         onSwiper={(swiper) => null}
+        autoHeight
         className="bg-red-500 z-auto"
       >
         <SwiperSlide className="w-full relative">
           <img
             src={`${process.env.REACT_APP_API_URL}/${store?.storeProfile?.banner}`}
             alt="Tienda"
-            className="h-[60vh] w-full"
+            className="h-[30vh] md:h-[60vh] w-full"
           />
           <div className="bg-black justify-between items-center bg-opacity-50 flex absolute z-10 bottom-0 w-full left-0 p-6 text-white">
             <div className="flex items-center">
@@ -321,7 +326,7 @@ const Store = () => {
           videoPreview ?
             <SwiperSlide className="w-full text-center">
               <iframe
-                className="w-full h-[60vh]"
+                className="w-full md:h-[60vh]"
                 src={videoPreview}
                 title="YouTube video player"
                 frameBorder="0"
@@ -345,12 +350,23 @@ const Store = () => {
       }
     </div>
 
-    <DiscountsSlider storeId={store?.storeId} slidesPerview={3} />
+    <DiscountsSlider storeId={store?.storeId} slidesPerview={window.innerWidth > 768 ? 3 : 1} />
     <Container withMargin className="mb-20">
-      <div className="flex justify-between items-start space-x-12">
-        <div className="w-3/12">
-
+      <div className="p-4 block md:hidden">
+        <button
+          className="w-full bg-white text-center text-gray-500 p-4 rounded shadow-xl"
+          onClick={() => { setShowFiltersModal((oldShowModal) => !oldShowModal) }}
+        >
+          <span>Mostrar filtros</span>
+        </button>
+      </div>
+      <div className="md:flex justify-between items-start space-x-12">
+        <div className="md:w-3/12 hidden md:block">
           <StoreInfo {...storeInfo} />
+
+          <br />
+
+          <ProductsFilters onChange={handleChange} filters={filters} />
 
           <CategoryFilter
             className="my-8 max-h-64 overflow-y-auto"
@@ -359,13 +375,6 @@ const Store = () => {
             onChange={handleChange}
             name="categoryIds"
             categoriesStores={categoriesStores} />
-
-          <RatingsFilter
-            className="my-8"
-            onChange={handleChange}
-            name="minRating"
-            values={filters.minRating}
-          />
 
           <PriceFilter
             className=" my-8"
@@ -388,14 +397,6 @@ const Store = () => {
             }}
           />
 
-          <TagsFilter
-            values={filters.tagIds}
-            loading={loadingTags}
-            tags={tags}
-            onChange={handleChange}
-            name="tagIds"
-            className="my-8" />
-
           <Button
             color="white"
             endAdorment={<ChevronRightIcon className="w-3 h-3" fill="none" />}
@@ -405,14 +406,14 @@ const Store = () => {
             Beneficios
           </Button>
         </div>
-        <div className="w-9/12">
+        <div className="md:w-9/12">
           <div className="mb-10 flex items-center justify-between">
-            <div className="w-9/12">
+            <div className="md:w-9/12 hidden md:block">
 
             </div>
 
             {/* Cart and Favorite Button */}
-            <div className="w-3/12 p-4 flex items-center space-x-8">
+            <div className="md:w-3/12 p-4 flex items-center space-x-8">
               {
                 loadingFavorite ?
                   <div>
@@ -431,7 +432,7 @@ const Store = () => {
 
               {
                 cartLoading ?
-                  "Obteniendo carrito..."
+                  <span>Obteniendo carrito...</span>
                   :
                   cart ?
                     <div className="relative">
@@ -444,7 +445,7 @@ const Store = () => {
                       }
                     </div>
                     :
-                    "Sin carrito con esta tienda"
+                    <span>Sin carrito con esta tienda</span>
               }
             </div>
           </div>
@@ -481,6 +482,38 @@ const Store = () => {
     </Container>
     <StoreCart show={showCart} cart={cart} onChangeCart={handleCart} closeCart={handleCloseCart} />
     <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
+    <FiltersModal show={showFiltersModal} onClose={() => { setShowFiltersModal((oldShowModal) => !oldShowModal) }}>
+      <ProductsFilters onChange={handleChange} filters={filters} />
+
+      <CategoryFilter
+        className="my-8 max-h-64 overflow-y-auto"
+        loading={loadingCategoriesStores}
+        categoryStoreIds={filters.categoryIds}
+        onChange={handleChange}
+        name="categoryIds"
+        categoriesStores={categoriesStores} />
+
+      <PriceFilter
+        className=" my-8"
+        min={{ value: priceFilter.minPrice, name: "minPrice" }}
+        max={{ value: priceFilter.maxPrice, name: "maxPrice" }}
+        onChange={handleChangePriceFilter}
+        onSubmit={(e) => {
+          if (e) {
+            e.preventDefault();
+          }
+          getProducts({
+            params: {
+              ...filters,
+              tagIds: filters?.tagIds?.join?.(","),
+              categoryStoreIds: filters?.categoryStoreIds?.join?.(","),
+              rating: filters?.rating?.join?.(","),
+              ...priceFilter
+            }
+          })
+        }}
+      />
+    </FiltersModal>
   </>;
 };
 

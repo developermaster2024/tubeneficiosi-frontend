@@ -3,7 +3,7 @@ import Checkbox from "./Checkbox";
 
 const TagsFilter = ({ onChange, filters, values, name }) => {
 
-    const [{ tags, loading: loadingTags, error: errorTags }, getTags] = useTags({ params: { storeCategoryIds: filters?.storeCategoryIds.join(","), } });
+    const [{ tags, loading: loadingTags, error: errorTags }, getTags] = useTags({ params: { storeCategoryIds: filters?.storeCategoryIds?.join(","), } });
 
     return (
         <div>

@@ -20,12 +20,12 @@ const ProductHorizontalCard = ({
   deliveryMethodTypes,
 }) => {
   return <div
-    className="flex bg-white border hover:shadow-2xl transform transition duration-500 hover:-translate-y-2 rounded-md p-4 animate__animated animate__rotateInUpLeft"
+    className="flex items-center md:items-start bg-white border hover:shadow-2xl transform transition duration-500 hover:-translate-y-2 rounded-md p-4 animate__animated animate__rotateInUpLeft"
   >
     <img
       src={imgSrc}
       alt={imgAlt}
-      className="w-56 h-56 rounded-xl"
+      className="w-12 h-12 md:w-56 md:h-56 rounded-xl"
     />
     <div className="flex-grow p-4">
       <Link className="hover:text-main" to={`/products/${slug}`}>
@@ -68,23 +68,20 @@ const ProductHorizontalCard = ({
           name="Envíos"
           value={deliveryMethodTypes.join(', ')}
         />
-
-        <ProductFeature
-          className="w-full"
-          name="Cantidad"
-          value={<span className="text-main">{quantity} pcs</span>}
-        />
+        {
+          quantity > 0 &&
+          <ProductFeature
+            className="w-full hidden md:block"
+            name="Cantidad"
+            value={<span className="text-main">{quantity} pcs</span>}
+          />
+        }
       </div>
     </div>
-    <div className="w-64 flex-shrink-0 flex flex-col p-4 space-y-4">
-      <div>
-        <p className="font-semibold text-xl">{price} USD</p>
-        <span className="text-xs text-gray-600 line-through">48.56</span>
-      </div>
+    <div className="md:w-64 flex-shrink-0 flex flex-col p-4 space-y-4">
 
-      <div>
-        <p className="text-gray-600 font-semibold">Envío gratis</p>
-        <p className="text-gray-600 opacity-75">Entrega en un dia</p>
+      <div className="text-right md:text-center">
+        <p className="font-semibold text-xl">{price ? `${price} USD` : 'GRATIS'}</p>
       </div>
 
       {

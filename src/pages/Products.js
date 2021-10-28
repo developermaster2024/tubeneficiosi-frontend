@@ -238,7 +238,7 @@ const Products = () => {
         leftSide={
           window.innerWidth > 768 ?
             <>
-              <ProductsFilters />
+              <ProductsFilters onChange={handleChange} filters={filters} />
               <PriceFilter
                 className=" my-8"
                 min={{ value: priceFilter.minPrice, name: "minPrice" }}
