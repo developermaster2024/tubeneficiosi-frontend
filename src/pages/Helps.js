@@ -76,8 +76,8 @@ const Helps = () => {
             <div className="text-center text-gray-500 font-bold text-xl">
                 Seleccione el tema que le interesa.
             </div>
-            <div className="flex w-full space-x-8">
-                <div className="w-1/4 space-y-4">
+            <div className="md:flex w-full md:space-x-8 space-y-4 md:space-y-4">
+                <div className="md:w-1/4 space-y-4">
                     <div className="text-center font-bold text-xl">
                         Topicos
                     </div>
@@ -98,7 +98,7 @@ const Helps = () => {
                         })
                     }
                 </div>
-                <div className="w-full flex" style={{ minHeight: "50vh" }}>
+                <div className="w-full md:flex" style={{ minHeight: "50vh" }}>
                     {
                         helpCategorySelected ?
                             helpsLoading ?
