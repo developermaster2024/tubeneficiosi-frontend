@@ -104,32 +104,35 @@ const ProfileForm = () => {
   }
 
   return <form
-    className="bg-white rounded p-5 mb-12"
+    className="bg-white p-2 rounded md:p-5 mb-12"
     onSubmit={handleDataSubmit}
   >
-    <div className="flex items-center justify-between">
-      <div className="flex items-center w-1/2">
+    <div className="md:flex md:items-center md:justify-between">
+      <div className="md:flex md:items-center md:w-1/2">
         {
           previewImage
-            ? <img src={previewImage} className="w-[80px] shadow-2xl rounded-full h-[80px] mr-3" alt="logo" />
+            ? <img src={previewImage} className="m-auto w-[80px] shadow-2xl rounded-full h-[80px] md:mr-3" alt="logo" />
             : <IoPersonCircle className="text-[100px] text-gray-500"></IoPersonCircle>
         }
-        <label
-          htmlFor="img"
-          className="bg-main text-white h-[fit-content] px-4 py-2 rounded hover:bg-gray-200 hover:text-main transition duration-500 font-bold cursor-pointer"
-        >
-          <span>Añadir Imagen</span>
-        </label>
-        <input
-          className="hidden"
-          type="file"
-          id="img"
-          name="img"
-          onChange={handleChange}
-          accept="image/png, image/gif, image/jpeg"
-        />
+        <br className="md:hidden" />
+        <div className="text-right">
+          <label
+            htmlFor="img"
+            className=" bg-main text-white h-[fit-content] px-4 py-2 rounded hover:bg-gray-200 hover:text-main transition duration-500 font-bold cursor-pointer"
+          >
+            <span>Añadir Imagen</span>
+          </label>
+          <input
+            className="hidden"
+            type="file"
+            id="img"
+            name="img"
+            onChange={handleChange}
+            accept="image/png, image/gif, image/jpeg"
+          />
+        </div>
       </div>
-      <div className="w-1/2">
+      <div className="md:w-1/2">
         <h2 className="text-gray-600 font-bold text-xl">
           Nombre:
         </h2>
@@ -144,8 +147,8 @@ const ProfileForm = () => {
         {formErros.name && <span className="block text-red-500 text-xs mt-1">{formErros.name}</span>}
       </div>
     </div>
-    <div className="flex justify-between my-12">
-      <div className="w-1/2">
+    <div className="md:flex justify-between my-12">
+      <div className="md:w-1/2">
         <h2 className="text-gray-600 font-bold text-xl">
           Telefono:
         </h2>

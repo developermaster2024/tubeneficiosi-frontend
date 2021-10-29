@@ -66,7 +66,7 @@ const Favorites = () => {
                         : products.length > 0
                             ? <ProductsCollection
                                 products={products}
-                                isInGridView={false}
+                                isInGridView={window.innerWidth > 768 ? false : true}
                             />
                             : <div className="text-center text-red-500 text-xl">
                                 No se encontraron productos.
@@ -84,7 +84,7 @@ const Favorites = () => {
                         stores.length > 0 ?
                             <StoresCollection
                                 stores={stores}
-                                isInGridView={false} />
+                                isInGridView={window.innerWidth > 768 ? false : true} />
                             :
                             <div className="text-center text-red-500 text-xl">
                                 No se encontraron Tiendas favoritas.

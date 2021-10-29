@@ -9,7 +9,7 @@ const MyAccountCartsTable = (props) => {
   return (
     <div>
       <div className={className}>
-        <div className="flex w-full text-center items-center font-bold">
+        <div className="hidden md:flex w-full text-center items-center font-bold">
           <div className="w-3/12 p-2">
             <p>ID</p>
             <CustomInput

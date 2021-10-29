@@ -60,11 +60,11 @@ const CartsRows = ({ cartValue, ...rest }) => {
 
     return (
         <div {...rest} className="bg-white my-4 p-6 rounded-lg transition duration-300 transform hover:shadow-xl hover:-translate-y-2">
-            <div className="flex items-center">
-                <div className="w-3/12">
+            <div className="md:flex items-center">
+                <div className="md:w-3/12">
                     {cart?.id}
                 </div>
-                <div className="w-3/12">
+                <div className="md:w-3/12">
                     <Link to={`/stores/${cart?.store?.slug}`} className="text-blue-500">
                         {
                             cart?.store?.storeProfile?.logo &&
@@ -73,13 +73,13 @@ const CartsRows = ({ cartValue, ...rest }) => {
                         <p>{cart?.store?.name}</p>
                     </Link>
                 </div>
-                <div className="w-3/12">
+                <div className="md:w-3/12">
                     {cart?.createdAt?.toLocaleString()}
                 </div>
-                <div className="w-3/12 font-bold text-gray-500">
+                <div className="md:w-3/12 font-bold text-gray-500">
                     ${cart?.subTotal}
                 </div>
-                <div className="w-3/12 flex justify-center items-center text-gray-400">
+                <div className="md:w-3/12 flex justify-center items-center text-gray-400">
                     <Link to={`/stores/${cart?.store?.slug}`}>
                         <IoStorefrontSharp className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300" />
                     </Link>

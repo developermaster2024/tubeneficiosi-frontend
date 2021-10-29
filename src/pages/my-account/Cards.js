@@ -59,7 +59,7 @@ const Cards = () => {
     }
 
     return (
-        <div className="p-4">
+        <div className="p-8 h-screen" style={{ overflowX: 'hidden' }}>
             <div className="text-2xl font-bold text-gray-500 mb-4 flex items-center space-x-4">
                 <IoCard />
                 <p>Mis tarjetas</p>

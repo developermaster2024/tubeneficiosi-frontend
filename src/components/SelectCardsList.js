@@ -75,7 +75,7 @@ const SelectCardsList = ({ onChange, name, className, values }) => {
 
     return (
         <>
-            <div className="flex justify-between">
+            <div className="md:flex justify-between">
                 <h3>Filtros:</h3>
                 <p>Resultados: {actualCards.length}</p>
                 <div className="text-right">
@@ -84,7 +84,7 @@ const SelectCardsList = ({ onChange, name, className, values }) => {
                     </Button>
                 </div>
             </div>
-            <div className="flex items-center space-x-4 my-2">
+            <div className="md:flex items-center md:space-x-4 space-y-4 my-2">
                 <CustomInput name="name" onChange={handleFilterChange} value={filters.name} placeholder="Nombre" />
                 <CustomInput name="cardIssuerName" onChange={handleFilterChange} value={filters.cardIssuerName} placeholder="Nombre del emisor" />
             </div>
@@ -114,7 +114,7 @@ const SelectCardsList = ({ onChange, name, className, values }) => {
                                                         />
                                                     }
                                                     {card?.imgPath &&
-                                                        <img className="w-20 h-14 rounded inline" src={`${process.env.REACT_APP_API_URL}/${card?.imgPath}`} alt="" />
+                                                        <img className="w-12 h-8 md:w-20 md:h-14 rounded inline" src={`${process.env.REACT_APP_API_URL}/${card?.imgPath}`} alt="" />
                                                     }
                                                     <p>{card?.name} {`- ${card?.cardIssuer?.name}`}</p>
                                                 </div>

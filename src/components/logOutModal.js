@@ -44,7 +44,7 @@ const LogOutModal = (props) => {
 
         <div className="text-center mt-8">
 
-          <button onClick={handleContinue} className={'bg-main text-white px-24 py-4 rounded-full transition duration-500'} >
+          <button onClick={handleContinue} className={'bg-main text-white px-10 md:px-24 md:py-4 rounded-full transition duration-500'} >
             <p className="font-bold text-xl">Continuar</p>
           </button>
         </div>

@@ -8,7 +8,7 @@ const OrdersTable = (props) => {
 
   return (
     <div className={className}>
-      <div className="flex w-full items-center font-bold">
+      <div className="hidden md:flex w-full items-center font-bold">
         <div className="w-1/12 p-2">
           Referencia
           <CustomInput name="orderNumber" value={values.orderNumber} onChange={onFiltersChange} placeholder="Referencia..." />

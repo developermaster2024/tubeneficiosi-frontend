@@ -239,7 +239,7 @@ const Product = () => {
                 <Swiper
                   autoHeight={true}
                   pagination
-                  className="md:hidden"
+                  className="md:hidden mb-4 md:mb-0"
                 >
                   {
                     product?.productImages?.length > 0 &&

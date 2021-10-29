@@ -111,10 +111,10 @@ const MyAccountConversations = () => {
                           Respondida < IoCheckmarkCircleSharp />
                         </div>
                       }
-                      <div className="flex items-center">
-                        <div className="w-1/2">
-                          <div className="flex items-center">
-                            <img className="w-1/12 rounded-full" src={`${process.env.REACT_APP_API_URL}/${question?.product?.productImages?.[0].path}`} alt="" />
+                      <div className="md:flex items-center">
+                        <div className="md:w-1/2">
+                          <div className="md:flex text-center md:text-left items-center">
+                            <img className="md:w-1/12 rounded-full" src={`${process.env.REACT_APP_API_URL}/${question?.product?.productImages?.[0].path}`} alt="" />
                             <a href={`${process.env.REACT_APP_HOST}products/${question?.product?.slug}`} className="text-blue-500 text-xl">
                               {question?.product?.name}
                             </a>
@@ -123,7 +123,7 @@ const MyAccountConversations = () => {
                             {question?.question ? question?.question : <span className="text-red-500">No hay pregunta.</span>} - <b>{question.createdAt.toLocaleString()}</b>
                           </div>
                         </div>
-                        <div className="w-1/2">
+                        <div className="md:w-1/2">
                           <div className="font-bold text-gray-500">
                             Tienda:
                           </div>

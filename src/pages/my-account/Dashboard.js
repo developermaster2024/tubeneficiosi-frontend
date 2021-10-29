@@ -41,13 +41,13 @@ const MyAccountDashboard = () => {
   });
 
   return (
-    <div className="px-20 px-12">
+    <div className="px-12">
       <h1 className="text-2xl flex items-center text-gray-600 font-bold my-5">
         <IoBarChartSharp className="text-4xl"></IoBarChartSharp>
         <span className="ml-4">Resumen</span>
       </h1>
 
-      <div className="flex justify-between">
+      <div className="md:flex md:justify-between">
         <StatCard
           link="/my-account/orders"
           icon={IoDocumentTextSharp}
@@ -55,6 +55,7 @@ const MyAccountDashboard = () => {
           iconColor="info"
           title={'Mis Pedidos'}
           loading={ordersLoading}
+          className="mb-4 md:mb-0"
         ></StatCard>
 
         <StatCard
@@ -64,6 +65,7 @@ const MyAccountDashboard = () => {
           iconColor="primary"
           title={'Carritos'}
           loading={cartsLoading}
+          className="mb-4 md:mb-0"
         ></StatCard>
 
         <StatCard
@@ -73,6 +75,7 @@ const MyAccountDashboard = () => {
           iconColor="success"
           title={'Direcciones'}
           loading={addressLoading}
+          className="mb-4 md:mb-0"
         ></StatCard>
 
         <StatCard
@@ -82,10 +85,11 @@ const MyAccountDashboard = () => {
           iconColor="purple"
           title={'Conversaciones'}
           loading={questionsLoading}
+          className="mb-4 md:mb-0"
         ></StatCard>
       </div>
 
-      <div className="my-24">
+      <div className="hidden md:block my-24">
         <LineChart title={'Dinero gastado en ARS mes de Mayo, TOTAL: ' + values.reduce((total, n) => total + n, 0)} values={values}></LineChart>
       </div>
     </div>

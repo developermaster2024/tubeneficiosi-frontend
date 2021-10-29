@@ -77,8 +77,8 @@ const PasswordForm = () => {
   }
 
   return <form onSubmit={handleSubmit} className="bg-white rounded p-5 mb-3">
-    <div className="flex">
-      <div className="w-4/12 px-2">
+    <div className="md:flex space-y-4 md:space-y-0">
+      <div className="md:w-4/12 px-2">
         <h2 className="text-gray-600 font-bold text-xl">
           Constraseña actual:
         </h2>
@@ -92,7 +92,7 @@ const PasswordForm = () => {
         />
         {formErros.currentPassword && <span className="block text-red-500 text-xs mt-1">{formErros.currentPassword}</span>}
       </div>
-      <div className="w-4/12 px-2">
+      <div className="md:w-4/12 px-2">
         <h2 className="text-gray-600 font-bold text-xl">
           Constraseña nueva:
         </h2>
@@ -106,7 +106,7 @@ const PasswordForm = () => {
         />
         {formErros.password && <span className="block text-red-500 text-xs mt-1">{formErros.password}</span>}
       </div>
-      <div className="w-4/12 px-2">
+      <div className="md:w-4/12 px-2">
         <h2 className="text-gray-600 font-bold text-xl">
           Confirmar Contraseña:
         </h2>

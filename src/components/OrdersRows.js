@@ -50,18 +50,18 @@ const OrdersRows = ({ orderValue, ...rest }) => {
     }
 
     return (
-        <div {...rest} className="flex bg-white my-4 p-6 items-center rounded-lg transition duration-300 transform hover:shadow-xl hover:-translate-y-2">
-            <div className="w-1/12 text-center">
+        <div {...rest} className="md:flex bg-white space-y-4 md:space-y-0 my-4 p-6 items-center rounded-lg transition duration-300 transform hover:shadow-xl hover:-translate-y-2">
+            <div className="md:w-1/12 text-center">
                 {order?.orderNumber}
             </div>
-            <div className="w-2/12">
+            <div className="md:w-2/12">
                 {order?.delivery?.profileAddress?.address ?
                     order?.delivery?.profileAddress?.address
                     :
                     <b>Retira en tienda.</b>
                 }
             </div>
-            <div className="w-2/12">
+            <div className="md:w-2/12">
                 <Link to={`/stores/${order?.store?.slug}`} className="text-blue-500">
                     {
                         order?.store?.storeProfile?.logo ?
@@ -72,21 +72,21 @@ const OrdersRows = ({ orderValue, ...rest }) => {
                     <p>{order?.store?.name}</p>
                 </Link>
             </div>
-            <div className="w-1/12">
+            <div className="md:w-1/12">
                 $ {order?.total?.toLocaleString()}
             </div>
-            <div className="w-2/12">
+            <div className="md:w-2/12">
                 {order?.createdAt?.toLocaleString()}
             </div>
-            <div className="w-1/12 rounded-lg p-2 font-bold bg-opacity-10" >
+            <div className="md:w-1/12 rounded-lg p-2 font-bold bg-opacity-10" >
                 <p className="px-2 py-1 rounded text-white capitalize" style={{ backgroundColor: order?.orderStatus?.color }}>
                     {order?.orderStatus?.name}
                 </p>
             </div>
-            <div className="w-2/12 capitalize">
+            <div className="md:w-2/12 capitalize">
                 {order?.paymentMethod?.name}
             </div>
-            <div className="w-1/12 flex">
+            <div className="md:w-1/12 md:flex justify-center">
                 <Link to={`/my-account/orders/${order?.id}`}>
                     <IoEye className="m-auto text-2xl cursor-pointer hover:text-main transition duration-300"></IoEye>
                 </Link>
