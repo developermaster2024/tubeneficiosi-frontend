@@ -24,7 +24,8 @@ const FiltersModal = ({ show, onClose, children }) => {
     return reactDom.createPortal(
         <div ref={modalRef} onClick={handleClose} className="fixed flex z-50 h-screen w-screen bg-black bg-opacity-50 left-0 top-0 animate__animated animate__fade">
             <div className="w-10/12 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
-                <div style={{ height: "8%" }} className="p-4 bg-main flex justify-end items-center text-white">
+                <div style={{ height: "8%" }} className="p-4 bg-main items-center flex justify-between items-center text-white">
+                    <span>Filtros</span>
                     <button className="text-2xl" onClick={() => { onClose() }}>
                         <IoClose />
                     </button>

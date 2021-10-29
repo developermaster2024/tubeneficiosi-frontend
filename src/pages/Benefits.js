@@ -11,6 +11,8 @@ import DiscountStoreCard from "../components/dicounts/DiscountStoreCard";
 import DiscountModal from "../components/dicounts/DiscountModal";
 import useCategories from "../hooks/useCategories";
 import clsx from "clsx";
+import FiltersModal from "../components/FiltersModal";
+import StoreCategoryFilter from "../components/StoreCategoryFilter";
 
 const Benefits = () => {
 
@@ -23,7 +25,7 @@ const Benefits = () => {
     storeCategoryIds: []
   });
 
-
+  const [showFiltersModal, setShowFiltersModal] = useState(false);
 
   const [cardIssuer, setCardIssuer] = useState(null);
 
@@ -74,7 +76,6 @@ const Benefits = () => {
   }
 
   const handleCard = (card) => {
-    console.log(card);
     setCard(card);
   }
 
@@ -130,13 +131,11 @@ const Benefits = () => {
         <h3 className="text-6xl font-semibold">Beneficios</h3>
       </Container>
 
-      <Container className="mt-auto flex space-x-2">
-
+      <Container className="mt-auto md:flex space-x-2 hidden">
         {
           categories.map((category, i) => <div
             key={i}
             onClick={() => { handleChange({ target: { name: "storeCategoryIds", value: Number(category?.id), type: "checkbox" } }) }}
-
             className={
               clsx(["flex items-center cursor-pointer justify-center w-1/5 py-3 capitalize hover:bg-main hover:text-white border border-main text-lg font-semibold rounded-md transitioncursor-pointer"], {
                 "bg-white": !filters.storeCategoryIds?.includes(category?.id),
@@ -151,19 +150,32 @@ const Benefits = () => {
 
     <Container className="my-10">
       <LeftSidebarLayout
-        leftSide={<div>
-          <h4 className="mb-2 text-center text-xl font-bold">Bancos y Supermercados</h4>
-          <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
+        leftSide={
+          window.innerWidth > 768 ?
+            <div>
+              <h4 className="mb-2 text-center text-xl font-bold">Bancos y Supermercados</h4>
+              <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
 
 
-          <div className="mt-8">
-            <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
-          </div>
+              <div className="mt-8">
+                <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
+              </div>
 
-        </div>}
+            </div>
+            :
+            null
+        }
       >
         <div className="my-4 text-3xl text-gray-500 font-bold">
           Tiendas con descuentos {cardIssuer ? `- Con ${cardIssuer?.name}` : null} {card ? ` - ${card?.name}` : null}
+        </div>
+        <div className="p-4 block md:hidden">
+          <button
+            className="w-full bg-white text-center text-gray-500 p-4 rounded shadow-xl"
+            onClick={() => { setShowFiltersModal((oldShowModal) => !oldShowModal) }}
+          >
+            <span>Mostrar filtros</span>
+          </button>
         </div>
         {
           discountsError ?
@@ -175,7 +187,7 @@ const Benefits = () => {
               </div>
               :
               discounts.length > 0 ?
-                <div className="grid grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-3 md:justify-none justify-center gap-8">
                   {
                     discounts.map((promo, i) => {
                       return (
@@ -197,6 +209,17 @@ const Benefits = () => {
         }
       </LeftSidebarLayout>
       <DiscountModal discount={discount} onClose={() => { setDiscount(null) }} />
+      <FiltersModal show={showFiltersModal} onClose={() => { setShowFiltersModal((oldShowModal) => !oldShowModal) }}>
+        <StoreCategoryFilter name="storeCategoryIds" onChange={handleChange} values={filters?.storeCategoryIds} />
+        <br />
+        <div>
+          <h4 className="mb-2 text-center text-xl font-bold">Bancos y Supermercados</h4>
+          <CardIssuersList selectedCardIssuer={cardIssuer} emitCardIssuer={handleCardIssuer} />
+          <div className="mt-8">
+            <CardsList selectedCard={card} cardIssuer={cardIssuer} emitCard={handleCard} />
+          </div>
+        </div>
+      </FiltersModal>
     </Container>
   </>;
 };
