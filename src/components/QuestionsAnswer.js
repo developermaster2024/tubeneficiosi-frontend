@@ -27,7 +27,7 @@ const QuestionsAnswer = ({
       </Link>
 
       <form onSubmit={onSubmit} className="space-y-1">
-        <div className="flex items-center">
+        <div className="space-y-4 md:space-y-0 md:flex items-center">
           <input
             className="py-2 px-3 bg-gray-200 w-11/12 rounded-xl border-none focus:shadow-xl focus:ring-white focus:bg-white transition duration-500 transform"
             placeholder=" Escribe tu pregunta..."

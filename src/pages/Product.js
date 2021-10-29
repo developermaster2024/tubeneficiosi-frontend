@@ -1,5 +1,4 @@
 import Container from "../components/Container"
-import StarIcon from "../components/StarIcon";
 import ProductFeature from "../components/ProductFeature";
 import Select from "../components/Select";
 import PlusIcon from "../components/PlusIcon";
@@ -25,7 +24,6 @@ import { isRequired, validate } from "../helpers/formsValidations";
 import { getErrorMessage } from "../helpers/axiosErrors";
 import ProductModal from "../components/ProductModal";
 import ProductFeatureGroup from "../components/ProductFeatureGroup";
-import ProductFeatureCheckbox from "../components/ProductFeatureCheckbox";
 import useProducts from "../hooks/useProducts";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ProductImagesCarousel from "../components/ProductImagesCarousel";
@@ -224,23 +222,41 @@ const Product = () => {
    * Si no existe el producto redireccionar a un 404
    */
 
-  return <div className="p-16">
+  return <div className="p-4 md:p-16">
     {
       productLoading ?
         <ProductLoadingComponent />
         :
         <div className="animate__animated animate__fadeIn">
           <Container>
-            <div className="flex space-x-6">
+            <div className="md:flex md:space-x-6">
               {/* Images */}
-              <div className="w-1/2 flex flex-col">
+              <div className="md:w-1/2 md:flex md:flex-col">
                 <ProductImagesCarousel
                   images={product?.productImages}
                 />
+
+                <Swiper
+                  autoHeight={true}
+                  pagination
+                  className="md:hidden"
+                >
+                  {
+                    product?.productImages?.length > 0 &&
+                    product?.productImages?.map(image => <SwiperSlide key={image.id}>
+                      <div className="swiper-zoom-container">
+                        <img
+                          src={generateBackendUrl(image.path)}
+                          alt={product?.name}
+                          className="rounded-xl w-full"
+                        />
+                      </div>
+                    </SwiperSlide>)}
+                </Swiper>
               </div>
 
               {/* Information */}
-              <div className="w-1/2">
+              <div className="md:w-1/2">
                 <div className="flex itemx-center text-3xl justify-between">
                   <h3 className="font-bold mb-2 uppercase">{product?.name}</h3>
                   {
@@ -274,7 +290,6 @@ const Product = () => {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                       </svg>
                     )
-
                   })}
                 </div>
 
@@ -284,37 +299,37 @@ const Product = () => {
 
                 {/* Características */}
                 <div className="space-y-3 mt-10">
-                  <div className="flex">
+                  <div className="md:flex">
                     <ProductFeature
-                      className="w-1/2"
+                      className="md:w-1/2"
                       name="Referencia"
                       value={product?.reference || 'Sin referencia'}
                     />
                     <ProductFeature
-                      className="w-1/2"
+                      className="md:w-1/2"
                       name="Metodo de Envio"
                       value={product?.deliveryMethodTypes.map(item => item.name).join(', ')}
                     />
                   </div>
 
-                  <div className="flex">
+                  <div className="md:flex">
                     <ProductFeature
-                      className="w-1/2"
+                      className="md:w-1/2"
                       name="Categorias"
                       value={product?.categories?.length === 0
                         ? 'Sin categorias'
                         : product?.categories?.map((category) => category.name).join(', ')}
                     />
                     <ProductFeature
-                      className="w-1/2"
+                      className="md:w-1/2"
                       name="Stock"
                       value={product?.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
                     />
                   </div>
 
-                  <div className="flex">
+                  <div className="md:flex">
                     <ProductFeature
-                      className="w-1/2"
+                      className="items-center md:w-1/2 md:items-start"
                       name="Tienda"
                       value={<div className="text-center hover:shadow-xl transition duration-500">
                         <Link to={`/stores/${product?.store?.slug}`}>
@@ -332,7 +347,7 @@ const Product = () => {
 
                 {/* Precio */}
                 <div className="flex items-center p-4 bg-white rounded-md mt-10">
-                  <div className="w-56 flex-shrink-0">
+                  <div className="md:w-56 flex-shrink-0">
                     {
                       product?.discount ?
                         <div>
@@ -389,10 +404,10 @@ const Product = () => {
             </div>
           </Container>
 
-          <Container className="mt-10">
+          <Container className="mt-10 p-0">
             <TabsProvider>
               {/* Tabs */}
-              <TabsContainer>
+              <TabsContainer className="md:flex">
                 <Tab value={0}>Descripción</Tab>
                 <Tab value={1}>Preguntas {questionsData?.total > 0 ? questionsData?.total : null}</Tab>
                 <Tab value={2}>Comparador</Tab>
@@ -500,17 +515,18 @@ const Product = () => {
           <div className="flex justify-between">
             <NavigationButton className="text-4xl text-main focus:outlined-none focus:border-none" onClick={handleBack} icon={<IoChevronBackOutline />}></NavigationButton>
             <Swiper
-              slidesPerView={4}
+              slidesPerView={window.innerWidth > 768 ? 4 : 1}
               style={{ width: "80%", padding: "40px 0" }}
-              onSlideChange={() => { }}
               onSwiper={(swiper) => { handleSwiper(swiper) }}
-              spaceBetween={80}
+              spaceBetween={window.innerWidth > 768 ? 80 : 0}
+              pagination={window.innerWidth > 768 ? false : true}
             >
               {
                 products.map((product, i) => {
                   return (
                     <SwiperSlide key={product.id}>
                       <ProductCard
+                        className="m-auto"
                         key={product.id}
                         name={product.name}
                         description={product.shortDescription}

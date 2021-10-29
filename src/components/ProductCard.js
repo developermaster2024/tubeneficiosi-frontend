@@ -15,13 +15,14 @@ const ProductCard = ({
   imgSrc,
   imgAlt,
   onBuy,
-  buttonText
+  buttonText,
+  className
 }) => {
 
   const [imgLoad, setImageLoad] = useState(false);
 
   return <div
-    className="p-5 mt-12 max-w-[250px] space-y-4 relative pt-28 w-full rounded-md transform hover:shadow-2xl hover:-translate-y-3 transition duration-500"
+    className={`p-5 mt-12 max-w-[250px] space-y-4 relative pt-28 w-full rounded-md transform hover:shadow-2xl hover:-translate-y-3 transition duration-500 ${className}`}
   >
     <img
       onLoad={() => { setImageLoad(true) }}
@@ -83,7 +84,7 @@ const ProductCard = ({
           No Disponible
         </div>
     }
-  </div>
+  </div >
 };
 
 export default ProductCard;

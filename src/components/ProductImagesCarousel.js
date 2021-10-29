@@ -14,7 +14,7 @@ const ProductImagesCarousel = ({ images, productName }) => {
 
   const isInInitialScale = zoomScale === 1;
 
-  return <div>
+  return <div className="hidden md:block">
     <div className="relative">
       <Swiper
         onSwiper={setSwiper}
