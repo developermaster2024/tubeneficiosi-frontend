@@ -9,6 +9,8 @@ import Button from '../components/Button';
 import ProductToRatingModal from '../components/ProductToRatingModal';
 import isAllRated from '../helpers/isAllRated';
 import StoreToRatingModal from '../components/StoreToRatingModal';
+import ProductCard from '../components/ProductCard';
+import { generateImageUrl } from '../helpers/url';
 
 const OrderDetails = () => {
 
@@ -212,7 +214,7 @@ const OrderDetails = () => {
             <IoCartOutline className="mr-2" />  Productos <span className=" ml-4 border rounded-full h-[38px] w-[40px] text-center">{order?.cart?.cartItems?.length}</span>
           </h1>
 
-          <table className="w-2/3 text-center">
+          <table className="hidden md:block md:w-2/3 text-center">
             <thead className="border-b">
               <tr>
                 <th>
@@ -258,7 +260,20 @@ const OrderDetails = () => {
               }
             </tbody>
           </table>
-
+          <div className="md:hidden space-y-4">
+            {
+              order?.cart?.cartItems?.map((product, i) => {
+                console.log(product);
+                return (
+                  <div className="text-center">
+                    <img className="w-20 h-20 rounded m-auto" src={generateImageUrl(product?.productImage)} alt="" />
+                    <p>{product?.productName}</p>
+                    <p>{product?.quantity} X ${product?.productPrice} = <b>${product?.total}</b></p>
+                  </div>
+                )
+              })
+            }
+          </div>
           <div className="text-right my-8 px-8">
             <p className="space-x-4 text-gray-400 my-4">
               <span>Descuento:</span>

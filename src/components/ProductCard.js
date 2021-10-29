@@ -46,7 +46,7 @@ const ProductCard = ({
         to={`/products/${slug}`}
         title={name}
       >
-        <p className="font-bold text-center text-gray-600 text-lg hover:text-main">{name.length > 35 ? `${name.slice(0, 35)}...` : name}</p>
+        <p className="font-bold text-center text-gray-600 text-lg hover:text-main">{name?.length > 35 ? `${name?.slice(0, 35)}...` : name}</p>
       </Link>
 
       <div className="flex space-x-1 justify-center">

@@ -26,7 +26,7 @@ const ProductToRatingModal = ({ products, ratedProducts, orderId, onClose }) => 
 
   return reactDom.createPortal(
     <div ref={modalRef} onClick={handleCloseModal} className="fixed flex z-50 h-screen w-screen bg-black bg-opacity-50 left-0 top-0 animate__animated animate__fade">
-      <div className="w-7/12 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
+      <div className="md:w-7/12 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
         <div style={{ height: "8%" }} className="p-4 bg-main flex justify-end items-center text-white">
           <button className="text-2xl" onClick={() => { onClose() }}>
             <IoClose />
