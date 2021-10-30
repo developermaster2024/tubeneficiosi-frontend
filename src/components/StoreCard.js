@@ -8,7 +8,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 
 
-const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, i, isFavorite, slug, open, id }) => {
+const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating, i, isFavorite, slug, open, id, className }) => {
 
   const { setLoading, setCustomAlert } = useAuth();
 
@@ -37,7 +37,7 @@ const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating,
   return <div
     onMouseEnter={() => { setStoreSelected(`${name} - ${i}`) }}
     onMouseLeave={() => { setStoreSelected(null) }}
-    className="p-4 bg-white relative max-w-[240px] rounded hover:shadow-2xl hover:-translate-y-3 transition duration-500"
+    className={`p-4 bg-white relative max-w-[240px] rounded hover:shadow-2xl hover:-translate-y-3 transition duration-500 ${className}`}
   >
 
     {

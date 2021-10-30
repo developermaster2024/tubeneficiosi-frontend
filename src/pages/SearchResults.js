@@ -167,7 +167,7 @@ const SearchResults = () => {
 
             <div className="bg-white p-4 space-y-8">
                 <div style={{ minHeight: 300 }}>
-                    <h2 className="text-2xl justify-between flex mb-4 font-bold text-gray-500">
+                    <h2 className="text-2xl justify-between md:flex mb-4 font-bold text-gray-500">
                         <div className="flex items-center text-3xl space-x-2">
                             <IoFastFoodOutline />
                             <p>Productos</p>
@@ -181,7 +181,7 @@ const SearchResults = () => {
                         {
                             productsList.length > 0 ?
                                 <Swiper
-                                    slidesPerView={4}
+                                    slidesPerView={window.innerWidth > 768 ? 4 : 1}
                                     navigation
                                     style={{ padding: "20px 20px" }}
                                     onReachEnd={handleProductsEnd}
@@ -191,6 +191,7 @@ const SearchResults = () => {
                                             return (
                                                 <SwiperSlide key={i}>
                                                     <ProductCard
+                                                        className="m-auto md:m-0"
                                                         name={product.name}
                                                         slug={product.slug}
                                                         description={product.shortDescription || 'Sin descripción'}
@@ -215,7 +216,7 @@ const SearchResults = () => {
                     </div>
                 </div>
                 <div>
-                    <h2 className="text-2xl justify-between flex mb-4 font-bold text-gray-500">
+                    <h2 className="text-2xl justify-between md:flex mb-4 font-bold text-gray-500">
                         <div className="flex items-center text-3xl space-x-2">
                             <IoStorefrontOutline />
                             <p>Tiendas</p>
@@ -227,7 +228,7 @@ const SearchResults = () => {
                     {
                         storesList.length > 0 ?
                             <Swiper
-                                slidesPerView={4}
+                                slidesPerView={window.innerWidth > 768 ? 4 : 1}
                                 navigation
                                 style={{ padding: "20px 20px" }}
                                 onReachEnd={handleStoresEnd}
@@ -247,6 +248,7 @@ const SearchResults = () => {
                                                     open={store?.isOpen}
                                                     slug={store.slug}
                                                     cheapestProduct={store.cheapestProduct}
+                                                    className="m-auto md:m-0"
                                                 />
                                             </SwiperSlide>
                                         )

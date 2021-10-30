@@ -6,6 +6,8 @@ import NavSearchBar from './NavSearchBar';
 import NavLinks from './NavLinks';
 import { IoClose, IoMenu, IoSearch } from 'react-icons/io5';
 import MobileMenu from './MobileMenu';
+import useCategories from '../hooks/useCategories';
+import SearchInputMobile from './SearchInputMobile';
 
 const ipdata = new IPData('67c7dfbb37526fc8f7beacac55a5030413e74e26dab32be0e25cbc57');
 
@@ -19,7 +21,11 @@ const Navbar = () => {
 
   const [showMenu, setShowMenu] = useState(false);
 
+  const [showSearchBar, setShowSearchBar] = useState(false);
+
   const [searchData, setSearchData] = useState({ storeCategoryId: "", search: "" })
+
+  const [{ categories, error: errorCategories, loading: categoriesLoading }] = useCategories();
 
   useEffect(() => {
     ipData.lookup().then((response) => {
@@ -30,6 +36,7 @@ const Navbar = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setShowSearchBar(false);
     history.push(`/search?storeCategoryId=${searchData.storeCategoryId}&search=${searchData.search}`);
   }
 
@@ -54,7 +61,7 @@ const Navbar = () => {
           <NavLinks />
 
           <div className="md:hidden items-center flex space-x-4">
-            <button>
+            <button onClick={() => { setShowSearchBar((oldShowSearchBar) => !oldShowSearchBar) }}>
               <IoSearch className="text-2xl" />
             </button>
 
@@ -72,6 +79,46 @@ const Navbar = () => {
     </div>
 
     <MobileMenu show={showMenu} onClose={() => { setShowMenu((oldShowMenu) => !oldShowMenu) }} />
+
+    <SearchInputMobile show={showSearchBar} onClick={() => { setShowSearchBar((oldShowSearchBar) => !oldShowSearchBar) }}>
+      <form className="items-center px-10 space-y-4" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="stores-categories">Categorias</label>
+          <select
+            id="stores-categories"
+            name="storeCategoryId"
+            value={searchData.storeCategoryId}
+            onChange={handleChange}
+            disabled={errorCategories || categoriesLoading ? true : false}
+            className="w-full capitalize rounded border-gray-300 focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 bg-transparent text-sm leading-4"
+          >
+            <option value="">Seleccione una categoria</option>
+            {categories.map((category, i) => {
+              return (
+                <option className="text-black capitalize" value={category.id} key={i}>{category.name}</option>
+              )
+            })}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="search">Buscar</label>
+          <input
+            name="search"
+            value={searchData.search}
+            onChange={handleChange}
+            id="search"
+            placeholder="Nombre de tienda, producto..."
+            className="w-full rounded border-gray-300 focus:border-gray-300 focus:ring focus:ring-gray-200 focus:ring-opacity-50 bg-transparent text-sm leading-4"
+            type="text"
+          />
+        </div>
+        <div className="text-center">
+          <button className="bg-main px-8 py-2 rounded text-white transition duration-300 hover:bg-white hover:shadow-xl hover:text-main">
+            Aceptar
+          </button>
+        </div>
+      </form>
+    </SearchInputMobile>
 
     <div className="bg-main text-white py-2">
       <div className="container relative space-y-2">
