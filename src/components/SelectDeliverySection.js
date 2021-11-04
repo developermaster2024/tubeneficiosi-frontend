@@ -10,7 +10,7 @@ import useProfileAddress from "../hooks/useProfileAddress";
 import Button from "./Button";
 import UserAddressCard from "./UserAddressCard";
 
-const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectDeliveryMethod, deliveryMethod }) => {
+const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectDeliveryMethod, deliveryMethod, isShowProducts }) => {
 
     const [{ profileAddress, error, loading }, getProfileAddress] = useProfileAddress({ axiosConfig: { params: { perPage: 200 } }, options: { manual: true, useCache: false } });
 
@@ -54,25 +54,29 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
 
     return (
         <div className={className}>
+            {
+                !isShowProducts &&
+                <>
+                    <h1 className="text-xl text-gray-500 font-bold mb-12 text-center">¿Por favor indique como desea recibir los productos?</h1>
+                    <div className="flex items-center justify-around space-x-12">
+                        <div onClick={() => { onSelectDeliveryMethod(true) }} className={clsx(["hover:text-main cursor-pointer"], {
+                            "text-gray-500": !deliveryMethod,
+                            "text-main": deliveryMethod
+                        })}>
+                            <IoRocketSharp className="m-auto text-4xl" />
+                            <p>Quiero que me los envien.</p>
+                        </div>
+                        <div onClick={() => { onSelectDeliveryMethod(false) }} className={clsx(["hover:text-main cursor-pointer"], {
+                            "text-gray-500": deliveryMethod,
+                            "text-main": !deliveryMethod
+                        })}>
+                            <IoStorefrontSharp className="m-auto text-4xl" />
+                            <p>Retirar en tienda</p>
+                        </div>
+                    </div>
+                </>
+            }
 
-            <h1 className="text-xl text-gray-500 font-bold mb-12 text-center">¿Por favor indique como desea recibir los productos?</h1>
-
-            <div className="flex items-center justify-around space-x-12">
-                <div onClick={() => { onSelectDeliveryMethod(true) }} className={clsx(["hover:text-main cursor-pointer"], {
-                    "text-gray-500": !deliveryMethod,
-                    "text-main": deliveryMethod
-                })}>
-                    <IoRocketSharp className="m-auto text-4xl" />
-                    <p>Quiero que me los envien.</p>
-                </div>
-                <div onClick={() => { onSelectDeliveryMethod(false) }} className={clsx(["hover:text-main cursor-pointer"], {
-                    "text-gray-500": deliveryMethod,
-                    "text-main": !deliveryMethod
-                })}>
-                    <IoStorefrontSharp className="m-auto text-4xl" />
-                    <p>Retirar en tienda</p>
-                </div>
-            </div>
 
             {
                 deliveryMethod && !selectedAddress &&
@@ -245,12 +249,20 @@ const SelectDeliverySection = ({ className, storeId, onChange, values, onSelectD
             }
 
             {
-                !deliveryMethod &&
-                <div className="animate__animated animate__fadeInUp text-center my-6 text-xl text-gray-500 font-bold">
-                    ¡Perfecto los productos le estaran esperando en la tienda!
+                !isShowProducts && !deliveryMethod ?
+                    <div className="animate__animated animate__fadeInUp text-center my-6 text-xl text-gray-500 font-bold">
+                        ¡Perfecto los productos le estaran esperando en la tienda!
+                    </div>
+                    :
+                    null
+            }
+            {
+                isShowProducts &&
+                < div className="animate__animated animate__fadeInUp text-center my-6 text-xl text-gray-500 font-bold">
+                    Pague y luego retire las entradas con la orden de BeneficioSI en digital o en Fisico.
                 </div>
             }
-        </div>
+        </div >
     )
 }
 

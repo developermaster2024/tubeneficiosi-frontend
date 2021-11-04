@@ -11,6 +11,8 @@ import isAllRated from '../helpers/isAllRated';
 import StoreToRatingModal from '../components/StoreToRatingModal';
 import ProductCard from '../components/ProductCard';
 import { generateImageUrl } from '../helpers/url';
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 const OrderDetails = () => {
 
@@ -243,16 +245,24 @@ const OrderDetails = () => {
                         <img className="w-[70px] h-[70px] m-auto" src={`${process.env.REACT_APP_API_URL}/${product.productImage}`} alt="" />
                       </th>
                       <th>
-                        {product.productName}
+                        {
+                          product?.cartItemShowDetails ?
+                            <h3>
+                              Entradas para <b>{product?.productName}</b>
+                              <p className="capitalize">{` ${format(new Date(product?.cartItemShowDetails?.show?.date), 'EEEE dd/MM/yyyy HH:mm:ss', { locale: es })}`}</p>
+                            </h3>
+                            :
+                            <h3>{product?.productName}</h3>
+                        }
                       </th>
                       <th>
-                        $ {product.total}
+                        $ {product.productPrice}
                       </th>
                       <th>
                         {product.quantity}
                       </th>
                       <th>
-                        $ {(product.total * product.quantity).toFixed(2)}
+                        $ {product?.total?.toFixed(2)}
                       </th>
                     </tr>
                   )

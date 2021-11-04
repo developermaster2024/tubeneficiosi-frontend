@@ -11,6 +11,7 @@ import ProductModal from "../components/ProductModal";
 import useAxios from "../hooks/useAxios";
 import { IoFastFoodOutline, IoStorefrontOutline } from "react-icons/io5";
 import StoreDiscountsModal from "../components/dicounts/StoreDiscountsModal";
+import findShowsQuantity from "../helpers/findShowsQuantity";
 
 
 const SearchResults = () => {
@@ -183,7 +184,7 @@ const SearchResults = () => {
                                 <Swiper
                                     slidesPerView={window.innerWidth > 768 ? 4 : 1}
                                     navigation
-                                    style={{ padding: "20px 20px" }}
+                                    style={{ padding: "80px 20px" }}
                                     onReachEnd={handleProductsEnd}
                                 >
                                     {
@@ -194,12 +195,13 @@ const SearchResults = () => {
                                                         className="m-auto md:m-0"
                                                         name={product.name}
                                                         slug={product.slug}
-                                                        description={product.shortDescription || 'Sin descripción'}
-                                                        quantity={product.quantity}
+                                                        description={product?.productDetails?.shortDescription ? product?.productDetails?.shortDescription : product?.description ? product?.description : 'Sin descripción'}
+                                                        quantity={product?.productDetails ? product?.productDetails?.quantity : findShowsQuantity(product?.shows)}
                                                         imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
                                                         imgAlt={product.name}
-                                                        price={product.price}
-                                                        onBuy={() => { setProductOnModal(product) }}
+                                                        price={product?.productDetails ? product.productDetails?.price > 0 ? `$${product.productDetails?.price}` : 'Gratis' : ''}
+                                                        rating={product?.rating}
+                                                        onBuy={() => { product?.productDetails ? setProductOnModal(product) : history?.push(`/products/${product?.slug}`) }}
                                                         buttonText={"Comprar"}
                                                     />
                                                 </SwiperSlide>

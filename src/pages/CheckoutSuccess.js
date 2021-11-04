@@ -6,6 +6,8 @@ import { IoPrintSharp } from "react-icons/io5";
 import useAxios from "../hooks/useAxios";
 import Button from "../components/Button";
 import PrintOrderComponent from "../components/PrintOrderComponent";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 const CheckoutSuccess = () => {
 
@@ -96,7 +98,15 @@ const CheckoutSuccess = () => {
                                                             <b>{n + 1}</b>
                                                             <img src={`${process.env.REACT_APP_API_URL}/${product?.productImage}`} className="rounded-full h-12 w-12" alt="" />
                                                             <div className="ml-2">
-                                                                <h3>{product?.productName}</h3>
+                                                                {
+                                                                    product?.cartItemShowDetails ?
+                                                                        <h3>
+                                                                            Entradas para <b>{product?.productName}</b>
+                                                                            <p className="capitalize">{` ${format(new Date(product?.cartItemShowDetails?.show?.date), 'EEEE dd/MM/yyyy HH:mm:ss', { locale: es })}`}</p>
+                                                                        </h3>
+                                                                        :
+                                                                        <h3>{product?.productName}</h3>
+                                                                }
                                                                 <b className="text-main">$ {product?.productPrice}</b>
                                                             </div>
                                                         </div>

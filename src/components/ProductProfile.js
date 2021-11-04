@@ -58,8 +58,8 @@ const ProductProfile = ({ product }) => {
     const [, createQuestion] = useAxios({ url: '/questions', method: 'POST' }, { manual: true });
 
     useEffect(() => {
-        console.log(product);
         if (product) {
+            console.log(product)
             fetchQuestions({
                 params: {
                     productId: product.id,
@@ -248,7 +248,7 @@ const ProductProfile = ({ product }) => {
                         </div>
 
                         <p className="mt-6">
-                            {product?.shortDescription}
+                            {product?.productDetails?.shortDescription}
                         </p>
 
                         {/* Características */}
@@ -257,7 +257,7 @@ const ProductProfile = ({ product }) => {
                                 <ProductFeature
                                     className="md:w-1/2"
                                     name="Referencia"
-                                    value={product?.reference || 'Sin referencia'}
+                                    value={product?.productDetails?.reference || 'Sin referencia'}
                                 />
                                 <ProductFeature
                                     className="md:w-1/2"
@@ -277,7 +277,7 @@ const ProductProfile = ({ product }) => {
                                 <ProductFeature
                                     className="md:w-1/2"
                                     name="Stock"
-                                    value={product?.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
+                                    value={product?.productDetails?.quantity > 0 ? <p className="text-main">En stock</p> : 'Sin existencia'}
                                 />
                             </div>
 
@@ -307,8 +307,8 @@ const ProductProfile = ({ product }) => {
                                         <div>
                                             <p className="text-main text-3xl font-semibold">
                                                 {
-                                                    product?.price > 0 ?
-                                                        <span> {(product?.price - ((product?.price * product?.discount) / 100)).toFixed(2)} USD</span>
+                                                    product?.productDetails?.price > 0 ?
+                                                        <span> {(product?.productDetails?.price - ((product?.productDetails?.price * product?.discount) / 100)).toFixed(2)} USD</span>
                                                         :
                                                         "Gratis"
                                                 }
@@ -318,8 +318,8 @@ const ProductProfile = ({ product }) => {
                                         :
                                         <p className="text-main text-3xl font-semibold">
                                             {
-                                                Number(product?.price) > 0 ?
-                                                    <span> {(Number(product?.price)).toFixed(2)} USD</span>
+                                                Number(product?.productDetails?.price) > 0 ?
+                                                    <span> {(Number(product?.productDetails?.price)).toFixed(2)} USD</span>
                                                     :
                                                     "Gratis"
                                             }
@@ -328,11 +328,11 @@ const ProductProfile = ({ product }) => {
                             </div>
                             <div className="flex-grow">
                                 {
-                                    product?.quantity > 0 ?
+                                    product?.productDetails?.quantity > 0 ?
                                         <div className="flex items-center justify-end space-x-2">
                                             <div className="w-20">
                                                 <Select>
-                                                    {Array.from(Array(product?.quantity).keys()).map(n => {
+                                                    {Array.from(Array(product?.productDetails?.quantity).keys()).map(n => {
                                                         return (
                                                             <option key={n} value={n + 1}>{n + 1}</option>
                                                         )

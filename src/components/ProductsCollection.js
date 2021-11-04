@@ -31,7 +31,7 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${error?.response?.status === 400 ? error?.response?.data.message[0] : error?.response?.data.message}.`, severity: "error" });
     }
-  }, [error, setLoading, setCustomAlert])
+  }, [error])
 
   useEffect(() => {
     if (data) {
@@ -93,11 +93,11 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
             rating={product?.rating}
             slug={product.slug}
             description={product.shortDescription}
-            quantity={product.quantity}
+            quantity={product?.productDetails ? product?.productDetails?.quantity : findShowsQuantity(product?.shows)}
             imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
             imgAlt={product.name}
-            price={product.price}
-            onBuy={() => { setProductOnModal(product) }}
+            price={product?.productDetails ? product.productDetails?.price > 0 ? `$${product.productDetails?.price}` : 'Gratis' : 'Ver Funciones'}
+            onBuy={() => { product?.productDetails ? setProductOnModal(product) : history?.push(`/products/${product?.slug}`) }}
             storeName={product.store.name}
             storeImageSrc={generateImageUrl(product.store?.storeProfile?.logo)}
             storeImageAlt={product.store.name}

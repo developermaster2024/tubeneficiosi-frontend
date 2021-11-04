@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
-import { IoCheckbox, IoLocationSharp } from 'react-icons/io5';
+import { IoCheckbox } from 'react-icons/io5';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { validURL } from '../helpers/formsValidations';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import onlyUnique from '../helpers/onlyUniques';
 import clsx from 'clsx';
 import CustomSelect from './CustomSelect';
+import useAxios from '../hooks/useAxios';
+import { useHistory } from 'react-router';
+import { useAuth } from '../contexts/AuthContext';
 
 const ShowProfile = ({ show }) => {
+
+    const history = useHistory();
+
+    const { setLoading, setCustomAlert } = useAuth();
 
     const [videoPreview, setVideoPreview] = useState('');
 
@@ -16,18 +22,39 @@ const ShowProfile = ({ show }) => {
 
     const [showFunctions, setShowFunctions] = useState([]);
 
+    const [total, setTotal] = useState(0);
+
     const [selectedFunctionShow, setSelectedFunctionShow] = useState(null);
 
     const [selectedZone, setSelectedZone] = useState(null);
 
     const [quantity, setQuantity] = useState(1);
 
+    const [{ data: createCartData, error: createCartError }, addToCart] = useAxios({ url: `/carts/add-show-to-cart`, method: 'POST' }, { manual: true, useCache: false });
+
     useEffect(() => {
-        console.log(selectedFunctionShow);
-    }, [selectedFunctionShow])
+        if (createCartData) {
+            setLoading?.({ show: false, message: "" });
+            history.push(`/checkout?cartId=${createCartData?.id}`);
+        }
+    }, [createCartData]);
+
+    useEffect(() => {
+        if (createCartError) {
+            setLoading?.({ show: false, message: "" });
+            setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${createCartError?.response?.status === 400 ? createCartError?.response?.data.message[0] : createCartError?.response?.data.message}.`, severity: "error" });
+        }
+    }, [createCartError])
+
+    useEffect(() => {
+        if (selectedZone) {
+            setTotal(Number(selectedZone?.price) * quantity);
+        }
+    }, [quantity, selectedZone]);
 
     useEffect(() => {
         if (show) {
+            console.log(show);
             if (validURL(show?.showDetails?.trailer)) {
                 var url_string = show?.showDetails?.trailer; //window.location.href
                 var url = new URL(url_string);
@@ -55,6 +82,35 @@ const ShowProfile = ({ show }) => {
         id,
         ...show?.shows?.find(show => show.place.id === id),
     }));
+
+    const handleBuy = async () => {
+        if (!quantity) {
+            alert('La cantidad debe ser igual o mayor a 1');
+            return;
+        }
+
+        if (!selectedFunctionShow) {
+            alert('Debe seleccionar una función.');
+            return;
+        }
+
+        if (!selectedZone) {
+            alert('Debe seleccionar una zona.');
+            return;
+        }
+
+        setLoading({ show: true, message: 'Procesando solicitud' });
+        await addToCart({
+            data: {
+                storeId: show?.store?.storeId,
+                productId: show?.id,
+                quantity: Number(quantity),
+                showId: selectedFunctionShow?.id,
+                zoneId: selectedZone?.zone?.id
+            }
+        });
+        setLoading({ show: false, message: '' });
+    }
 
     return (
         <>
@@ -98,6 +154,24 @@ const ShowProfile = ({ show }) => {
                         null
                 }
             </Swiper>
+            <div className="p-8 flex items-center justify-between" style={{ background: 'rgba(0,0,0, .3)' }}>
+                <div>
+                    <a href={`/stores/${show?.store?.slug}`}>
+                        {
+                            show?.store?.storeProfile?.logo &&
+                            <img className="h-28" src={`${process.env.REACT_APP_API_URL}/${show?.store?.storeProfile?.logo}`} alt="" />
+                        }
+                        <p className="text-4xl text-white">{show?.store?.name}</p>
+                    </a>
+                </div>
+                <div className="text-white">
+                    <h2 className="font-bold text-xl">Información de la tienda</h2>
+                    <p>Telefono: {show?.store?.phoneNumber}</p>
+                    <p>Dirección: {show?.store?.address}</p>
+                    <p>Instagram: {show?.store?.storeProfile?.instagram}</p>
+                    <p>Whatsapp: {show?.store?.storeProfile?.whatsapp}</p>
+                </div>
+            </div>
             <div className="p-8">
                 <div className="flex w-full justify-between">
                     <div className="w-1/2">
@@ -168,7 +242,7 @@ const ShowProfile = ({ show }) => {
                                                         className="border-b flex justify-between items-center py-4 px-2 rounded cursor-pointer transition duration-500 hover:shadow-xl"
                                                         key={i}
                                                         onClick={() => { setSelectedZone(zone) }}>
-                                                        <span>{zone?.zone?.name}</span>
+                                                        <span>{zone?.zone?.name} <b className="text-xl text-gray-500">${zone?.price}</b></span>
                                                         {
                                                             zone?.id === selectedZone?.id &&
                                                             <IoCheckbox className="text-green-500 text-2xl animate__animated animate__fadeInUp" />
@@ -194,6 +268,14 @@ const ShowProfile = ({ show }) => {
                                                 )
                                             })}
                                         </CustomSelect>
+                                        <div className="text-right text-gray-500 text-xl mt-4">
+                                            <b>TOTAL: ${total}</b>
+                                        </div>
+                                        <div className="text-center mt-8">
+                                            <button onClick={handleBuy} className="bg-main text-white px-8 py-2 rounded transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
+                                                Realizar Pedido
+                                            </button>
+                                        </div>
                                     </div>
                                 }
                             </div>

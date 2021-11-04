@@ -10,6 +10,7 @@ import useAxios from "../hooks/useAxios";
 import StoreDiscountsModal from "./dicounts/StoreDiscountsModal";
 import useFeaturedProducts from "../hooks/useFeaturedProducts";
 import Button from "./Button";
+import findShowsQuantity from "../helpers/findShowsQuantity";
 
 const ShowsFeaturedProducts = ({ categoryInfo }) => {
 
@@ -108,13 +109,13 @@ const ShowsFeaturedProducts = ({ categoryInfo }) => {
                                             <SwiperSlide key={featuredProduct.id}>
                                                 <ProductCard
                                                     name={featuredProduct?.product?.name}
-                                                    description={featuredProduct?.product?.shortDescription}
+                                                    description={featuredProduct?.product?.productDetails?.shortDescription ? featuredProduct?.product?.productDetails?.shortDescription : featuredProduct?.product?.description ? featuredProduct?.product?.description : 'Sin descripción'}
                                                     imgSrc={generateImageUrl(featuredProduct?.product.productImages?.[0]?.path)}
-                                                    imgAlt={featuredProduct?.product?.name}
                                                     rating={featuredProduct?.product?.rating}
-                                                    price={featuredProduct?.product?.price}
-                                                    quantity={featuredProduct?.product?.quantity}
-                                                    onBuy={() => { setProductOnModal(featuredProduct.product) }}
+                                                    imgAlt={featuredProduct?.product?.name}
+                                                    price={featuredProduct?.product?.productDetails ? featuredProduct?.product.productDetails?.price > 0 ? `$${featuredProduct?.product.productDetails?.price}` : 'Gratis' : ''}
+                                                    quantity={featuredProduct?.product?.productDetails ? featuredProduct?.product?.productDetails?.quantity : findShowsQuantity(featuredProduct?.product?.shows)}
+                                                    onBuy={() => { featuredProduct?.product?.productDetails ? setProductOnModal(featuredProduct?.product) : history?.push(`/products/${featuredProduct?.product?.slug}`) }}
                                                     slug={featuredProduct?.product?.slug}
                                                 />
                                             </SwiperSlide>

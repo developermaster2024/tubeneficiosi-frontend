@@ -3,6 +3,8 @@ import Button from "./Button";
 import { useReactToPrint } from 'react-to-print';
 import { useAuth } from "../contexts/AuthContext";
 import { useEffect } from "react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 
 
@@ -148,7 +150,15 @@ const PrintOrderComponent = ({ order, togglePrintMode, print, onFinalizePrint })
                                             <tr className={`border-b`} key={i}>
                                                 <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>
                                                     <div className="text-center">
-                                                        {product.productName}
+                                                        {
+                                                            product?.cartItemShowDetails ?
+                                                                <h3>
+                                                                    Entradas para <b>{product?.productName}</b>
+                                                                    <p className="capitalize">{` ${format(new Date(product?.cartItemShowDetails?.show?.date), 'EEEE dd/MM/yyyy HH:mm:ss', { locale: es })}`}</p>
+                                                                </h3>
+                                                                :
+                                                                <h3>{product?.productName}</h3>
+                                                        }
                                                     </div>
                                                 </td>
                                                 <td style={{ padding: i === 4 && order?.cart?.cartItems.length > 5 ? "1rem 1rem 2.5rem 1rem" : "1rem" }}>

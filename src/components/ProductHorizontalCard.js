@@ -62,26 +62,32 @@ const ProductHorizontalCard = ({
             </Link>
           }
         />
-
-        <ProductFeature
-          className="w-full"
-          name="Envíos"
-          value={deliveryMethodTypes.join(', ')}
-        />
         {
-          quantity > 0 &&
-          <ProductFeature
-            className="w-full hidden md:block"
-            name="Cantidad"
-            value={<span className="text-main">{quantity} pcs</span>}
-          />
+          deliveryMethodTypes?.length > 0 ?
+            <ProductFeature
+              className="w-full"
+              name="Envíos"
+              value={deliveryMethodTypes.join(', ')}
+            />
+            :
+            <ProductFeature
+              className="w-full"
+              name="Envíos"
+              value={'Retiro en tienda'}
+            />
+
         }
+        <ProductFeature
+          className="w-full hidden md:block"
+          name="Cantidad"
+          value={<span className="text-main"> {quantity}</span>}
+        />
       </div>
     </div>
     <div className="md:w-64 flex-shrink-0 flex flex-col p-4 space-y-4">
 
       <div className="text-right md:text-center">
-        <p className="font-semibold text-xl">{price ? `${price} USD` : 'GRATIS'}</p>
+        <p className="font-semibold text-xl">{price}</p>
       </div>
 
       {

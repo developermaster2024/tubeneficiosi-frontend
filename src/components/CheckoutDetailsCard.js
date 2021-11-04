@@ -6,6 +6,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
 import Button from "./Button";
 import ProductFeaturesModal from "./ProductFeaturesModal";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, deliveryCost, onBuy }) => {
 
@@ -63,9 +65,10 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
 
     useEffect(() => {
         if (cart) {
+            console.log(cart);
             emitCart(cart)
         }
-    }, [cart, emitCart])
+    }, [cart])
 
     useEffect(() => {
         if (data) {
@@ -97,21 +100,24 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                     </div>
                     :
                     <>
-                        <div className="bg-white  p-4 rounded mb-4  text-gray-500">
-                            <div className="justify-between flex items-center">
-                                <Link className="text-center hover:text-main" to={`/stores/${cart?.store?.slug}`}>
-                                    <img className="w-12 h-12 rounded m-auto" src={`${process.env.REACT_APP_API_URL}/${cart?.store?.storeProfile?.logo}`} alt={cart?.store?.name} />
-                                    <h3 className="text-xl">{cart?.store?.name}</h3>
-                                </Link>
-                                <Button className="bg-green-500">
-                                    Abierta
-                                </Button>
+                        {
+                            !data?.isProcessed &&
+                            <div className="bg-white  p-4 rounded mb-4  text-gray-500">
+                                <div className="justify-between flex items-center">
+                                    <Link className="text-center hover:text-main" to={`/stores/${cart?.store?.slug}`}>
+                                        <img className="w-12 h-12 rounded m-auto" src={`${process.env.REACT_APP_API_URL}/${cart?.store?.storeProfile?.logo}`} alt={cart?.store?.name} />
+                                        <h3 className="text-xl">{cart?.store?.name}</h3>
+                                    </Link>
+                                    <Button className="bg-green-500">
+                                        Abierta
+                                    </Button>
+                                </div>
+                                <div className="flex items-center space-x-2 mt-2">
+                                    <IoLocationSharp className="text-4xl" />
+                                    <p>{cart?.store?.address}</p>
+                                </div>
                             </div>
-                            <div className="flex items-center space-x-2 mt-2">
-                                <IoLocationSharp className="text-4xl" />
-                                <p>{cart?.store?.address}</p>
-                            </div>
-                        </div>
+                        }
                         {
                             cart?.discount &&
                             <div className="bg-white p-4 rounded items-center mb-4 text-gray-500 flex space-x-4">
@@ -162,7 +168,15 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                                                     <div className="w-1/2 flex items-center">
                                                                         <img src={`${process.env.REACT_APP_API_URL}/${product?.productImage}`} className="rounded-full h-12 w-12" alt="" />
                                                                         <div className="ml-2 space-y-2">
-                                                                            <h3>{product?.productName}</h3>
+                                                                            {
+                                                                                product?.cartItemShowDetails ?
+                                                                                    <h3>
+                                                                                        Entradas para <b>{product?.productName}</b>
+                                                                                        <p className="capitalize">{` ${format(new Date(product?.cartItemShowDetails?.show?.date), 'EEEE dd/MM/yyyy HH:mm:ss', { locale: es })}`}</p>
+                                                                                    </h3>
+                                                                                    :
+                                                                                    <h3>{product?.productName}</h3>
+                                                                            }
                                                                             {
                                                                                 product?.cartItemFeatures?.length > 0 &&
                                                                                 <div className="cursor-pointer text-main" onClick={() => { handleFeatures(product) }}>

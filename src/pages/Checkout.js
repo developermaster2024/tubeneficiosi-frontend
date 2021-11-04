@@ -40,6 +40,8 @@ const Checkout = (props) => {
     totalTransfer: null
   });
 
+  const [showProduct, setShowProduct] = useState(false);
+
   const [canBuy, setCanBuy] = useState(false);
 
   const [storeId, setStoreId] = useState("");
@@ -102,7 +104,6 @@ const Checkout = (props) => {
   }, [errorsForm.deliveryMethodId, errorsForm.profileAddressId, checkoutData.profileAddressId, checkoutData.deliveryMethodId, deliveryMethod]);
 
   useEffect(() => {
-    console.log(checkoutData.paymentMethodCode);
     setErrorsForm((oldErrorsForm) => {
       return {
         ...oldErrorsForm,
@@ -195,8 +196,15 @@ const Checkout = (props) => {
 
     setStoreId(cart?.storeId);
 
+    cart?.cartItems?.forEach(product => {
+      if (product?.cartItemShowDetails) {
+        setDeliveryMethod(false);
+        setShowProduct(true);
+      }
+
+    });
+
     if (!cart?.discount) {
-      console.log(cart?.discount?.discountType?.code)
       setCartSubTotal(cart.subTotal);
       return;
     }
@@ -210,8 +218,6 @@ const Checkout = (props) => {
     setLoading?.({ show: true, message: "Creando orden" });
     const data = new FormData();
     const { bankAccountId, ...rest } = checkoutData;
-    console.log(bankAccountId);
-    console.log(checkoutData);
     if (rest.cartId) {
       data.append('cartId', rest.cartId);
     }
@@ -246,6 +252,7 @@ const Checkout = (props) => {
           </h1>
 
           <SelectDeliverySection
+            isShowProducts={showProduct}
             onChange={handleChange}
             storeId={storeId}
             deliveryMethod={deliveryMethod}
@@ -266,7 +273,13 @@ const Checkout = (props) => {
           }
         </div>
         <div className="w-5/12 p-8">
-          <CheckoutDetailsCard onBuy={handleBuy} deliveryCost={deliveryCost} loadingDeliveryCost={deliveryCostLoading} canBuy={canBuy} emitCart={handleCart} cartId={checkoutData.cartId} />
+          <CheckoutDetailsCard
+            onBuy={handleBuy}
+            deliveryCost={deliveryCost}
+            loadingDeliveryCost={deliveryCostLoading}
+            canBuy={canBuy}
+            emitCart={handleCart}
+            cartId={checkoutData.cartId} />
         </div>
       </div>
     </div >
