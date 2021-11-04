@@ -29,7 +29,6 @@ const Navbar = () => {
 
   useEffect(() => {
     ipData.lookup().then((response) => {
-      console.log(response);
       setLocationInfo(response);
     })
   }, [ipData])

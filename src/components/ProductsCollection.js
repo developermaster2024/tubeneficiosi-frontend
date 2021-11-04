@@ -8,6 +8,7 @@ import useAxios from "../hooks/useAxios";
 import { useAuth } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import StoreDiscountsModal from "./dicounts/StoreDiscountsModal";
+import findShowsQuantity from "../helpers/findShowsQuantity";
 
 const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) => {
 
@@ -74,13 +75,13 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
             <ProductCard
               name={product.name}
               slug={product.slug}
-              description={product.shortDescription || 'Sin descripción'}
-              quantity={product.quantity}
+              description={product?.productDetails?.shortDescription ? product?.productDetails?.shortDescription : product?.description ? product?.description : 'Sin descripción'}
+              quantity={product?.productDetails ? product?.productDetails?.quantity : findShowsQuantity(product?.shows)}
               imgSrc={generateImageUrl(product.productImages?.[0]?.path)}
               imgAlt={product.name}
-              price={product.price}
+              price={product?.productDetails ? product.productDetails?.price > 0 ? `$${product.productDetails?.price}` : 'Gratis' : ''}
               rating={product?.rating}
-              onBuy={() => { setProductOnModal(product) }}
+              onBuy={() => { product?.productDetails ? setProductOnModal(product) : history?.push(`/products/${product?.slug}`) }}
               buttonText={isStore ? "Añadir al carrito" : "Comprar"}
             />
           </div>)}

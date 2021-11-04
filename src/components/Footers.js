@@ -12,7 +12,6 @@ const Footer = () => {
 
     useEffect(() => {
         if (footerData) {
-            console.log(footerData);
             setFooter(footerData);
         }
     }, [footerData])

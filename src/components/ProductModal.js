@@ -16,20 +16,19 @@ const ProductModal = ({ product, closeModal, isStore }) => {
   const [featuresPrice, setfeaturesPrice] = useState(0);
   const [productFeaturesData, setProductFeaturesData] = useState({ featureIds: [], featureForGroupIds: [] })
 
-  const [total, setTotal] = useState(product?.price);
+  const [total, setTotal] = useState(product?.productDetails?.price);
 
   const modalRef = useRef();
 
   useEffect(() => {
     if (product) {
       console.log(product);
-      setTotal(product?.price);
     }
   }, [product])
 
   useEffect(() => {
     if (product) {
-      setTotal((Number(product?.price) + featuresPrice) * quantity);
+      setTotal((Number(product?.productDetails?.price) + featuresPrice) * quantity);
     }
   }, [quantity, product, featuresPrice]);
 
@@ -37,7 +36,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
     setQuantity(1)
     setfeaturesPrice(0)
     setProductFeaturesData({ featureIds: [], featureForGroupIds: [] })
-  }, [closeModal])
+  }, [closeModal]);
 
   const handleFeatureChange = (event) => {
     const value = productFeaturesData[event.target.name].includes(Number(event.target.value));
@@ -145,7 +144,18 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                 </h1>
               </Link>
               <p className="text-center text-gray-500">
-                {product?.shortDescription?.length > 100 ? `${product?.shortDescription?.slice(0, 100)}...` : product?.shortDescription}
+                {
+                  product?.productDetails?.shortDescription ?
+                    product?.productDetails?.shortDescription?.length > 100 ?
+                      `${product?.shortDescription?.slice(0, 100)}...`
+                      :
+                      product?.productDetails?.shortDescription
+                    :
+                    product?.description?.length > 100 ?
+                      `${product?.description?.slice(0, 100)}...`
+                      :
+                      product?.description
+                }
               </p>
             </div>
             <div style={{ maxHeight: "250px" }} className="overflow-y-auto h-[50%] custom-scrollbar">
@@ -160,16 +170,19 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                   </div>
                 </Link>
               </div>
-              <div className="mb-2 flex items-center space-x-4">
-                <h3 className="text-lg font-bold text-gray-600">Disponibles:</h3>
-                {
-                  product.quantity > 0 ?
-                    <p className="text-main">{product.quantity}</p>
-                    :
-                    <p className="text-red-500">No hay disponible</p>
-                }
+              {
+                product?.productDetails?.quantity > 0 &&
+                <div className="mb-2 flex items-center space-x-4">
+                  <h3 className="text-lg font-bold text-gray-600">Disponibles:</h3>
+                  {
+                    product?.productDetails?.quantity > 0 ?
+                      <p className="text-main">{product?.productDetails?.quantity}</p>
+                      :
+                      <p className="text-red-500">No hay disponible</p>
+                  }
 
-              </div>
+                </div>
+              }
               {
                 product?.productFeatures?.length > 0 &&
                 <div>
@@ -224,16 +237,19 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                 <p>{product?.description}</p>
               </div>
             </div>
-            <div className="text-right text-2xl font-bold text-gray-600 font bold">
-              ${product?.price}
-            </div>
             {
-              product?.quantity > 0 &&
+              product?.productDetails?.price &&
+              <div className="text-right text-2xl font-bold text-gray-600 font bold">
+                ${product?.productDetails?.price}
+              </div>
+            }
+            {
+              product?.productDetails?.quantity > 0 &&
               <div className="flex items-center justify-between mt-4">
                 <div className="w-1/2 flex items-center space-x-4">
                   <p>Cantidad: </p>
                   <CustomSelect value={quantity} name="quantity" onChange={(e) => { setQuantity(e.target.value) }}>
-                    {Array.from(Array(product?.quantity).keys()).map(n => {
+                    {Array.from(Array(product?.productDetails?.quantity).keys()).map(n => {
                       return (
                         <option key={n} value={n + 1}>{n + 1}</option>
                       )
@@ -252,7 +268,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
               {
                 user ?
                   product?.store?.isOpen ?
-                    product?.quantity > 0 ?
+                    product?.productDetails?.quantity > 0 ?
                       <button onClick={handleAccept} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
                         <p>{isStore ? "añadir al carrito" : "Comprar"}</p>
                         <IoCart />

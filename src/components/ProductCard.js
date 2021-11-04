@@ -70,7 +70,7 @@ const ProductCard = ({
       <p className="opacity-75 text-xs text-center text-gray-800 truncate" title={description}>{description}</p>
 
       <div className="text-center">
-        <p className="font-bold text-gray-600 text-xl">{price > 0 ? `$${price}` : "Gratis"}</p>
+        <p className="font-bold text-gray-600 text-xl">{price}</p>
       </div>
     </div>
 
