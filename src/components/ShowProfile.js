@@ -154,7 +154,7 @@ const ShowProfile = ({ show }) => {
                         null
                 }
             </Swiper>
-            <div className="p-8 flex items-center justify-between" style={{ background: 'rgba(0,0,0, .3)' }}>
+            <div className="p-8 md:flex items-center space-y-8 md:space-y-0 justify-between" style={{ background: 'rgba(0,0,0, .3)' }}>
                 <div>
                     <a href={`/stores/${show?.store?.slug}`}>
                         {
@@ -173,9 +173,9 @@ const ShowProfile = ({ show }) => {
                 </div>
             </div>
             <div className="p-8">
-                <div className="flex w-full justify-between">
-                    <div className="w-1/2">
-                        <h3 className="text-xl text-gray-500 mb-2">Seleccione el lugar</h3>
+                <div className="md:flex space-y-8 md:space-y-0 w-full justify-between">
+                    <div className="md:w-1/2">
+                        <h3 className="text-center md:text-left text-xl text-gray-500 mb-2">Seleccione el lugar</h3>
                         <div className="flex items-center space-x-8">
                             {show?.shows?.length > 0 ?
                                 showsGroupedByPlace?.map((show, i) => {
@@ -197,8 +197,8 @@ const ShowProfile = ({ show }) => {
                             }
                         </div>
                     </div>
-                    <div className="w-1/2">
-                        <h3 className="text-xl text-gray-500 capitalize">Seleccione la fecha</h3>
+                    <div className="md:w-1/2">
+                        <h3 className="text-xl text-center md:text-left text-gray-500 capitalize">Seleccione la fecha</h3>
                         {showFunctions?.length > 0 ?
                             <ul>
                                 {
@@ -226,12 +226,12 @@ const ShowProfile = ({ show }) => {
                     selectedFunctionShow &&
                     <div className="animate__animated animate__fadeInUp">
                         <h1 className="text-center text-gray-500 text-2xl mt-8">Seleccione los puestos</h1>
-                        <div className="flex justify-between space-x-8 mt-4 border-t py-8">
-                            <div className="w-1/2">
+                        <div className="md:flex justify-between space-y-8 md:space-y-0 md:space-x-8 mt-4 border-t py-8">
+                            <div className="md:w-1/2">
                                 <h3 className="text-center text-gray-500 text-2xl mb-2">Mapa del lugar</h3>
                                 <img src={`${process.env.REACT_APP_API_URL}/${selectedFunctionShow?.place?.imgPath}`} alt="" />
                             </div>
-                            <div className="w-1/2">
+                            <div className="md:w-1/2">
                                 <h3 className="text-center text-gray-500 text-2xl mb-2">Seleccione la zona</h3>
                                 {selectedFunctionShow?.showToZones?.length > 0 ?
                                     <ul>

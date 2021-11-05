@@ -27,7 +27,7 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
         if (cartId) {
             getCart();
         }
-    }, [cartId, getCart]);
+    }, [cartId]);
 
     useEffect(() => {
         if (deleteData !== undefined) {
@@ -39,7 +39,7 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                 }
             })
         }
-    }, [deleteData, setCustomAlert, setCart])
+    }, [deleteData])
 
     useEffect(() => {
         setLoading({ show: deleteLoading, message: "Eliminando el producto" });
@@ -222,7 +222,7 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                             </div>
                                             <div className="flex font-bold justify-between text-gray-400 my-4">
                                                 <span>Total a pagar</span>
-                                                <span>$ {cart?.discount ? (cart?.subTotalWithDiscount + Number(deliveryCost)) : (cart?.subTotal + Number(deliveryCost))}</span>
+                                                <span>$ {cart?.discount ? (Number(cart?.subTotalWithDiscount) + Number(deliveryCost)) : (Number(cart?.subTotal) + Number(deliveryCost))}</span>
                                             </div>
                                             <div className="px-8 text-center mt-6">
                                                 <button className={clsx(["text-center text-2xl px-14 py-2 rounded text-white"], {
