@@ -79,7 +79,7 @@ const Navbar = () => {
 
     <MobileMenu show={showMenu} onClose={() => { setShowMenu((oldShowMenu) => !oldShowMenu) }} />
 
-    <SearchInputMobile show={showSearchBar} onClick={() => { setShowSearchBar((oldShowSearchBar) => !oldShowSearchBar) }}>
+    <SearchInputMobile onClose={() => { setShowSearchBar((oldShowSearchBar) => !oldShowSearchBar) }} show={showSearchBar} onClick={() => { setShowSearchBar((oldShowSearchBar) => !oldShowSearchBar) }}>
       <form className="items-center px-10 space-y-4" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="stores-categories">Categorias</label>
