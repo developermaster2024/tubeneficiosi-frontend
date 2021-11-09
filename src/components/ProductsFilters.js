@@ -1,8 +1,9 @@
-import Button from "./Button";
-import ChevronRightIcon from "./ChevronRightIcon";
 import RatingsFilter from "./RatingsFilter";
 import StoreCategoryFilter from "./StoreCategoryFilter";
 import TagsFilter from "./TagsFilters";
+import { CalendarComponent, DatePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 const ProductsFilters = ({ onChange, filters }) => {
     return (
@@ -13,6 +14,25 @@ const ProductsFilters = ({ onChange, filters }) => {
                 values={filters?.storeCategoryIds}
                 onChange={onChange} />
 
+            <h4 className="text-xl font-semibold mb-2">Fecha de eventos</h4>
+            {
+                filters?.showDate &&
+                <div title="Quitar filtro" onClick={() => { onChange({ target: { name: 'showDate', value: '' } }) }} className="flex items-center justify-between text-white bg-main rounded-full px-2 py-1 cursor-pointer transition duration-500 hover:bg-white hover:text-main hover:shadow-xl" style={{ fontSize: 13 }}>
+                    <span className="capitalize">{`${format(new Date(filters?.showDate), 'EEEE', { locale: es })}, ${format(new Date(filters?.showDate), 'dd', { locale: es })} de ${format(new Date(filters?.showDate), 'LLLL', { locale: es })} de ${format(new Date(filters?.showDate), 'yyyy', { locale: es })}`}</span>
+                </div>
+            }
+            {
+                !filters?.showDate &&
+                <CalendarComponent
+                    name="showDate"
+                    value={filters?.showDate}
+                    format="dd/MM/yyyy"
+                    onChange={onChange}
+                    allowEdit={false}
+                    floatLabelType="auto"
+                    openOnFocus={true} />
+            }
+
             {/* Rating */}
             <RatingsFilter
                 className="my-8"
@@ -20,6 +40,7 @@ const ProductsFilters = ({ onChange, filters }) => {
                 name="minRating"
                 values={filters?.minRating}
             />
+
 
             <TagsFilter
                 name="tagIds"

@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { IoCheckbox } from 'react-icons/io5';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { validURL } from '../helpers/formsValidations';
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import clsx from 'clsx';
 import CustomSelect from './CustomSelect';
 import useAxios from '../hooks/useAxios';
 import { useHistory } from 'react-router';
 import { useAuth } from '../contexts/AuthContext';
+import Button from './Button';
+import { CalendarComponent } from '@syncfusion/ej2-react-calendars';
 
 const ShowProfile = ({ show }) => {
 
@@ -20,8 +21,6 @@ const ShowProfile = ({ show }) => {
 
     const [selectedPlace, setSelectedPlace] = useState(null);
 
-    const [showFunctions, setShowFunctions] = useState([]);
-
     const [total, setTotal] = useState(0);
 
     const [selectedFunctionShow, setSelectedFunctionShow] = useState(null);
@@ -30,7 +29,53 @@ const ShowProfile = ({ show }) => {
 
     const [quantity, setQuantity] = useState(1);
 
+    const [filters, setFilters] = useState({
+        page: 1,
+        isActive: true,
+        date: ''
+    });
+
+    const [actualShows, setActualShows] = useState([]);
+
+    const observer = useRef();
+
+    const [{ data, error: showsError, loading: showsLoading }, getShows] = useAxios({ url: `/shows/${show?.id}/shows`, params: { ...filters } }, { manual: true, useCache: false });
+
     const [{ data: createCartData, error: createCartError }, addToCart] = useAxios({ url: `/carts/add-show-to-cart`, method: 'POST' }, { manual: true, useCache: false });
+
+    const lastShowRef = useCallback((show) => {
+        if (observer?.current) observer?.current?.disconnect?.();
+
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && data?.numberOfPages > filters.page) {
+                setFilters((oldFilters) => {
+                    return {
+                        ...oldFilters,
+                        page: oldFilters.page + 1
+                    }
+                })
+            }
+        })
+        if (show) observer?.current?.observe?.(show)
+    }, [data?.numberOfPages, filters.page]);
+
+
+    useEffect(() => {
+        getShows({
+            params: {
+                ...filters,
+                date: filters?.date ? format(new Date(filters?.date), 'yyyy-MM-dd') : '',
+            }
+        });
+    }, [filters])
+
+    useEffect(() => {
+        if (data) {
+            setActualShows((oldShows) => {
+                return [...oldShows, ...data?.results];
+            });
+        }
+    }, [data]);
 
     useEffect(() => {
         if (createCartData) {
@@ -54,34 +99,18 @@ const ShowProfile = ({ show }) => {
 
     useEffect(() => {
         if (show) {
-            console.log(show);
             if (validURL(show?.showDetails?.trailer)) {
                 var url_string = show?.showDetails?.trailer; //window.location.href
                 var url = new URL(url_string);
                 var v = url.searchParams.get("v");
                 setVideoPreview(`https://www.youtube.com/embed/${v}`);
             }
-
-            setShowFunctions(show?.shows);
         }
     }, [show]);
-
-    useEffect(() => {
-        if (selectedPlace) {
-            setShowFunctions((oldShowFunctions) => {
-                return [...show?.shows?.filter?.((showFunction) => showFunction?.place?.id === selectedPlace?.id)];
-            })
-        }
-    }, [selectedPlace])
 
     if (!show) {
         return null;
     }
-
-    const showsGroupedByPlace = Array.from(new Set(show?.shows?.map((show) => show.place.id))).map(id => ({
-        id,
-        ...show?.shows?.find(show => show.place.id === id),
-    }));
 
     const handleBuy = async () => {
         if (!quantity) {
@@ -110,6 +139,17 @@ const ShowProfile = ({ show }) => {
             }
         });
         setLoading({ show: false, message: '' });
+    }
+
+    const handleChange = (e) => {
+        setActualShows([]);
+        setFilters((oldFilters) => {
+            return {
+                ...oldFilters,
+                [e.target.name]: e.target.value,
+                page: 1
+            }
+        })
     }
 
     return (
@@ -173,52 +213,81 @@ const ShowProfile = ({ show }) => {
                 </div>
             </div>
             <div className="p-8">
-                <div className="md:flex space-y-8 md:space-y-0 w-full justify-between">
+                <div className="md:flex md:space-x-8 space-y-8 md:space-y-0 w-full justify-between">
                     <div className="md:w-1/2">
-                        <h3 className="text-center md:text-left text-xl text-gray-500 mb-2">Seleccione el lugar</h3>
-                        <div className="flex items-center space-x-8">
-                            {show?.shows?.length > 0 ?
-                                showsGroupedByPlace?.map((show, i) => {
-                                    return (
-                                        <button
-                                            key={i}
-                                            onClick={() => { setSelectedPlace(show?.place) }}
-                                            className={clsx(["border border-main rounded-full px-4 py-2 transition duration-500 hover:bg-main hover:text-white"], {
-                                                "text-white bg-main": show?.place === selectedPlace
-                                            })}>
-                                            {show?.place?.name}
-                                        </button>
-                                    )
-                                })
-                                :
-                                <div>
+                        <div className="md:flex md:items-center md:justify-between w-full">
+                            <h3 className="text-center md:text-left text-xl text-gray-500 mb-2 font-bold">
+                                Seleccione el dia
+                            </h3>
 
-                                </div>
-                            }
+                            <Button onClick={() => {
+                                setActualShows([]);
+                                setFilters({
+                                    page: 1,
+                                    isActive: true,
+                                    date: ''
+                                })
+                            }} className="bg-main text-white">
+                                Mostrar todo
+                            </Button>
+
                         </div>
+                        <CalendarComponent
+                            name="date"
+                            value={filters?.date}
+                            format="dd/MM/yyyy"
+                            onChange={handleChange}
+                            allowEdit={false}
+                            floatLabelType="auto"
+                            openOnFocus={true} />
                     </div>
                     <div className="md:w-1/2">
-                        <h3 className="text-xl text-center md:text-left text-gray-500 capitalize">Seleccione la fecha</h3>
-                        {showFunctions?.length > 0 ?
-                            <ul>
-                                {
-                                    showFunctions?.map((funtionsShow, i) => {
-                                        return (
-                                            <li className="border-b flex justify-between items-center py-4 px-2 rounded cursor-pointer transition duration-500 hover:shadow-xl" key={i} onClick={() => { setSelectedFunctionShow(funtionsShow) }}>
-                                                <span className="capitalize">{`${format(new Date(funtionsShow?.date), 'EEEE', { locale: es })}, ${format(new Date(funtionsShow?.date), 'dd', { locale: es })} de ${format(new Date(funtionsShow?.date), 'LLLL', { locale: es })} de ${format(new Date(funtionsShow?.date), 'yyyy', { locale: es })} a las ${format(new Date(funtionsShow?.date), 'HH:mm:ss', { locale: es })}`} <b>{funtionsShow?.place?.name}</b></span>
-                                                {
-                                                    selectedFunctionShow?.id === funtionsShow?.id &&
-                                                    <IoCheckbox className="text-green-500 text-2xl animate__animated animate__fadeInUp" />
-                                                }
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </ul>
-                            :
-                            <div className="text-red-500 text-xl">
-                                No tiene Eventos
-                            </div>
+                        <h3 className="text-xl text-center md:text-left text-gray-500 capitalize font-bold">Seleccione la función <b>Total: {actualShows?.length}</b></h3>
+                        {
+                            showsLoading && actualShows?.length === 0 ?
+                                <div className="text-center text-gray-500 text-xl">
+                                    Obteniendo Funciones
+                                </div>
+                                :
+                                showsError ?
+                                    <div className="text-center text-red-500">
+                                        <p>Ha ocurrido un error.</p>
+                                        <Button onClick={() => { getShows({ params: { ...filters } }) }} className="bg-main text-white">
+                                            Reintentar
+                                        </Button>
+                                    </div>
+                                    :
+                                    actualShows?.length > 0 ?
+                                        <ul className="custom-scrollbar bg-white shadow-lg p-4 rounded-xl" style={{ maxHeight: "400px", overflowY: 'auto' }}>
+                                            {
+                                                actualShows?.map((funtionsShow, i) => {
+                                                    return (
+                                                        <li
+                                                            ref={i + 1 === actualShows.length ? lastShowRef : null}
+                                                            className="border-b flex justify-between items-center py-4 px-2 rounded cursor-pointer transition duration-500 hover:shadow-xl"
+                                                            key={i}
+                                                            onClick={() => { setSelectedFunctionShow(funtionsShow) }}
+                                                        >
+                                                            <span className="capitalize">{`${format(new Date(funtionsShow?.date), 'EEEE', { locale: es })}, ${format(new Date(funtionsShow?.date), 'dd', { locale: es })} de ${format(new Date(funtionsShow?.date), 'LLLL', { locale: es })} de ${format(new Date(funtionsShow?.date), 'yyyy', { locale: es })} a las ${format(new Date(funtionsShow?.date), 'HH:mm:ss', { locale: es })}`} <b>{funtionsShow?.place?.name}</b></span>
+                                                            {
+                                                                selectedFunctionShow?.id === funtionsShow?.id &&
+                                                                <IoCheckbox className="text-green-500 text-2xl animate__animated animate__fadeInUp" />
+                                                            }
+                                                        </li>
+                                                    )
+                                                })
+                                            }
+                                            {
+                                                showsLoading &&
+                                                <li className="text-center text-gray-500 text-xl">
+                                                    Obteniendo Funciones
+                                                </li>
+                                            }
+                                        </ul>
+                                        :
+                                        <div className="text-red-500 text-xl text-center">
+                                            No tiene eventos
+                                        </div>
                         }
                     </div>
                 </div>

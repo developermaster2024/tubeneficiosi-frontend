@@ -22,6 +22,7 @@ import CardsList from "../components/CardsList";
 import SelectGridMode from "../components/SelectGridMode";
 import ProductsFilters from "../components/ProductsFilters";
 import FiltersModal from "../components/FiltersModal";
+import { format } from "date-fns";
 
 const Products = () => {
 
@@ -40,7 +41,8 @@ const Products = () => {
     tagIds: [],
     cardIds: [],
     cardIssuerIds: [],
-    minRating: ""
+    minRating: "",
+    showDate: ''
   });
 
   const [cardIssuer, setCardIssuer] = useState(null);
@@ -105,6 +107,7 @@ const Products = () => {
     getProducts({
       params: {
         ...filters,
+        showDate: filters?.showDate ? format(new Date(filters?.showDate), 'yyyy-MM-dd') : '',
         storeCategoryIds: filters.storeCategoryIds.join(","),
         cardIds: filters?.cardIds?.join(","),
         cardIssuerIds: filters?.cardIssuerIds?.join?.(","),

@@ -1,5 +1,6 @@
 @tailwind base;
 @tailwind components;
+@import url("https://cdn.syncfusion.com/ej2/material.css");
 
 .hidden-scrollbar::-webkit-scrollbar {
   display: none;

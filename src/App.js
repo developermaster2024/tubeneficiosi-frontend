@@ -5,7 +5,6 @@ import { useAuth } from './contexts/AuthContext';
 import { useEffect, useState } from 'react';
 import CustomAlert from "./components/CustomAlert";
 
-
 const App = () => {
 
   const { customLoading, customAlert, setCustomAlert } = useAuth();
