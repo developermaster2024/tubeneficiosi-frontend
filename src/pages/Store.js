@@ -29,6 +29,7 @@ import DiscountsSlider from "../components/dicounts/DiscountsSlider";
 import StoreDiscountsModal from "../components/dicounts/StoreDiscountsModal";
 import ProductsFilters from "../components/ProductsFilters";
 import FiltersModal from "../components/FiltersModal";
+import StoresNewsPosts from "../components/StoresNewsPosts";
 
 const Store = () => {
 
@@ -349,6 +350,9 @@ const Store = () => {
         </div>
       }
     </div>
+
+    <h1 className="text-center mt-10 text-3xl text-gray-500">Boletín de noticias</h1>
+    <StoresNewsPosts storeId={store?.storeId} />
 
     <DiscountsSlider storeId={store?.storeId} slidesPerview={window.innerWidth > 768 ? 3 : 1} />
     <Container withMargin className="mb-20">

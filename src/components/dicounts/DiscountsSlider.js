@@ -33,7 +33,7 @@ const DiscountsSlider = ({ showTitle, storeId, slidesPerview }) => {
     }
 
     return (
-        <>
+        <div>
             {
                 showTitle &&
                 <div className="container mt-20">
@@ -41,7 +41,7 @@ const DiscountsSlider = ({ showTitle, storeId, slidesPerview }) => {
                 </div>
             }
 
-            <div className="my-20 md:px-24">
+            <div className="md:px-24">
                 {
                     discountsError ?
                         <div className="text-red-500 text-center">
@@ -56,26 +56,30 @@ const DiscountsSlider = ({ showTitle, storeId, slidesPerview }) => {
                                 Cargando descuentos...
                             </div>
                             :
-                            <Swiper
-                                navigation
-                                style={{ padding: '0 100px' }}
-                                onSlideChange={() => { }}
-                                slidesPerView={slidesPerview ? slidesPerview : 1}
-                                spaceBetween={50}
-                                onSwiper={(swiper) => { }}
-                            >
-                                {
-                                    discounts.map((discount, i) =>
-                                        <SwiperSlide key={i}>
-                                            <StoreDiscountCard emitDiscount={handleDiscount} storeType={storeId ? true : false} storeDiscount={discount}></StoreDiscountCard>
-                                        </SwiperSlide>
-                                    )
-                                }
-                            </Swiper>
+                            discounts?.length > 0 ?
+                                <Swiper
+                                    navigation
+                                    style={{ padding: '0 100px' }}
+                                    className="my-20"
+                                    onSlideChange={() => { }}
+                                    slidesPerView={slidesPerview ? slidesPerview : 1}
+                                    spaceBetween={50}
+                                    onSwiper={(swiper) => { }}
+                                >
+                                    {
+                                        discounts.map((discount, i) =>
+                                            <SwiperSlide key={i}>
+                                                <StoreDiscountCard emitDiscount={handleDiscount} storeType={storeId ? true : false} storeDiscount={discount}></StoreDiscountCard>
+                                            </SwiperSlide>
+                                        )
+                                    }
+                                </Swiper>
+                                :
+                                null
                 }
                 <DiscountModal discount={discount} onClose={() => { setDiscount(null) }} />
             </div>
-        </>
+        </div>
     )
 }
 

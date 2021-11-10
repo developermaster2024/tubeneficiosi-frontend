@@ -20,6 +20,7 @@ import HomeBanksDiscountsSlider from '../components/HomeBanksDiscountsSlider';
 import DiscountsSlider from '../components/dicounts/DiscountsSlider';
 import NecessaryInfo from '../components/NecessaryInfo';
 import MobileAppSection from '../components/MobileAppSection';
+import StoresNewsPosts from "../components/StoresNewsPosts";
 
 const Home = () => {
 
@@ -149,6 +150,14 @@ const Home = () => {
     </div>
 
     <div className="container mt-20">
+      <SectionHeading>Información de las tiendas</SectionHeading>
+    </div>
+
+    {/* TIENDA DESTACADAS */}
+
+    <StoresNewsPosts />
+
+    <div className="container mt-8">
       <SectionHeading>Las Mejores tiendas te esperan</SectionHeading>
     </div>
 
