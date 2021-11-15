@@ -86,15 +86,15 @@ const ProductModal = ({ product, closeModal, isStore }) => {
   }
 
   return reactDom.createPortal(
-    <div ref={modalRef} onClick={handleCloseModal} className="fixed flex z-50 h-screen w-screen bg-black bg-opacity-50 left-0 top-0 animate__animated animate__fade">
-      <div className="w-7/12 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
+    <div ref={modalRef} onClick={handleCloseModal} className="px-4 md:px-0 fixed flex z-50 h-screen w-screen bg-black bg-opacity-50 left-0 top-0 animate__animated animate__fade">
+      <div className="w-full md:w-7/12 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
         <div style={{ height: "8%" }} className="p-4 bg-main flex justify-end items-center text-white">
           <button className="text-2xl" onClick={() => { closeModal() }}>
             <IoClose />
           </button>
         </div>
-        <div style={{ height: "92%" }} className="p-16 flex items-center space-x-4">
-          <div className="w-5/12">
+        <div style={{ maxHeight: 550, overflowY: 'scroll' }} className="p-16 md:flex md:items-center space-x-4">
+          <div className="md:w-5/12">
             <Swiper
               autoHeight
               navigation
@@ -119,7 +119,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
             </Swiper>
           </div>
 
-          <div className="w-9/12">
+          <div className="mt-4 md:mt-0 md:w-9/12">
             <div className="mb-6">
               <div className="flex justify-center space-x-1 mb-2">
                 {Array.from(Array(5).keys()).map((n) => {
