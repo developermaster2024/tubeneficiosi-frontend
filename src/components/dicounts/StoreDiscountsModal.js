@@ -69,8 +69,8 @@ const StoreDiscountsModal = ({ storeAndProduct, onClose }) => {
     }
 
     return reactDom.createPortal(
-        <div ref={modalRef} onClick={handleCloseModal} className="fixed flex z-50 h-screen w-screen bg-black bg-opacity-50 left-0 top-0 animate__animated animate__fade">
-            <div className="w-7/12 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
+        <div ref={modalRef} onClick={handleCloseModal} className="md:px-0 px-4 fixed flex z-50 h-screen w-screen bg-black bg-opacity-50 left-0 top-0 animate__animated animate__fade">
+            <div className="md:w-7/12 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
                 <div style={{ height: "8%" }} className="p-4 bg-main flex justify-end items-center text-white">
                     <button className="text-2xl" onClick={() => { onClose() }}>
                         <IoClose />
@@ -102,8 +102,8 @@ const StoreDiscountsModal = ({ storeAndProduct, onClose }) => {
                                     {
                                         actualDiscount?.map((discount, i) => {
                                             return (
-                                                <div key={i} className="shadow-xl flex items-center p-4 justify-between">
-                                                    <img className="w-10 h-10 rounded" src={`${process.env.REACT_APP_API_URL}/${discount?.imgPath}`} alt="" />
+                                                <div key={i} className="shadow-xl md:space-y-0 space-y-2 md:flex md:items-center p-4 md:justify-between">
+                                                    <img className="m-auto md:m-0 w-10 h-10 rounded" src={`${process.env.REACT_APP_API_URL}/${discount?.imgPath}`} alt="" />
                                                     <p>
                                                         {discount.name}
                                                     </p>
@@ -116,10 +116,10 @@ const StoreDiscountsModal = ({ storeAndProduct, onClose }) => {
                                                         discount?.discountType?.code === "dit-001" &&
                                                         <p className="text-main">En Bancos seleccionados.</p>
                                                     }
-                                                    <div>
+                                                    <div className="md:space-y-4 space-y-0">
                                                         {
                                                             discount?.discountType?.code === "dit-002" || discount?.discountType?.code === "dit-001" ?
-                                                                <IoEyeSharp className="text-xl cursor-pointer" title="Ver información" onClick={() => { setDiscount(discount) }} />
+                                                                <IoEyeSharp className="m-auto md:m-0 text-xl cursor-pointer" title="Ver información" onClick={() => { setDiscount(discount) }} />
                                                                 :
                                                                 null
                                                         }
@@ -141,14 +141,14 @@ const StoreDiscountsModal = ({ storeAndProduct, onClose }) => {
 
                     }
                 </div>
-                <div className="mb-4 text-center space-x-4">
-                    <Button onClick={() => { onClose() }} className="bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
+                <div className="my-4 md:mb-4 text-center md:space-x-4 md:px-0 md:space-y-0 px-8 space-y-4">
+                    <Button onClick={() => { onClose() }} className="w-full bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
                         Cancelar
                     </Button>
-                    <Button onClick={handlePay} className="bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
+                    <Button onClick={handlePay} className="w-full bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
                         Continuar sin descuento
                     </Button>
-                    <Button onClick={handleClose} className={clsx(["bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl"], {
+                    <Button onClick={handleClose} className={clsx(["w-full bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl"], {
                         "bg-opacity-50": !discountId
                     })}>
                         Ir a Pagar
