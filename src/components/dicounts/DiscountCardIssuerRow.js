@@ -1,13 +1,16 @@
 const DiscountCardIssuerRow = ({ cardIssuer }) => {
+
+    console.log(cardIssuer);
+
     return (
-        <div className="flex items-center justify-between shadow-xl p-4 rounded text-gray-500">
+        <div className="md:flex md:items-center md:space-y-0 space-y-2 md:justify-between shadow-xl p-4 rounded text-gray-500">
             <div className="text-center">
                 <p>
                     <b>Imagen</b>
                 </p>
                 {
                     cardIssuer?.imgPath &&
-                    <img className="w-20 h-14 rounded" src={`${process.env.REACT_APP_API_URL}/${cardIssuer?.imgPath}`} alt={cardIssuer?.name} />
+                    <img className="m-auto md:m-0 w-20 h-14 rounded" src={`${process.env.REACT_APP_API_URL}/${cardIssuer?.imgPath}`} alt={cardIssuer?.name} />
                 }
             </div>
             <div className="text-center">

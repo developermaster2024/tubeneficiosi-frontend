@@ -65,14 +65,12 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
 
     useEffect(() => {
         if (cart) {
-            console.log(cart);
             emitCart(cart)
         }
     }, [cart])
 
     useEffect(() => {
         if (data) {
-            console.log(data);
             if (!data.isProcessed) {
                 setCart(data);
             }
@@ -225,7 +223,7 @@ const CheckoutDetailsCard = ({ cartId, canBuy, emitCart, loadingDeliveryCost, de
                                                 <span>$ {cart?.discount ? (Number(cart?.subTotalWithDiscount) + Number(deliveryCost)) : (Number(cart?.subTotal) + Number(deliveryCost))}</span>
                                             </div>
                                             <div className="px-8 text-center mt-6">
-                                                <button className={clsx(["text-center text-2xl px-14 py-2 rounded text-white"], {
+                                                <button id="buy-button" className={clsx(["text-center text-2xl px-14 py-2 rounded text-white"], {
                                                     'bg-red-500': canBuy,
                                                     'bg-red-100': !canBuy
                                                 })} disabled={!canBuy} onClick={onBuy}>

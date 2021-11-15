@@ -66,6 +66,15 @@ const Checkout = (props) => {
   }, [location]);
 
   useEffect(() => {
+    if (canBuy && window.innerWidth < 768) {
+      document.getElementById('buy-button').scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+  }, [canBuy])
+
+  useEffect(() => {
     if (deliveryCostError) {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${deliveryCostError?.response?.status === 400 ? deliveryCostError?.response?.data.message[0] : deliveryCostError?.response?.data.message}.`, severity: "error" });
@@ -245,8 +254,8 @@ const Checkout = (props) => {
 
   return (
     <div className={className}>
-      <div className="flex items-center p-4 justify-between">
-        <div className="bg-white p-6 rounded w-7/12">
+      <div className="md:flex items-center p-4 justify-between">
+        <div className="bg-white p-6 rounded md:w-7/12">
           <h1 className="text-4xl text-gray-600 font-bold">
             Realizar Pago
           </h1>
@@ -267,12 +276,13 @@ const Checkout = (props) => {
                 paymentMethodCode: checkoutData.paymentMethodCode,
                 bankAccountId: checkoutData.bankAccountId,
                 bankTransfers: checkoutData.bankTransfers,
-                discountType: discountType
+                discountType: discountType,
+                total: cartSubTotal + Number(deliveryCost)
               }}
               onChange={handleChange} />
           }
         </div>
-        <div className="w-5/12 p-8">
+        <div className="md:w-5/12 p-8">
           <CheckoutDetailsCard
             onBuy={handleBuy}
             deliveryCost={deliveryCost}

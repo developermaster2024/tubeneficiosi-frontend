@@ -135,7 +135,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                     </div>
                     :
                     <div>
-                        <div className="flex items-center justify-between mb-4">
+                        <div className="md:flex md:space-y-0 space-y-6 items-center justify-between mb-4">
                             {
                                 error &&
                                 <div className="text-center w-full text-red-500">
@@ -147,7 +147,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                             {
                                 payMethods?.map((payMethod, i) => {
                                     return (
-                                        <div key={i} className="w-4/12">
+                                        <div key={i} className="md:w-4/12">
                                             <div className="flex items-center space-x-2">
                                                 <input
                                                     type="checkbox"
@@ -159,7 +159,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                                 <label className="capitalize text-center space-x-4" htmlFor={`payment-${payMethod.code}`}>
                                                     {
                                                         payMethod.imgPath &&
-                                                        <img className="h-12 w-16 rounded m-auto" src={`${process.env.REACT_APP_API_URL}${payMethod.imgPath}`} alt={payMethod.name} />
+                                                        <img className="h-12 w-16 rounded md:m-auto" src={`${process.env.REACT_APP_API_URL}${payMethod.imgPath}`} alt={payMethod.name} />
                                                     }
                                                     <p>{payMethod.name}</p>
                                                 </label>
@@ -203,7 +203,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                                         newBanksAccounts?.length > 0 ?
                                                             newBanksAccounts?.map((bankAccount, i) => {
                                                                 return (
-                                                                    <div key={i} className="mb-2 flex items-center space-x-2">
+                                                                    <div key={i} className="m-auto md:m-0 flex justify-center md:justify-none shadow-xl space-y-8 md:p-0 p-8 items-center md:space-x-8">
                                                                         <input
                                                                             type="checkbox"
                                                                             name="bankAccountId"
@@ -211,11 +211,11 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                                                             checked={selectedBankAccountId === bankAccount.id}
                                                                             value={bankAccount.id}
                                                                             onChange={handleBankAccount} />
-                                                                        <label className="flex items-center justify-between space-x-8" htmlFor={`bank-account-${bankAccount.id}`}>
+                                                                        <label className="md:flex items-center justify-between md:space-x-8" htmlFor={`bank-account-${bankAccount.id}`}>
                                                                             <div className="text-center">
                                                                                 {
                                                                                     bankAccount?.cardIssuer?.imgPath &&
-                                                                                    <img className="h-12 w-16 rounded" src={`${process.env.REACT_APP_API_URL}/${bankAccount?.cardIssuer?.imgPath}`} alt="" />
+                                                                                    <img className="md:m-0 m-auto h-12 w-16 rounded" src={`${process.env.REACT_APP_API_URL}/${bankAccount?.cardIssuer?.imgPath}`} alt="" />
                                                                                 }
                                                                                 {bankAccount?.cardIssuer?.name}
                                                                             </div>
@@ -278,7 +278,10 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                     })
                                 }
                                 <form onSubmit={handleSubmit}>
-                                    <div className="flex items-center mt-4 space-x-8">
+                                    <h1 className="text-xl mt-4 md:hidden text-main font-bold">
+                                        Monto a transferir: $ {values?.total}
+                                    </h1>
+                                    <div className="md:flex space-y-4 md:space-y-0 md:items-center mt-4 md:space-x-8">
                                         <div>
                                             <label htmlFor="reference">Referencia</label>
                                             <CustomInput
@@ -307,7 +310,7 @@ const PayMethodSection = ({ onChange, values, ...rest }) => {
                                                 <p className="text-red-500">{errorsForm.amount}</p>
                                             }
                                         </div>
-                                        <div className="w-1/3">
+                                        <div className="md:w-1/3">
                                             <p className="text-sm text-gray-500">Tamaño maximo: <b>3MB</b></p>
                                             <ImgUploadInput name="image" change={handlePaymentChange} className="h-16" description="Comprobante" />
                                             {
