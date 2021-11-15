@@ -88,7 +88,7 @@ const NotificationsComponent = () => {
     return (
         <>
 
-            <button onClick={toggleOpen} className={clsx(["text-xl p-3 rounded-full relative transition duration-300 hover:bg-main hover:text-main hover:bg-opacity-50"], {
+            <button title="Mis notificaciones" onClick={toggleOpen} className={clsx(["text-xl p-3 rounded-full relative transition duration-300 hover:bg-main hover:text-main hover:bg-opacity-50"], {
                 'text-main bg-main bg-opacity-50': open
             })}>
                 {

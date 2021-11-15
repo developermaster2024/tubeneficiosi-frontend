@@ -4,7 +4,7 @@ import IPData from 'ipdata';
 import PageLogo from './PageLogo';
 import NavSearchBar from './NavSearchBar';
 import NavLinks from './NavLinks';
-import { IoClose, IoMenu, IoSearch } from 'react-icons/io5';
+import { IoCart, IoClose, IoMenu, IoSearch } from 'react-icons/io5';
 import MobileMenu from './MobileMenu';
 import useCategories from '../hooks/useCategories';
 import SearchInputMobile from './SearchInputMobile';
@@ -64,6 +64,10 @@ const Navbar = () => {
               <IoSearch className="text-2xl" />
             </button>
 
+            <Link type="button" title="Mis Carritos" to={"/my-account/carts"}>
+              <IoCart className="text-2xl" />
+            </Link>
+
             <button onClick={() => { setShowMenu((oldShowMenu) => !oldShowMenu) }} type="button" aria-controls="mobile-menu" aria-expanded="false">
               {
                 showMenu ?
@@ -72,6 +76,7 @@ const Navbar = () => {
                   <IoMenu className="text-2xl" />
               }
             </button>
+
           </div>
         </div>
       </div>

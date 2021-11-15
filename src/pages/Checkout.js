@@ -72,7 +72,7 @@ const Checkout = (props) => {
         block: 'center'
       });
     }
-  }, [canBuy])
+  }, [canBuy]);
 
   useEffect(() => {
     if (deliveryCostError) {

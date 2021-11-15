@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IoLogOut, IoPersonCircleSharp } from "react-icons/io5";
+import { IoLogOut, IoPersonCircleSharp, IoCartSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import NotificationsComponent from "./notifications/NotificationsComponent";
@@ -29,7 +29,9 @@ const NavLinks = () => {
                                 <p>{user.name}</p>
                                 <IoPersonCircleSharp className="text-xl" />
                             </Link>
-
+                            <Link title="Mis Carritos" className="hover:text-main" to={"/my-account/carts"}>
+                                <IoCartSharp className="text-xl" />
+                            </Link>
                             <NotificationsComponent />
                         </div>
 
