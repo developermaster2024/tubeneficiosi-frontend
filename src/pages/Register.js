@@ -6,6 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { isEmail, isRequired, validate } from '../helpers/formsValidations';
 import SystemInfo from '../util/SystemInfo';
+import useCountries from '../hooks/useCountries';
 
 const Register = () => {
 
@@ -20,7 +21,8 @@ const Register = () => {
     email: null,
     phoneNumber: null,
     password: null,
-    confirmPassword: null
+    confirmPassword: null,
+    phoneCode: null
   });
 
   const [registerFormData, setRegisterFormData] = useState({
@@ -28,9 +30,15 @@ const Register = () => {
     email: "",
     phoneNumber: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    phoneCode: ""
   });
 
+  const [{ countries, loading: countriesLoading, error: countriesError }, getCountries] = useCountries({
+    params: {
+      perPage: 500
+    }
+  });
 
   useEffect(() => {
     setLoading({ show: loading, message: "Creando usuario" })
@@ -52,20 +60,20 @@ const Register = () => {
   useEffect(() => {
     setErrorsForm({
       name: validate(registerFormData.name, [
-        { validator: isRequired, errorMessage: "el nombre es obligatorio." },
+        { validator: isRequired, errorMessage: "El nombre es obligatorio." },
       ]),
       email: validate(registerFormData.email, [
         { validator: isRequired, errorMessage: "El email es obligatorio." },
-        { validator: isEmail, errorMessage: "el email debe ser valido." }
+        { validator: isEmail, errorMessage: "El email debe ser valido." }
       ]),
       password: validate(registerFormData.password, [
-        { validator: isRequired, errorMessage: "la contraseña es Obligatoria." },
+        { validator: isRequired, errorMessage: "La contraseña es Obligatoria." },
       ]),
       confirmPassword: validate(registerFormData.confirmPassword, [
         { validator: isRequired, errorMessage: "Por favor llene este campo." },
       ]),
       phoneNumber: validate(registerFormData.phoneNumber, [
-        { validator: isRequired, errorMessage: "la el telefono es Obligatorio." },
+        { validator: isRequired, errorMessage: "El telefono es Obligatorio." },
       ]),
     })
   }, [registerFormData])
@@ -91,7 +99,18 @@ const Register = () => {
       return;
     }
 
-    createClient({ data: { name: registerFormData.name, email: registerFormData.email, password: registerFormData.password, phoneNumber: registerFormData.phoneNumber } });
+    if (!registerFormData?.phoneCode) {
+      alert("Debe seleccionar el codigo del telefono");
+      return;
+    }
+    createClient({
+      data: {
+        name: registerFormData.name,
+        email: registerFormData.email,
+        password: registerFormData.password,
+        phoneNumber: registerFormData?.phoneCode + registerFormData.phoneNumber
+      }
+    });
   }
 
 
@@ -119,7 +138,7 @@ const Register = () => {
             </h2>
           </div>
 
-          <form className="text-2xl mt-5 px-14" onSubmit={handleSubmit}>
+          <form className="text-2xl mt-5 md:px-14" onSubmit={handleSubmit}>
             <div className="my-12 md:flex space-y-4 md:space-y-0 justify-between">
               <div>
                 <h2 className="text-gray-600 font-bold">
@@ -174,19 +193,28 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="my-12 md:flex md:justify-between">
-              <div>
-                <h2 className="text-gray-600 font-bold">
-                  Telefono
-                </h2>
-                <input value={registerFormData.phoneNumber} onChange={handleChange} className="rounded w-full mt-1" type="text" name="phoneNumber" placeholder="Telefono" />
-                {
-                  errorsForm.phoneNumber ?
-                    <p className="text-sm mt-2 text-red-500">{errorsForm.phoneNumber}</p>
-                    :
-                    null
-                }
+            <div className="px-1 my-6">
+              <h2 className="text-gray-600 font-bold">
+                Telefono
+              </h2>
+              <div className="flex items-center space-x-2">
+                <select className="rounded w-1/3" value={registerFormData?.phoneCode} name="phoneCode" onChange={handleChange}>
+                  {countries?.map?.((country, i) => {
+                    return (
+                      <option value={country?.dialCode}>
+                        ({country?.dialCode}) {country?.name}
+                      </option>
+                    )
+                  })}
+                </select>
+                <input name="phoneNumber" onChange={handleChange} className="rounded w-full" type="text" placeholder="Telefono" />
               </div>
+              {
+                errorsForm.phoneNumber ?
+                  <p className="text-sm text-red-500">{errorsForm.phoneNumber}</p>
+                  :
+                  null
+              }
             </div>
 
             <div className="text-center">
