@@ -105,7 +105,7 @@ const StoreCard = ({ cheapestProduct, imgSrc, imgAlt, name, description, rating,
           cheapestProduct?.price ?
             <p className="font-bold text-gray-600 text-xl">desde: ${cheapestProduct?.price}</p>
             :
-            <p className="font-bold text-red-600 text-xl">Sin productos</p>
+            null
         }
       </div>
 

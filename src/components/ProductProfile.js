@@ -287,11 +287,14 @@ const ProductProfile = ({ product }) => {
                                     name="Tienda"
                                     value={<div className="text-center hover:shadow-xl transition duration-500">
                                         <Link to={`/stores/${product?.store?.slug}`}>
-                                            <img
-                                                className="w-12 h-12 rounded m-auto"
-                                                src={product?.store?.storeProfile?.logo ? generateBackendUrl(product?.store?.storeProfile?.logo) : noImage}
-                                                alt={product?.name}
-                                            />
+                                            {
+                                                product?.store?.storeProfile?.logo &&
+                                                <img
+                                                    className="w-12 h-12 rounded m-auto"
+                                                    src={product?.store?.storeProfile?.logo ? generateBackendUrl(product?.store?.storeProfile?.logo) : noImage}
+                                                    alt={product?.name}
+                                                />
+                                            }
                                             <p className="text-blue-500">{product?.store?.name}</p>
                                         </Link>
                                     </div>}
@@ -380,7 +383,7 @@ const ProductProfile = ({ product }) => {
                             questions={questionsData?.results ?? []}
                             ownerName={product?.store?.name}
                             ownerSlug={product?.store?.slug}
-                            ownerImage={generateBackendUrl(product?.store?.storeProfile?.logo)}
+                            ownerImage={product?.store?.storeProfile?.logo ? generateBackendUrl(product?.store?.storeProfile?.logo) : ''}
                             onChange={handleQuestionChange}
                             value={questionFormData.question}
                             error={questionsFormErrors.question}

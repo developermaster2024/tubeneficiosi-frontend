@@ -21,7 +21,10 @@ const QuestionsAnswer = ({
       <h1 className="text-2xl text-gray-800 mb-4">Preguntale a: </h1>
       <Link to={`/stores/${ownerSlug}`}>
         <div className="text-2xl text-gray-500 flex items-center mb-4">
-          <img className="h-20 w-20 mr-2 rounded-xl" src={ownerImage} alt={ownerName} />
+          {
+            ownerImage &&
+            <img className="h-20 w-20 mr-2 rounded-xl" src={ownerImage} alt={ownerName} />
+          }
           {ownerName}
         </div>
       </Link>

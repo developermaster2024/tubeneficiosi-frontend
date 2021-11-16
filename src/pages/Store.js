@@ -107,7 +107,13 @@ const Store = () => {
     if (cartData) {
       setCart(cartData);
     }
-  }, [cartData])
+  }, [cartData]);
+
+  useEffect(() => {
+    if (store) {
+      console.log(store)
+    }
+  }, [store])
 
   useEffect(() => {
     if (cart) {
@@ -271,7 +277,8 @@ const Store = () => {
   }
 
   const handleCloseCart = async (e) => {
-    setShowCart(false)
+    setShowCart(false);
+    console.log(e);
     if (e) {
       if (store.latestActiveDiscount) {
         setStoreAndProduct({
@@ -372,7 +379,7 @@ const Store = () => {
 
           <br />
 
-          <ProductsFilters onChange={handleChange} filters={filters} />
+          <ProductsFilters hiddenEvents={store?.storeCategory === 2 || store?.storeCategory === 4 ? false : true} onChange={handleChange} filters={filters} />
 
           <CategoryFilter
             className="my-8 max-h-64 overflow-y-auto"
@@ -489,7 +496,7 @@ const Store = () => {
     <StoreCart show={showCart} cart={cart} onChangeCart={handleCart} closeCart={handleCloseCart} />
     <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
     <FiltersModal show={showFiltersModal} onClose={() => { setShowFiltersModal((oldShowModal) => !oldShowModal) }}>
-      <ProductsFilters onChange={handleChange} filters={filters} />
+      <ProductsFilters hiddenEvents={store?.storeCategory === 2 || store?.storeCategory === 4 ? false : true} onChange={handleChange} filters={filters} />
 
       <CategoryFilter
         className="my-8 max-h-64 overflow-y-auto"

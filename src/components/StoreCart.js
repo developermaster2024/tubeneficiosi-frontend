@@ -50,8 +50,8 @@ const StoreCart = (props) => {
 
   return reactDom.createPortal(
     <div hidden={!show} className="fixed h-full w-full bg-black bg-opacity-50 top-0 left-0 z-10 text-white animate__animated animate__fadeIn">
-      <div className="ml-auto w-3/12 h-full bg-white text-gray-600 p-4 animate__animated animate__fadeInRight">
-        <IoArrowForwardOutline onClick={closeCart} className="text-2xl text-main cursor-pointer transition duration-500 transform hover:scale-150" />
+      <div className="ml-auto w-full md:w-3/12 bg-white text-gray-600 p-4 animate__animated animate__fadeInRight custom-scrollbar" style={{ maxHeight: "100vh", overflowY: 'auto' }}>
+        <IoArrowForwardOutline onClick={() => { closeCart() }} className="text-2xl text-main cursor-pointer transition duration-500 transform hover:scale-150" />
         <div className="flex items-center text-2xl my-4">
           <IoCartOutline />
           <p className="ml-2">Mi Carrito</p>
