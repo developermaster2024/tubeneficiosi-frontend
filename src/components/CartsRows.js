@@ -1,9 +1,11 @@
 import clsx from "clsx";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
-import { IoChevronDownOutline, IoChevronUp, IoCloseSharp, IoStorefrontSharp } from "react-icons/io5"
+import { IoCashSharp, IoChevronDownOutline, IoChevronUp, IoCloseSharp, IoStorefrontSharp } from "react-icons/io5"
 import { Link } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext";
 import useAxios from "../hooks/useAxios";
+import { es } from "date-fns/locale";
 
 const CartsRows = ({ cartValue, ...rest }) => {
 
@@ -73,21 +75,28 @@ const CartsRows = ({ cartValue, ...rest }) => {
                         <p>{cart?.store?.name}</p>
                     </Link>
                 </div>
-                <div className="md:w-3/12">
-                    {cart?.createdAt?.toLocaleString()}
+                <div className="capitalize md:w-3/12">
+
+                    {
+                        cart?.createdAt &&
+                        format(new Date(cart?.createdAt), 'EEEE, dd/MM/yyyy', { locale: es })
+                    }
                 </div>
                 <div className="md:w-3/12 font-bold text-gray-500">
                     ${cart?.subTotal}
                 </div>
                 <div className="md:w-3/12 flex justify-center items-center text-gray-400">
-                    <Link to={`/stores/${cart?.store?.slug}`}>
+                    <Link to={`/stores/${cart?.store?.slug}`} title="Ir a la tienda.">
                         <IoStorefrontSharp className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300" />
+                    </Link>
+                    <Link to={`/checkout?cartId=${cart?.id}`} title="Pagar">
+                        <IoCashSharp className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300" />
                     </Link>
                     {
                         showDetails ?
-                            <IoChevronUp onClick={toggleShowDetails} className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300" />
+                            <IoChevronUp title="Mostrar destalles" onClick={toggleShowDetails} className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300" />
                             :
-                            <IoChevronDownOutline onClick={toggleShowDetails} className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300" />
+                            <IoChevronDownOutline title="Ocultar destalles" onClick={toggleShowDetails} className="mx-2 text-2xl cursor-pointer hover:text-main transition duration-300" />
                     }
                 </div>
             </div>

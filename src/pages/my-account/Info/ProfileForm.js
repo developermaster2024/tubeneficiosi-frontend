@@ -111,7 +111,7 @@ const ProfileForm = () => {
       <div className="md:flex md:items-center md:w-1/2">
         {
           previewImage
-            ? <img src={previewImage} className="m-auto w-[80px] shadow-2xl rounded-full h-[80px] md:mr-3" alt="logo" />
+            ? <img src={previewImage} className="m-auto md:m-0 w-[80px] shadow-2xl rounded-full h-[80px] md:mr-3" alt="logo" />
             : <IoPersonCircle className="text-[100px] text-gray-500"></IoPersonCircle>
         }
         <br className="md:hidden" />

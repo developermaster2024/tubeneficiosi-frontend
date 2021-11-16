@@ -20,9 +20,7 @@ import useAxios from "../hooks/useAxios";
 
 import StoreInfo from "../components/StoreInfo";
 import CategoryFilter from "../components/CategoryFilter";
-import RatingsFilter from "../components/RatingsFilter";
 import PriceFilter from "../components/PriceFilter";
-import TagsFilter from "../components/TagsFilter";
 import useTags from "../hooks/useTags";
 import { validURL } from "../helpers/formsValidations";
 import DiscountsSlider from "../components/dicounts/DiscountsSlider";
@@ -30,6 +28,7 @@ import StoreDiscountsModal from "../components/dicounts/StoreDiscountsModal";
 import ProductsFilters from "../components/ProductsFilters";
 import FiltersModal from "../components/FiltersModal";
 import StoresNewsPosts from "../components/StoresNewsPosts";
+import defaultBanner from "../assets/images/welcome.jpg";
 
 const Store = () => {
 
@@ -166,20 +165,21 @@ const Store = () => {
   useEffect(() => {
     if (store) {
       const { storeProfile } = store;
-      const { videoUrl } = storeProfile;
 
-      if (videoUrl && validURL(videoUrl)) {
+      if (storeProfile?.videoUrl && validURL(storeProfile?.videoUrl)) {
+        const { videoUrl } = storeProfile;
         var url_string = videoUrl; //window.location.href
         var url = new URL(url_string);
         var v = url.searchParams.get("v");
         setVideoPreview(`https://www.youtube.com/embed/${v}`);
       }
+
       setStoreInfo({
-        phoneNumber: store.phoneNumber,
-        shortDescription: store.storeProfile.shortDescription,
-        instagram: store.storeProfile.instagram,
-        facebook: store.storeProfile.facebook,
-        whatsapp: store.storeProfile.whatsapp
+        phoneNumber: store?.phoneNumber,
+        shortDescription: store?.storeProfile?.shortDescription,
+        instagram: store?.storeProfile?.instagram,
+        facebook: store?.storeProfile?.facebook,
+        whatsapp: store?.storeProfile?.whatsapp
       });
 
       setFilters((oldFilters) => {
@@ -272,13 +272,15 @@ const Store = () => {
 
   const handleCloseCart = async (e) => {
     setShowCart(false)
-    if (store.latestActiveDiscount) {
-      setStoreAndProduct({
-        storeId: store?.storeId
-      });
-      return;
+    if (e) {
+      if (store.latestActiveDiscount) {
+        setStoreAndProduct({
+          storeId: store?.storeId
+        });
+        return;
+      }
+      history.push(`/checkout?cartId=${cart?.id}`);
     }
-    history.push(`/checkout?cartId=${cart?.id}`);
   }
 
   const handleClose = async (e) => {
@@ -306,7 +308,7 @@ const Store = () => {
       >
         <SwiperSlide className="w-full relative">
           <img
-            src={`${process.env.REACT_APP_API_URL}/${store?.storeProfile?.banner}`}
+            src={store?.storeProfile?.banner ? `${process.env.REACT_APP_API_URL}/${store?.storeProfile?.banner}` : defaultBanner}
             alt="Tienda"
             className="h-[30vh] md:h-[60vh] w-full"
           />
