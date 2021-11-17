@@ -9,7 +9,8 @@ import {
   IoHeartOutline,
   IoCartOutline,
   IoLocationSharp,
-  IoHeart
+  IoHeart,
+  IoTime
 } from "react-icons/io5";
 import StoreCart from "../components/StoreCart";
 import useProducts from "../hooks/useProducts";
@@ -278,7 +279,6 @@ const Store = () => {
 
   const handleCloseCart = async (e) => {
     setShowCart(false);
-    console.log(e);
     if (e) {
       if (store.latestActiveDiscount) {
         setStoreAndProduct({
@@ -378,7 +378,27 @@ const Store = () => {
           <StoreInfo {...storeInfo} />
 
           <br />
-
+          {
+            store?.storeHours?.length > 0 ?
+              <div className="space-y-2">
+                <h1 className="text-gray-500 text-xl font-bold">
+                  <IoTime className="text-4xl" />
+                  Horarios
+                </h1>
+                {
+                  store?.storeHours?.map((day, i) => {
+                    return (
+                      <div key={i}>
+                        <b>{day?.dayInSpanish}</b>: {day?.startTime} - {day?.endTime}
+                      </div>
+                    )
+                  })
+                }
+              </div>
+              :
+              null
+          }
+          <br />
           <ProductsFilters hiddenEvents={store?.storeCategory === 2 || store?.storeCategory === 4 ? false : true} onChange={handleChange} filters={filters} />
 
           <CategoryFilter
