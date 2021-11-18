@@ -33,7 +33,8 @@ const Stores = () => {
     withCheapestProduct: true,
     cardIssuerIds: [],
     cardIds: [],
-    storeFeatureIds: []
+    storeFeatureIds: [],
+    locationIds: []
   });
 
   const [cardIssuer, setCardIssuer] = useState(null);
@@ -55,7 +56,8 @@ const Stores = () => {
       cardIssuerIds: filters.cardIssuerIds.join(","),
       cardIds: filters.cardIds.join(","),
       storeCategoryIds: filters.storeCategoryIds.join(","),
-      storeFeatureIds: filters.storeFeatureIds.join(",")
+      storeFeatureIds: filters.storeFeatureIds.join(","),
+      locationIds: filters?.locationIds?.join(',')
     }
   });
 
@@ -136,6 +138,16 @@ const Stores = () => {
   }, [viewType])
 
   const handleChange = (e) => {
+
+    if(e.target.name === 'locationIds'){
+      setFilters((oldFilters) => {
+        return {
+          ...oldFilters,
+          locationIds: [e.target.value]
+        }
+      });
+      return;
+    }
 
     if (e.target.name === "minRating") {
       setFilters((oldFilters) => {

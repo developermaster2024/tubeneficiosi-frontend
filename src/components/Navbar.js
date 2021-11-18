@@ -51,7 +51,7 @@ const Navbar = () => {
   return <>
     <div className="h-14 bg-gray-800 text-white">
       <div className="container h-full">
-        <div className="flex justify-between md:justify-none items-center h-full">
+        <div className="flex space-x-4 justify-between md:justify-none items-center h-full">
 
           <PageLogo />
 

@@ -1,6 +1,7 @@
 import Button from "./Button";
 import ChevronRightIcon from "./ChevronRightIcon";
 import RatingsFilter from "./RatingsFilter";
+import SearchAddressFilter from "./SearchAddressFilter";
 import StoreCategoryFilter from "./StoreCategoryFilter";
 import StoreFeatureFilter from "./StoreFeatureFilter";
 
@@ -8,6 +9,12 @@ const StoresFilters = ({ onChange, filters }) => {
 
     return (
         <div className="space-y-5">
+
+            <SearchAddressFilter                
+                name="locationIds"
+                values={filters?.locationIds}
+                onChange={onChange}
+            />
 
             <StoreCategoryFilter
                 name="storeCategoryIds"

@@ -78,8 +78,7 @@ const StoresInMap = () => {
       };
     });
 
-    if (selectedLocation) {
-      console.log(selectedLocation);
+    /* if (selectedLocation) {      
       var realArea = [];
       WKT?.parse?.(selectedLocation?.area)?.coordinates?.forEach?.(
         (areas) => {
@@ -93,15 +92,15 @@ const StoresInMap = () => {
           );
         }
       );
-      //console.log(realArea);
-      /* setPolygon(realArea);
+      
+      setPolygon(realArea);
       setGoogleMapsOptions((oldGoogleMapsOpts) => {
         return {
           ...oldGoogleMapsOpts,
           center: realArea?.[0],
         };
-      }); */
-    }
+      });
+    } */
   }, [selectedLocation]);
 
   useEffect(() => {
