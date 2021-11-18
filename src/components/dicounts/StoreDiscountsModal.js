@@ -141,13 +141,13 @@ const StoreDiscountsModal = ({ storeAndProduct, onClose }) => {
 
                     }
                 </div>
-                <div className="my-4 md:mb-4 text-center md:space-x-4 md:px-0 md:space-y-0 px-8 space-y-4">
+                <div className="my-4 md:mt-0 text-center px-8 space-y-4">
                     <Button onClick={() => { onClose() }} className="w-full bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
                         Cancelar
                     </Button>
-                    <Button onClick={handlePay} className="w-full bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
+                    <button onClick={handlePay} className="w-full py-1 bg-main text-white font-bold rounded-full transition duration-500 hover:bg-white hover:text-main hover:shadow-xl">
                         Continuar sin descuento
-                    </Button>
+                    </button>
                     <Button onClick={handleClose} className={clsx(["w-full bg-main transition duration-500 hover:bg-white hover:text-main hover:shadow-xl"], {
                         "bg-opacity-50": !discountId
                     })}>

@@ -12,6 +12,7 @@ import useStoreFeatures from "../hooks/useStoresFeatures";
 import useTags from "../hooks/useTags";
 import StoresInMap from "./StoresInMap";
 
+
 const StoresMap = () => {
 
     const location = useLocation();

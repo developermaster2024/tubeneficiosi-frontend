@@ -93,7 +93,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
             <IoClose />
           </button>
         </div>
-        <div style={{ maxHeight: 550, overflowY: 'scroll' }} className="p-8 md:p-16 md:flex md:items-center md:space-x-4">
+        <div style={{ maxHeight: 550, overflowY: 'auto' }} className="custom-scrollbar p-8 md:p-16 md:flex md:items-center md:space-x-4">
           <div className="md:w-5/12">
             <Swiper
               autoHeight

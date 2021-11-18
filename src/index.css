@@ -2,6 +2,11 @@
 @tailwind components;
 @import url("https://cdn.syncfusion.com/ej2/material.css");
 
+.custom-option-location:hover{
+  color: white;
+  background-color: #F04141;
+}
+
 .hidden-scrollbar::-webkit-scrollbar {
   display: none;
 }

@@ -5,7 +5,7 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   mode: 'jit',
-  theme: {
+  theme: {    
     container: {
       center: true,
       padding: {

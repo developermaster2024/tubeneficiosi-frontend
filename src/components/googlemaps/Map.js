@@ -9,7 +9,7 @@ const loader = new Loader({
     libraries: ['drawing', 'geometry', 'places', 'visualization']
 });
 
-const Map = ({ searchBox, onClick, markers, options, height = '50vh', forStores, onSelectedStore }) => {
+const Map = ({ searchBox, onClick, markers, options, height = '50vh', forStores, onSelectedStore, className, style }) => {
 
 
     const [mapApi, setMapApi] = useState(null);
@@ -109,7 +109,7 @@ const Map = ({ searchBox, onClick, markers, options, height = '50vh', forStores,
 
 
     return (
-        <div>
+        <div className={className} style={style}>
             {
                 mapApi ?
                     <div>
