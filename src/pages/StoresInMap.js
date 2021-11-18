@@ -306,7 +306,7 @@ const StoresInMap = () => {
             )}
             {stores?.length === 0 && (
               <div className="text-center text-red-500 my-8 font-bold text-2xl">
-                Lo sentimos pero no tenemos {selectedCategory ? `tiendas de ${selectedCategory?.name}` : 'tiendas'} que atiendan en esta zona.
+                Lo sentimos pero no tenemos {selectedCategory ? `comercios de ${selectedCategory?.name}` : 'comercios'} que atiendan en esta zona.
               </div>
             )}
           </div>
