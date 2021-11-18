@@ -28,6 +28,7 @@
     "react-to-print": "^2.13.0",
     "socket.io-client": "^2.3.1",
     "swiper": "^6.6.1",
+    "terraformer-wkt-parser": "^1.2.1",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

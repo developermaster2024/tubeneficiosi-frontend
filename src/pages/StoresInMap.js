@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import { IoClose, IoLocationSharp } from "react-icons/io5";
+import { IoClose, IoHappyOutline, IoLocationSharp } from "react-icons/io5";
 import Map from "../components/googlemaps/Map";
 import StoreInSideBar from "../components/StoreInSideBar";
 import { useAuth } from "../contexts/AuthContext";
@@ -8,6 +8,8 @@ import useCategories from "../hooks/useCategories";
 import useLocations from "../hooks/useLocations";
 import useStores from "../hooks/useStores";
 import SystemInfo from "../util/SystemInfo";
+
+var WKT = require('terraformer-wkt-parser');
 
 const StoresInMap = () => {
   const { setLoading } = useAuth();
@@ -19,6 +21,8 @@ const StoresInMap = () => {
     locationIds: [],
     storeCategoryIds: [],
   });
+
+  const [polygon, setPolygon] = useState(null);
 
   const [showList, setShowList] = useState(false);
 
@@ -73,6 +77,31 @@ const StoresInMap = () => {
         locationIds: [selectedLocation?.id],
       };
     });
+
+    if (selectedLocation) {
+      console.log(selectedLocation);
+      var realArea = [];
+      WKT?.parse?.(selectedLocation?.area)?.coordinates?.forEach?.(
+        (areas) => {
+          return realArea.push(
+            areas[0].map((points) => {
+              return {
+                lat: points[0],
+                lng: points[1],
+              };
+            })
+          );
+        }
+      );
+      //console.log(realArea);
+      /* setPolygon(realArea);
+      setGoogleMapsOptions((oldGoogleMapsOpts) => {
+        return {
+          ...oldGoogleMapsOpts,
+          center: realArea?.[0],
+        };
+      }); */
+    }
   }, [selectedLocation]);
 
   useEffect(() => {
@@ -90,11 +119,7 @@ const StoresInMap = () => {
         ...locationFilters,
       },
     });
-  }, [locationFilters]);
-
-  useEffect(() => {
-    console.log(locations);
-  }, [locations]);
+  }, [locationFilters]);  
 
   useEffect(() => {
     setGoogleMapsMarkers(
@@ -106,11 +131,7 @@ const StoresInMap = () => {
         };
       })
     );
-  }, [stores]);
-
-  useEffect(() => {
-    console.log(selectedLocation);
-  }, [selectedLocation]);
+  }, [stores]);  
 
   const hanleMapClick = (e) => {
     console.log(e);
@@ -151,8 +172,8 @@ const StoresInMap = () => {
           <IoLocationSharp /> Indique su Ubicación
         </h1>
         <p className="text-center mb-10">
-          Por favor ingrese su dirección para mostrarle los comercios mas
-          cercanos a su ubicación.
+          Por favor ingrese su dirección para mostrarle los comercios que realizan envios
+          a su ubicación.
         </p>
         <div>
           <input
@@ -283,25 +304,32 @@ const StoresInMap = () => {
                 })}
               </div>
             )}
-            {
-              stores?.length === 0 &&
-              
-                <div className="text-center text-red-500 my-8 font-bold text-2xl">
-                  Lo sentimos pero no tenemos tiendas.
-                </div>
-            }            
+            {stores?.length === 0 && (
+              <div className="text-center text-red-500 my-8 font-bold text-2xl">
+                Lo sentimos pero no tenemos {selectedCategory ? `tiendas de ${selectedCategory?.name}` : 'tiendas'} que atiendan en esta zona.
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-gray-500 text-center my-8 font-bold text-2xl">
             Por favor seleccione una ubicación
           </div>
         )}
+        {
+          selectedLocation && stores?.length > 0 ?
+          <div className="text-center text-gray-500">
+            Estos son los comercios que realizan envios a tu zona <IoHappyOutline className="inline text-xl"/>
+          </div>
+          :
+          null
+        }
         <Map
           className="animate__animated animate__fadeIn"
           style={{
             display: selectedLocation && stores?.length > 0 ? "block" : "none",
           }}
           height="90vh"
+          defaultPolygon={polygon}
           forStores
           options={googleMapsOptions}
           onClick={hanleMapClick}
