@@ -5,8 +5,7 @@ const CategoryFilter = (props) => {
     const { loading, categoryStoreIds, onChange, name, categoriesStores, ...rest } = props;
 
     return (
-        <div {...rest}>
-            <h4 className="text-xl font-semibold mb-2">Categorias</h4>
+        <div {...rest}>            
             {
                 loading ?
                     <div>

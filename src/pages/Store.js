@@ -99,7 +99,7 @@ const Store = () => {
     },
     getCategoriesStores,
   ] = useCategoriesStores({
-    params: { parentOnly: true, storeId: store?.storeId },
+    params: { parentOnly: true, storeId: store?.storeId, perPage: 200 },
     options: { useCache: false, manual: true },
   });
 
@@ -540,9 +540,9 @@ const Store = () => {
               onChange={handleChange}
               filters={filters}
             />
-
+            <h4 className="text-xl font-semibold mt-8">Categorias</h4>
             <CategoryFilter
-              className="my-8 max-h-64 overflow-y-auto"
+              className="max-h-64 overflow-y-auto custom-scrollbar"
               loading={loadingCategoriesStores}
               categoryStoreIds={filters.categoryIds}
               onChange={handleChange}
