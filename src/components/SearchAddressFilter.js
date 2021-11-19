@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { IoClose, IoLocationSharp } from "react-icons/io5";
+import {
+  IoCheckmarkCircleSharp,
+  IoClose,
+  IoLocationSharp,
+} from "react-icons/io5";
 import useLocations from "../hooks/useLocations";
 import CustomInput from "./CustomInput";
 
@@ -29,24 +33,24 @@ const SearchAddressFilter = ({ name, values, onChange, label }) => {
       onChange?.({
         target: { name: name, value: selectedLocation?.id, type: "checkbox" },
       });
-      setLocationFilters((oldLocationsFilters) => {
+      /* setLocationFilters((oldLocationsFilters) => {
         return {
           ...oldLocationsFilters,
           name: selectedLocation?.parentLocation?.name
             ? `${selectedLocation?.name}, ${selectedLocation?.parentLocation?.name}`
             : selectedLocation?.name,
         };
-      });
+      }); */
     } else {
       onChange?.({
         target: { name: name, value: "", type: "checkbox" },
       });
-      setLocationFilters((oldLocationsFilters) => {
+      /* setLocationFilters((oldLocationsFilters) => {
         return {
           ...oldLocationsFilters,
-          name: ''
+          name: "",
         };
-      });
+      }); */
     }
   }, [selectedLocation]);
 
@@ -68,13 +72,13 @@ const SearchAddressFilter = ({ name, values, onChange, label }) => {
   };
 
   const handleLocationClick = (customLocation) => {
-    setSelectedLocation(customLocation);    
+    setSelectedLocation(customLocation);
   };
 
   return (
     <div>
       <h1 className="mb-4 flex items-center space-x-2 text-gray-500">
-        <IoLocationSharp /> Indique su Ubicación
+        <IoLocationSharp /> Seleccione las ubicaciones de envios
       </h1>
       <CustomInput
         name="name"
@@ -92,23 +96,7 @@ const SearchAddressFilter = ({ name, values, onChange, label }) => {
             setShowList(false);
           }, [100]);
         }}
-      />
-      {selectedLocation && (
-        <div className="flex items-center justify-between bg-main mt-4 p-1 text-white rounded-full animate__animated animate__fadeInLeft">
-          <p>
-            {selectedLocation?.name}
-            {selectedLocation?.parentLocation?.name
-              ? `, ${selectedLocation?.parentLocation?.name}`
-              : null}
-          </p>
-          <IoClose
-            className="text-xl cursor-pointer"
-            onClick={() => {
-              setSelectedLocation(null);
-            }}
-          />
-        </div>
-      )}
+      />      
       {locationsLoading ? (
         <div className="text-center text-xl mt-1 animate__animated animate__fadeIn">
           Cargando
@@ -126,11 +114,16 @@ const SearchAddressFilter = ({ name, values, onChange, label }) => {
                     handleLocationClick(customLocation);
                   }}
                   key={i}
-                  className="p-1 text-gray-500 hover:bg-main hover:text-white capitalize border-b cursor-pointer"
+                  className="p-1 text-gray-500 flex items-center justify-between hover:bg-main hover:text-white capitalize border-b cursor-pointer"
                 >
-                  {customLocation?.parentLocation?.name
-                    ? `${customLocation?.name}, ${customLocation?.parentLocation?.name}`
-                    : customLocation?.name}
+                  <p>
+                    {customLocation?.parentLocation?.name
+                      ? `${customLocation?.name}, ${customLocation?.parentLocation?.name}`
+                      : customLocation?.name}
+                  </p>
+                  {values?.includes?.(customLocation?.id) && (
+                    <IoCheckmarkCircleSharp className="text-green-500" />
+                  )}
                 </li>
               );
             })}

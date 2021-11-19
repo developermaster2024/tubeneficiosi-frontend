@@ -137,17 +137,7 @@ const Stores = () => {
     }
   }, [viewType])
 
-  const handleChange = (e) => {
-
-    if(e.target.name === 'locationIds'){
-      setFilters((oldFilters) => {
-        return {
-          ...oldFilters,
-          locationIds: [e.target.value]
-        }
-      });
-      return;
-    }
+  const handleChange = (e) => {    
 
     if (e.target.name === "minRating") {
       setFilters((oldFilters) => {

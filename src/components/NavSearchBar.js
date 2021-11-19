@@ -18,7 +18,7 @@ const NavSearchBar = ({ onChange, onSubmit, data }) => {
                 <option value="">Todo</option>
                 {categories.map((category, i) => {
                     return (
-                        <option className="text-black capitalize" value={category.id} key={i}>{category.name}</option>
+                        <option className="text-white capitalize" value={category.id} key={i}>{category.name}</option>
                     )
                 })}
             </select>
