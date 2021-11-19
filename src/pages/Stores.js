@@ -63,6 +63,10 @@ const Stores = () => {
 
 
   useEffect(() => {
+    console.log(filters?.locationIds);
+  }, [filters?.locationIds])
+
+  useEffect(() => {
     setLoading({ show: true, message: "Obteniendo Informacion" });
     Promise.all([getStores(), getBannersAds({ params: { adsPositionId: 7, isActive: "true" } }), getLeftAds({ params: { adsPositionId: 8, isActive: "true" } })]).then((values) => {
       setLoading({ show: false, message: "" });
@@ -138,6 +142,8 @@ const Stores = () => {
   }, [viewType])
 
   const handleChange = (e) => {    
+
+    console.log(e);
 
     if (e.target.name === "minRating") {
       setFilters((oldFilters) => {

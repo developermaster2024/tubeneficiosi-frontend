@@ -26,33 +26,7 @@ const SearchAddressFilter = ({ name, values, onChange, label }) => {
     params: {
       ...locationFilters,
     },
-  });
-
-  useEffect(() => {
-    if (selectedLocation) {
-      onChange?.({
-        target: { name: name, value: selectedLocation?.id, type: "checkbox" },
-      });
-      /* setLocationFilters((oldLocationsFilters) => {
-        return {
-          ...oldLocationsFilters,
-          name: selectedLocation?.parentLocation?.name
-            ? `${selectedLocation?.name}, ${selectedLocation?.parentLocation?.name}`
-            : selectedLocation?.name,
-        };
-      }); */
-    } else {
-      onChange?.({
-        target: { name: name, value: "", type: "checkbox" },
-      });
-      /* setLocationFilters((oldLocationsFilters) => {
-        return {
-          ...oldLocationsFilters,
-          name: "",
-        };
-      }); */
-    }
-  }, [selectedLocation]);
+  });  
 
   useEffect(() => {
     getLocations({
@@ -73,6 +47,9 @@ const SearchAddressFilter = ({ name, values, onChange, label }) => {
 
   const handleLocationClick = (customLocation) => {
     setSelectedLocation(customLocation);
+    onChange?.({
+      target: { name: name, value: customLocation?.id, type: "checkbox" },
+    });
   };
 
   return (
