@@ -374,7 +374,7 @@ const ProductProfile = ({ product }) => {
                     {/* TAB PANELS */}
                     {/* Description */}
                     <TabPanel className="py-4 animate__animated animate__fadeInUp" value={0}>
-                        {product?.description}
+                        <div dangerouslySetInnerHTML={{ __html: product?.description }} />                        
                     </TabPanel>
 
                     {/* Questions */}

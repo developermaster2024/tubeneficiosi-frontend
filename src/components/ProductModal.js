@@ -234,7 +234,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
               }
               <div>
                 <h3 className="text-lg font-bold text-gray-600">Descripción</h3>
-                <p>{product?.description}</p>
+                <div dangerouslySetInnerHTML={{ __html: product?.description }} />
               </div>
             </div>
             {
