@@ -21,7 +21,7 @@ const StoreModal = ({ show, store, onClose }) => {
         <div ref={modalRef} onClick={handleClose} className="fixed flex z-50 h-screen w-screen bg-black bg-opacity-50 left-0 top-0 animate__animated animate__fade">
             <div className="w-10/12 overflow-hidden bg-white animate__animated animate__fadeInUp m-auto rounded-xl">
                 <div style={{ height: "8%" }} className="p-4 bg-main items-center flex justify-between items-center text-white">
-                    <button className="text-2xl" onClick={() => { onClose() }}>
+                    <button className="text-2xl" onClick={() => { onClose?.() }}>
                         <IoClose />
                     </button>
                 </div>
@@ -39,7 +39,7 @@ const StoreModal = ({ show, store, onClose }) => {
                     <div className="space-y-4">
                         <p className="text-center text-gray-500 text-xl">¿Que deseas hacer?</p>
                         <div className="md:flex md:items-center justify-center md:space-x-6 w-full">
-                            <button className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+                            <button onClick={() => { onClose?.() }} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
                                 Seguir comprando
                             </button>
                             <a href={`/my-account/carts`} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">

@@ -12,6 +12,7 @@ import useAxios from "../hooks/useAxios";
 import { IoFastFoodOutline, IoStorefrontOutline } from "react-icons/io5";
 import StoreDiscountsModal from "../components/dicounts/StoreDiscountsModal";
 import findShowsQuantity from "../helpers/findShowsQuantity";
+import StoreModal from "../components/StoreModal";
 
 
 const SearchResults = () => {
@@ -36,6 +37,12 @@ const SearchResults = () => {
 
     const [storeAndProduct, setStoreAndProduct] = useState(null);
 
+    const [isAddToCart, setIsAddToCart] = useState(false);
+
+    const [storeToModal, setStoreToModal] = useState(null);
+
+    const [showStoreModal, setShowStoreModal] = useState(false);
+
     const [{ error: cartError, data: cart }, addToCart] = useAxios({ url: `/carts/add-to-cart`, method: "POST" }, { manual: true, useCache: false });
 
     const [{ products, total: productsTotal, numberOfPages: productsPages, error: productsError }, getProducts] = useProducts({ axiosConfig: { params: { ...filters, page: productPage } }, options: { manual: true, useCache: false } });
@@ -44,10 +51,15 @@ const SearchResults = () => {
 
     useEffect(() => {
         if (cart) {
-            setLoading?.({ show: false, message: "" });
-            history.push(`/checkout?cartId=${cart?.id}`);
+            if (!isAddToCart) {
+                history.push(`/checkout?cartId=${cart?.id}`);
+                return;
+            } else {
+                setIsAddToCart(false);
+                setShowStoreModal(true);
+            }
         }
-    }, [cart, setLoading, history]);
+    }, [cart])
 
     useEffect(() => {
         setProductsList((oldProductsList) => {
@@ -145,10 +157,25 @@ const SearchResults = () => {
                 setStoreAndProduct(e);
                 return;
             }
+
+            if (e?.addTocart) {
+                setIsAddToCart(e?.addTocart);
+                const { addTocart, store, ...rest } = e;
+                setStoreToModal(store);
+                setLoading?.({ show: true, message: "Realizando compra" });
+                await addToCart({ data: e });
+                setLoading?.({ show: false, message: "" });
+                return;
+            }
             setLoading?.({ show: true, message: "Realizando compra" });
             await addToCart({ data: e });
             setLoading?.({ show: false, message: "" });
         }
+    }
+
+    const handleCloseStoreModal = () => {
+        setShowStoreModal(false);
+        setStoreToModal(null);
     }
 
     const handleClose = async (e) => {
@@ -266,6 +293,7 @@ const SearchResults = () => {
             </div>
             <ProductModal product={productOnModal} closeModal={handleCloseModal} />
             <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
+            <StoreModal show={storeToModal && showStoreModal ? true : false} store={storeToModal} onClose={handleCloseStoreModal} />
         </div>
     )
 }

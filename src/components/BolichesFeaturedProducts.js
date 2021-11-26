@@ -11,6 +11,7 @@ import StoreDiscountsModal from "./dicounts/StoreDiscountsModal";
 import useFeaturedProducts from "../hooks/useFeaturedProducts";
 import Button from "./Button";
 import findShowsQuantity from "../helpers/findShowsQuantity";
+import StoreModal from "./StoreModal";
 
 const BolichesFeaturedProducts = ({ categoryInfo }) => {
 
@@ -25,6 +26,12 @@ const BolichesFeaturedProducts = ({ categoryInfo }) => {
     const [productOnModal, setProductOnModal] = useState(null);
 
     const [storeAndProduct, setStoreAndProduct] = useState(null);
+
+    const [isAddToCart, setIsAddToCart] = useState(false);
+
+    const [storeToModal, setStoreToModal] = useState(null);
+
+    const [showStoreModal, setShowStoreModal] = useState(false);
 
     useEffect(() => {
         getFeaturedProducts({ params: { isActive: "true", storeCategoryId: 4 } });
@@ -43,11 +50,15 @@ const BolichesFeaturedProducts = ({ categoryInfo }) => {
 
     useEffect(() => {
         if (data) {
-            console.log(data)
-            history.push(`/checkout?cartId=${data?.id}`);
-            return;
+            if (!isAddToCart) {
+                history.push(`/checkout?cartId=${data?.id}`);
+                return;
+            } else {
+                setIsAddToCart(false);
+                setShowStoreModal(true);
+            }
         }
-    }, [data, history])
+    }, [data])
 
     const handleCloseModal = async (e) => {
         setProductOnModal(null);
@@ -56,8 +67,21 @@ const BolichesFeaturedProducts = ({ categoryInfo }) => {
                 setStoreAndProduct(e);
                 return;
             }
+
+            if (e?.addTocart) {
+                setIsAddToCart(e?.addTocart);
+                const { addTocart, store, ...rest } = e;
+                setStoreToModal(store);
+                await addToCart({ data: rest });
+                return;
+            }
             await addToCart({ data: e });
         }
+    }
+
+    const handleCloseStoreModal = () => {
+        setShowStoreModal(false);
+        setStoreToModal(null);
     }
 
     const handleClose = async (e) => {
@@ -136,6 +160,7 @@ const BolichesFeaturedProducts = ({ categoryInfo }) => {
             </div>
             <ProductModal product={productOnModal} closeModal={handleCloseModal} />
             <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
+            <StoreModal show={storeToModal && showStoreModal ? true : false} store={storeToModal} onClose={handleCloseStoreModal} />
         </div>
     )
 }
