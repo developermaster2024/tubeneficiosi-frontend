@@ -81,6 +81,19 @@ const ProductModal = ({ product, closeModal, isStore }) => {
     });
   }
 
+  const handleAddToCart = () => {
+    closeModal({
+      addTocart: true,
+      store: product?.store,
+      storeId: product?.store?.storeId,
+      productId: product?.id,
+      productFeaturesData,
+      quantity: quantity,
+      isDirectPurchase: false,
+      discount: false
+    });
+  }
+
   if (!product) {
     return null;
   }
@@ -266,6 +279,12 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                 Cancelar
               </button>
               {
+                !isStore &&
+                <button onClick={handleAddToCart} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+                  <p>Añadir al carrito</p>
+                </button>
+              }
+              {
                 user ?
                   product?.store?.isOpen ?
                     product?.productDetails?.quantity > 0 ?
@@ -282,7 +301,6 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                     iniciar sesión
                   </Link>
               }
-
             </div>
           </div>
         </div>

@@ -9,6 +9,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
 import StoreDiscountsModal from "./dicounts/StoreDiscountsModal";
 import findShowsQuantity from "../helpers/findShowsQuantity";
+import StoreModal from "./StoreModal";
 
 const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) => {
 
@@ -21,6 +22,12 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
   const [productOnModal, setProductOnModal] = useState(null);
 
   const [storeAndProduct, setStoreAndProduct] = useState(null);
+
+  const [isAddToCart, setIsAddToCart] = useState(false);
+
+  const [storeToModal, setStoreToModal] = useState(null);
+
+  const [showStoreModal, setShowStoreModal] = useState(false);
 
   useEffect(() => {
     setLoading({ show: loading, message: "Añadiendo al carrito." })
@@ -35,12 +42,17 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
 
   useEffect(() => {
     if (data) {
-      if (!isStore) {
+      if (!isStore && !isAddToCart) {
         history.push(`/checkout?cartId=${data?.id}`);
         return;
       } else {
-        onAddToCard?.(data);
-        setCustomAlert?.({ show: true, message: `El producto ha sido añadido al carrito exitosamente.`, severity: "success" })
+        if (isStore) {
+          onAddToCard?.(data);
+          setCustomAlert?.({ show: true, message: `El producto ha sido añadido al carrito exitosamente.`, severity: "success" })
+        } else {
+          setIsAddToCart(false);
+          setShowStoreModal(true);
+        }
       }
     }
   }, [data])
@@ -52,6 +64,14 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
         setStoreAndProduct(e);
         return;
       }
+
+      if (e?.addTocart) {
+        setIsAddToCart(e?.addTocart);
+        const { addTocart, store, ...rest } = e;
+        setStoreToModal(store);
+        await addToCart({ data: rest });
+        return;
+      }
       await addToCart({ data: e });
     }
   }
@@ -61,6 +81,11 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
     if (e) {
       await addToCart({ data: e });
     }
+  }
+
+  const handleCloseStoreModal = () => {
+    setShowStoreModal(false);
+    setStoreToModal(null);
   }
 
   return (
@@ -109,6 +134,7 @@ const ProductsCollection = ({ products, isInGridView, isStore, onAddToCard }) =>
       }
       <ProductModal isStore={isStore} product={productOnModal} closeModal={handleCloseModal} />
       <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
+      <StoreModal show={storeToModal && showStoreModal ? true : false} store={storeToModal} onClose={handleCloseStoreModal} />
     </div>
   )
 };
