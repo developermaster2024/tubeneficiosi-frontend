@@ -274,13 +274,13 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                 </div>
               </div>
             }
-            <div className="flex justify-end space-x-4 mt-6">
-              <button onClick={() => { closeModal() }} className="rounded px-4 py-2 text-main transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+            <div className="md:flex md:justify-end md:space-x-4 mt-6 space-y-2 md:space-y-0">
+              <button onClick={() => { closeModal() }} className="rounded w-full px-4 py-2 text-main transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
                 Cancelar
               </button>
               {
                 !isStore &&
-                <button onClick={handleAddToCart} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+                <button onClick={handleAddToCart} className="bg-main w-full justify-center text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
                   <p>Añadir al carrito</p>
                 </button>
               }
@@ -288,7 +288,7 @@ const ProductModal = ({ product, closeModal, isStore }) => {
                 user ?
                   product?.store?.isOpen ?
                     product?.productDetails?.quantity > 0 ?
-                      <button onClick={handleAccept} className="bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+                      <button onClick={handleAccept} className="w-full justify-center bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
                         <p>{isStore ? "añadir al carrito" : "Comprar"}</p>
                         <IoCart />
                       </button>
