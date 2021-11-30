@@ -27,6 +27,7 @@ import { isRequired, validate } from "../helpers/formsValidations";
 import { useHistory } from "react-router-dom";
 import ProductModal from "./ProductModal";
 import StoreDiscountsModal from "./dicounts/StoreDiscountsModal";
+import VideoComponent from "./VideoComponent";
 
 const ProductProfile = ({ product }) => {
 
@@ -369,12 +370,16 @@ const ProductProfile = ({ product }) => {
                         <Tab value={1}>Preguntas {questionsData?.total > 0 ? questionsData?.total : null}</Tab>
                         <Tab value={2}>Comparador</Tab>
                         <Tab value={3}>Caracteristicas</Tab>
+                        {
+                            product?.productVideos?.length > 0 &&
+                            <Tab value={4}>Videos</Tab>
+                        }
                     </TabsContainer>
 
                     {/* TAB PANELS */}
                     {/* Description */}
                     <TabPanel className="py-4 animate__animated animate__fadeInUp" value={0}>
-                        <div dangerouslySetInnerHTML={{ __html: product?.description }} />                        
+                        <div dangerouslySetInnerHTML={{ __html: product?.description }} />
                     </TabPanel>
 
                     {/* Questions */}
@@ -460,6 +465,15 @@ const ProductProfile = ({ product }) => {
                                     )
                                 })}
                             </ProductFeatureGroup>)}
+                    </TabPanel>
+                    <TabPanel className="py-4 animate__animated animate__fadeInUp" value={4}>
+                        {
+                            product?.productVideos?.map((video, i) => {
+                                return (
+                                    <VideoComponent url={video?.url} />
+                                )
+                            })
+                        }
                     </TabPanel>
                 </TabsProvider>
             </Container>
