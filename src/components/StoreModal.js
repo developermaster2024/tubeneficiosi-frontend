@@ -3,7 +3,7 @@ import { IoClose } from "react-icons/io5";
 import reactDom from "react-dom";
 
 
-const StoreModal = ({ show, store, onClose }) => {
+const StoreModal = ({ show, store, cartId, onClose }) => {
 
     const modalRef = useRef();
 
@@ -39,14 +39,14 @@ const StoreModal = ({ show, store, onClose }) => {
                     <div className="space-y-4">
                         <p className="text-center text-gray-500 text-xl">¿Que deseas hacer?</p>
                         <div className="md:flex md:items-center justify-center md:space-x-6 w-full space-y-2">
-                            <button onClick={() => { onClose?.() }} className="w-full justify-center bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+                            <a href={`/stores/${store?.slug}`} className="w-full justify-center bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
                                 Seguir comprando
-                            </button>
+                            </a>
                             <a href={`/my-account/carts`} className="w-full justify-center bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
                                 Ver mis carritos
                             </a>
-                            <a href={`/stores/${store?.slug}`} className="w-full justify-center bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
-                                Ir a la tienda
+                            <a href={`/checkout?cartId=${cartId}`} className="w-full justify-center bg-main text-lg flex items-center space-x-4 rounded px-4 py-2 text-white transition duration-500 hover:shadow-xl hover:bg-white hover:text-main focus:ring-white">
+                                Ir a pagar
                             </a>
                         </div>
                     </div>

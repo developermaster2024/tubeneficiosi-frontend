@@ -159,7 +159,7 @@ const GastronomyFeaturedProducts = ({ categoryInfo }) => {
             />
             <ProductModal product={productOnModal} closeModal={handleCloseModal} />
             <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
-            <StoreModal show={storeToModal && showStoreModal ? true : false} store={storeToModal} onClose={handleCloseStoreModal} />
+            <StoreModal show={storeToModal && showStoreModal ? true : false} store={storeToModal} onClose={handleCloseStoreModal} cartId={data?.id} />
         </div>
     )
 }

@@ -293,7 +293,7 @@ const SearchResults = () => {
             </div>
             <ProductModal product={productOnModal} closeModal={handleCloseModal} />
             <StoreDiscountsModal onClose={handleClose} storeAndProduct={storeAndProduct} />
-            <StoreModal show={storeToModal && showStoreModal ? true : false} store={storeToModal} onClose={handleCloseStoreModal} />
+            <StoreModal show={storeToModal && showStoreModal ? true : false} store={storeToModal} onClose={handleCloseStoreModal} cartId={cart?.id} />
         </div>
     )
 }
