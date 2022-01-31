@@ -108,18 +108,7 @@ const Store = () => {
     options: { useCache: false, manual: true },
   });
 
-  const [{ data: cartData, error: cartError, loading: cartLoading }, getCart] =
-    useAxios(
-      {
-        url: `/carts/stores/${store?.storeId}`,
-        params: {
-          isProcessed: "false",
-          isExpired: "false",
-          isDirectPurchase: "false",
-        },
-      },
-      { manual: true, useCache: false }
-    );
+  const [{ data: cartData, error: cartError, loading: cartLoading }, getCart] = useAxios({ url: `/carts/stores/${store?.storeId}`, params: { isProcessed: "false", isExpired: "false", isDirectPurchase: "false" }, }, { manual: true, useCache: false });
 
   const [
     {
@@ -180,11 +169,10 @@ const Store = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({
         show: true,
-        message: `Ha ocurrido un error: ${
-          error?.response?.status === 400
-            ? error?.response?.data.message[0]
-            : error?.response?.data.message
-        }.`,
+        message: `Ha ocurrido un error: ${error?.response?.status === 400
+          ? error?.response?.data.message[0]
+          : error?.response?.data.message
+          }.`,
         severity: "error",
       });
     }
@@ -192,11 +180,10 @@ const Store = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({
         show: true,
-        message: `Ha ocurrido un error: ${
-          errorCategoriesStores?.response?.status === 400
-            ? errorCategoriesStores?.response?.data.message[0]
-            : errorCategoriesStores?.response?.data.message
-        }.`,
+        message: `Ha ocurrido un error: ${errorCategoriesStores?.response?.status === 400
+          ? errorCategoriesStores?.response?.data.message[0]
+          : errorCategoriesStores?.response?.data.message
+          }.`,
         severity: "error",
       });
     }
@@ -205,11 +192,10 @@ const Store = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({
         show: true,
-        message: `Ha ocurrido un error: ${
-          storeError?.response?.status === 400
-            ? storeError?.response?.data.message[0]
-            : storeError?.response?.data.message
-        }.`,
+        message: `Ha ocurrido un error: ${storeError?.response?.status === 400
+          ? storeError?.response?.data.message[0]
+          : storeError?.response?.data.message
+          }.`,
         severity: "error",
       });
     }
@@ -218,11 +204,10 @@ const Store = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({
         show: true,
-        message: `Ha ocurrido un error: ${
-          errorTags?.response?.status === 400
-            ? errorTags?.response?.data.message[0]
-            : errorTags?.response?.data.message
-        }.`,
+        message: `Ha ocurrido un error: ${errorTags?.response?.status === 400
+          ? errorTags?.response?.data.message[0]
+          : errorTags?.response?.data.message
+          }.`,
         severity: "error",
       });
     }
@@ -232,11 +217,10 @@ const Store = () => {
       if (cartError?.response?.data.message !== "Carrito no encontrado") {
         setCustomAlert?.({
           show: true,
-          message: `Ha ocurrido un error: ${
-            cartError?.response?.status === 400
-              ? cartError?.response?.data.message[0]
-              : cartError?.response?.data.message
-          }.`,
+          message: `Ha ocurrido un error: ${cartError?.response?.status === 400
+            ? cartError?.response?.data.message[0]
+            : cartError?.response?.data.message
+            }.`,
           severity: "error",
         });
       }
@@ -247,11 +231,10 @@ const Store = () => {
       if (updateCartError?.response?.data.message !== "Carrito no encontrado") {
         setCustomAlert?.({
           show: true,
-          message: `Ha ocurrido un error: ${
-            updateCartError?.response?.status === 400
-              ? updateCartError?.response?.data.message[0]
-              : updateCartError?.response?.data.message
-          }.`,
+          message: `Ha ocurrido un error: ${updateCartError?.response?.status === 400
+            ? updateCartError?.response?.data.message[0]
+            : updateCartError?.response?.data.message
+            }.`,
           severity: "error",
         });
       }
@@ -261,11 +244,10 @@ const Store = () => {
       setLoading?.({ show: false, message: "" });
       setCustomAlert?.({
         show: true,
-        message: `Ha ocurrido un error: ${
-          favoriteError?.response?.status === 400
-            ? favoriteError?.response?.data.message[0]
-            : favoriteError?.response?.data.message
-        }.`,
+        message: `Ha ocurrido un error: ${favoriteError?.response?.status === 400
+          ? favoriteError?.response?.data.message[0]
+          : favoriteError?.response?.data.message
+          }.`,
         severity: "error",
       });
     }
@@ -491,7 +473,7 @@ const Store = () => {
           </div>
         )}
       </div>
-      
+
       <StoresNewsPosts storeId={store?.storeId} />
 
       <DiscountsSlider
@@ -621,8 +603,8 @@ const Store = () => {
                             cartQuantity.toString().length === 1
                               ? -5
                               : cartQuantity.toString().length === 2
-                              ? -7
-                              : -10,
+                                ? -7
+                                : -10,
                           top: -7,
                         }}
                         className="bg-main text-white absolute top-0 rounded-full px-1"

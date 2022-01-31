@@ -58,7 +58,6 @@ const OrderDetails = () => {
 
   useEffect(() => {
     if (orderData) {
-      console.log(orderData)
       setOrder(orderData)
     }
   }, [orderData]);

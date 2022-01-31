@@ -40,7 +40,7 @@ const CreateAddress = () => {
       setCustomAlert?.({ show: true, message: `La dirección ha sido creada exitosamente.`, severity: "success" });
       history.push("/my-account/address");
     }
-  }, [createData, setLoading, setCustomAlert, history]);
+  }, [createData]);
 
   useEffect(() => {
     if (createError) {

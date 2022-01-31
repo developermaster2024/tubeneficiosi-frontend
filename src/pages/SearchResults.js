@@ -88,7 +88,7 @@ const SearchResults = () => {
             setLoading?.({ show: false, message: "" });
             setCustomAlert?.({ show: true, message: `Ha ocurrido un error: ${cartError?.response?.status === 400 ? cartError?.response?.data.message[0] : cartError?.response?.data.message}.`, severity: "error" });
         }
-    }, [productsError, storesError, cartError, setLoading, setCustomAlert]);
+    }, [productsError, storesError, cartError]);
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -116,21 +116,21 @@ const SearchResults = () => {
         ]).then((values) => {
             setLoading({ show: false, message: "" });
         })
-    }, [filters, getProducts, getStores, productPage, setLoading, storePage]);
+    }, [filters]);
 
     useEffect(() => {
         setLoading({ show: true, message: "Obteniendo productos" });
         getProducts({ params: { storeCategoryIds: filters.storeCategoryId, name: filters.name, page: productPage } }).then(() => {
             setLoading({ show: false, message: "" });
         })
-    }, [productPage, setLoading, getProducts, filters.storeCategoryId, filters.name]);
+    }, [productPage, filters.storeCategoryId, filters.name]);
 
     useEffect(() => {
         setLoading({ show: true, message: "Obteniendo Tiendas" });
         getStores({ params: { ...filters, page: storePage, withCheapestProduct: "true" } }).then(() => {
             setLoading({ show: false, message: "" });
         })
-    }, [storePage, setLoading, getStores, filters]);
+    }, [storePage, filters]);
 
 
 
